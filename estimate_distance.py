@@ -47,15 +47,21 @@ def Likelihood(r, std, varpi):
 
 # The stellar number density
 def rho_MW(r, l, b):
+	'''
+	Calculates the stellar number density of the Milky Way. The number of stars per volumne element dV. 
+	----------------
+	Input Parameters
+	----------------
+	r		Distance in parsec.
+	l		The longitude coordiante
+	b		The latitude coordinate
 	
-	# Convert l,b to Galactocentric distance and height in cylindrical coordinates
-	c_gal = coord.SkyCoord(l=l, b=b, frame='galactic')
-	c_galacto = c_gal.transform_to(coord.Galactocentric,  representation_type='cylindrical')
-	z, R = c_galacto.z, c_galacto.rho
-	# Transform to spherical Galactocentric coordinates
-	c_galacto_sph = c_gal.transform_to(coord.Galactocentric,  representation_type='spherical')
-	r_G = c_galacto_sph.distance
-	
+	------
+	Output
+	------
+	rho_MW	The stellar number density of the Milky Way consisting of the sum of the number density of 
+			the buldge, disc and halo.
+	'''
 	
 	# Constants used
 	# Bulge (Binney & Tremaine 2008)
@@ -82,7 +88,16 @@ def rho_MW(r, l, b):
 	ep_h	= (r_ht/del_h) - 4.5
 	r_hmin	= 0.5 * u.kpc
 
-	
+
+	# Convert l,b to Galactocentric distance and height in cylindrical coordinates
+	c_gal = coord.SkyCoord(l=l, b=b, frame='galactic')
+	c_galacto = c_gal.transform_to(coord.Galactocentric,  representation_type='cylindrical')
+	z, R = c_galacto.z, c_galacto.rho
+	# Transform to spherical Galactocentric coordinates
+	c_galacto_sph = c_gal.transform_to(coord.Galactocentric,  representation_type='spherical')
+	r_G = c_galacto_sph.distance	
+
+
 	# The bulge model as described by Binney & Tremaine (2008)
 	q = np.sqrt(R**2 + (z/q_b)**2)
 	if q > qmin:
@@ -150,7 +165,7 @@ def P(r, std, varpi):
 	varpi = varpi.to(u.arcsec)	
 
 
-	P = 1/norm * Likelihood(r, std, varpi) * Prior(r, l, b)
+	P = 1.0/norm * Likelihood(r, std, varpi) * Prior(r, l, b)
 
 
 
