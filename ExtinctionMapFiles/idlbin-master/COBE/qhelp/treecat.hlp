@@ -1,0 +1,70 @@
+.Title
+COBE Help Tree Categories
+.Help
+
+   {BT}{U}The COBE Help Tree Categories{N}
+
+   The COBE Help Tree is a hierarchical "tree" of menus that
+   provides access to UIDL help information by categories of
+   routine function.  This feature is useful to find a routine
+   with a particular function, even if you do not know its name.
+
+   The first menu gives the top-level or main categories.
+   Each category may contain more specific categories under
+   it.  But the tree always leads to lists of routine names.
+   Routines may appear in more than one category to increase
+   the chance of finding it.  An overview of the hierarchical
+   structure is shown in the table below.
+
+   In general, selecting a category will produce a menu of
+   routine names and/or more categories (which are always
+   designated by ellipses).  Picking a routine name displays
+   the help information for that routine.
+
+
+       {BT}{U}Main Categories{N}      {BT}{U}Subcategories{N}
+
+       COBE Data Input    o Skymap Data
+                          o Time-Ordered Data
+                          o Engineering/Hskeeping/Spacecraft Data
+
+       General Data I/O
+
+       Image and Plot     o Annotation
+                          o Printing
+                          o User-Interactive Programs
+
+       Analysis Tools     o UIMAGE
+                          o Statistics
+                          o Astronomical Tools
+                          o Ephemerides
+                          o DMR Analysis Tools
+                          o FIRAS Analysis Tools
+ 
+       Utilities          o Coordinates
+                          o Time/Ephemerides
+                          o Skycube
+                          o String Manipulation
+                       
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@ZWICKY.GSFC.NASA.GOV.
+
+

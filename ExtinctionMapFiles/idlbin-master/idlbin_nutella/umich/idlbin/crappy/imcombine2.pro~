@@ -1,0 +1,56 @@
+pro imcombine2
+l = 0
+sum = 0
+numocounts=0
+cntarr = fltarr(numoimages)
+;newarr = fltarr()
+
+;read in all datas
+
+FOR x = 0, xmax, 1 DO BEGIN
+	FOR y = 0, ymax, 1 DO BEGIN
+		cntarr(o) = data0(x,y)
+		cntarr(o) = data0(x,y)
+		cntarr(o) = data0(x,y)
+		cntarr(o) = data0(x,y)
+		cntarr(o) = data0(x,y)
+	
+		FOR i = 0, numoimages, 1 DO BEGIN
+			IF (cntarr(i) NE 0) THEN BEGIN
+				sum = sum + cntarr(i)
+				numocounts = numocounts + 1
+			ENDIF
+		ENDFOR
+
+		IF (numocounts EQ 0) THEN newdata(x,y) = 0
+		IF (numocounts EQ 1) THEN newdata(x,y) = sum
+		IF (numocounts EQ 2) THEN newdata(x,y) = sum/2
+		IF (numocounts GE 3) THEN BEGIN
+			FOR j = 0, numoimages, 1 DO BEGIN
+				IF (cntarr(j) NE 0) THEN BEGIN
+					newarr(l) = cntarr(j)
+					l = l+1
+				ENDIF
+			ENDFOR
+
+			med = MEDIAN (newarr)
+			sigma = blah
+
+			FOR k = 0, numoimages, 1 DO BEGIN
+				IF(cntarr(k) LT med - lsigma*sigma OR cntarr(k) GT med + hsigma*sigma) THEN BEGIN
+					cntarr(k) = 0
+					IF (k EQ 0) THEN data0(x,y) = 0
+					IF (k EQ 1) THEN data1(x,y) = 0
+					IF (k EQ 2) THEN data2(x,y) = 0
+					IF (k EQ 3) THEN data3(x,y) = 0
+					IF (k EQ 4) THEN data4(x,y) = 0
+				ENDIF
+			ENDFOR
+		ENDIF
+		sum = 0
+		numocounts = 0
+		l = 0
+	ENDFOR
+ENDFOR
+
+END

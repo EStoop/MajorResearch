@@ -1,0 +1,1663 @@
+MAIN MENU
+UIMAGE is an image-based analysis program that works with data from each
+of the three COBE instruments (FIRAS, DIRBE, and DMR).  Additionally,
+it works with other astronomical data that is also in the quadri-
+lateralized spherical cube projection and in a supported resolution.
+
+UIMAGE is menu-based.  Options available from the main menu are:
+
+{BT}Data I/O and Management...{N}  displays a submenu through which you
+         will be able to import and export data sets,  create PostScript
+         files for printing, and report on or remove data objects from
+         your analysis session.  (Note:  a data object can consist of
+         either a graph, an image, or a 3-D array).
+
+{BT}Display Manipulation...{N}  displays a submenu through which users
+         can modify the visual representations of their various data
+         objects.  You can use this submenu to change the color table,
+         to stretch the contrast of images (rescaling), to replot graphs
+         with specified axis labels and ranges, add labels, etc.
+
+{BT}Image Enhancement...{N}  displays a submenu containing operations
+         which generate new images from existing ones.  These operations
+         include zooming, smoothing, edge enhancement, array up- or
+         down-sizing, histogram equalization, and reprojection into
+         other coordinate systems and projections (Aitoff, Mollweide,
+         etc.)
+
+{BT}Algebraic Operations...{N}  displays a submenu through which you can
+         add, subtract, multiply, or divide two images or graphs; find
+         weighted sums or averages of multiple images or graphs; or take
+         the square root, reciprocal, absolute value, or logarithm of 
+         an image or graph.
+
+{BT}Spectrum Operations...{N}  displays a submenu through which you can
+         operate on spectral data cubes (i.e., 3-D arrays) by extracting
+         a spectrum for a single pixel or an average spectrum for a
+         user-defined area;  by taking frequency/wavelength slices;  
+         and/or by integrating over frequency/wavelength.
+
+{BT}Line Plots and Statistics...{N}  displays a submenu for operations
+         which involve plot generation or which print out scalar
+         quantities derived from images.  You can make histograms,
+         scatter plots, or geometric cross-sectional plots.  You can
+         also extract statistical information (average, min, max, etc.)
+         about areas of pixels or print out values for individual
+         pixels.
+
+{BT}Modeling and Fitting...{N}  displays a submenu of fitting and
+         modeling utilities. Currently six operations are available. 
+         One which calculates and subtracts a dipole from a selected
+         skymap, one which fits spectra with a 3 black body model,
+         one which fits spectra with a Bose-Einstein plus black body
+         model, one which models the background of a 2-D map, a
+         quadrupole subtraction routine, a polynomial fitting routine
+         for graphs and a gaussian fitting routine.
+
+{BT}Journal Enable/Disable{N}  toggles creation of an ASCII history
+         file that tracks many of your UIMAGE operations.  When enabling
+         journaling, you will be prompted for a name of a file that
+         will be written into your default (or otherwise specified)
+         directory.
+
+{BT}Report Comments or Problems{N}  invokes your default editor where
+         you can record any problems or comments you may have.  Type a
+         control-Z, followed by EXIT, when you are finished.  Your
+         message will be sent to the Guest Investigator support group
+         where it will be addressed.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Exit UIMAGE{N}  brings you back to the environment that you were in
+         prior to entering UIMAGE.
+----------------------------------------------------------------------
+DATA I/O AND MANAGEMENT
+
+{BT}Read a data set...{N}  invokes a submenu describing the kind of data
+         sets available.  These are: the COBE PDS/IP
+         sky maps, their corresponding FITS files, and IDL save sets.
+         For each case you will be presented with a menu of available
+         data sets for each instrument, and the available fields
+         (signal, signal error, coordinates, etc.) for each data set.
+         You may also choose "User-defined" instead of an instrument if
+         you know the file name, directory, and field name(s) of
+         interest for any arbitrary dataset anywhere in the COBEtrieve
+         archives.
+
+{BT}Write a data file...{N}  enables you to write out either a FITS file
+         or an IDL save set.  In the either case, the ancillary
+         information about the data (instrument, signal units,
+         projection, cube orientation, bad pixel value) are also
+         automatically stored in the save set.  You will be prompted
+         for a file name and the data set will be written into your
+         default (or otherwise specified) directory.
+
+{BT}Create a PostScript file{N}  lets you generate a PostScript file for
+         any selected image or graph.  You can print that file out after
+         you exit UIMAGE.  Both black & white and color PostScript is
+         supported.  X window users have the ability to create a
+         PostScript file which contains both image data and overlaid
+         graphics (such as labels and coordinate grids) together.
+
+{BT}Associate weights with an object{N} will tell the chosen data object
+         to use the chosen weight object in any operations involving
+         weights. This option can be chosen multiple times to overwrite
+         previous choices.
+
+{BT}Extract Face from skymap{N} will extract a face from a full skycube
+         or 3-D skycube. If there are weights associated with the data
+         then the appropriate face of the weight object is also extracted.
+
+{BT}Combine 2D objects into 3D object{N} will create a new 3D object
+         out of the selected 2D objects. If there are weights associated
+         with the data then a set of 3D weights will be created.
+
+{BT}Report object attributes{N}  will display ancilliary information about
+         any of your objects.  The reported information may include
+         things such as the object title, instrument, projection,
+         coordinate system, data min and max, bad pixel value, etc.,
+         depending on whether the object is a map, a zoomed section, or
+         a graph.
+
+{BT}Remove an object{N}  lets you remove a selected data object from memory
+         All information associated with that data object is lost,
+         unless it has been stored in a file.  For X window users, the
+         visual representation of the object is removed from the screen.
+
+         Some other data objects may be necessarily linked to the object
+         which you have selected for deletion.  If this is the case,
+         then you will be presented with a list of the linked objects
+         and informed that the deletion of the selected object will be
+         accompanied by the deletion of the linked objects.  You will
+         be given the ability to abort the deletion at that point if
+         you want to.
+
+         Removing objects for which you no longer have any use is good
+         practice, as it frees up machine memory.
+
+{BT}Display/hide an object{N} can be used to select whether a chosen
+         UIMAGE object is displayed or not. When an object is not
+         displayed it still exists and can be chosen as an operand in
+         any of the functions.
+
+{BT}Remove ALL objects{N} lets you remove all data objects from memory
+         All information associated with that data objects is lost,
+         unless it has been stored in a file.  For X window users, the
+         visual representation of the object is removed from the screen.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Return to MAIN MENU{N}  returns you to the UIMAGE Main Menu.
+
+-------------------------------------------------------------------------
+DISPLAY MANIPULATION
+
+All of the operations on this menu change the display conditions of one
+or more objects but do not generate any new objects.  Some of the
+operations are accessible only by users of X window terminals.
+
+{BT}Refresh an image{N}  (X windows only)  will restore an object to its
+         original display conditions, e.g. with no superimposed
+         contours.  (However, it does not restore the original contrast
+         stretch).
+
+{BT}Resize/redraw all windows{N}  (X windows only)  lets you adjust the
+         magnification factor that applies to all windows.  Normally,
+         this factor depends on the size of the largest resident image. 
+         If, for example, a 1024 x 768 map is one of the objects, then
+         the factor is set to 1 so that that map will fit on the screen.
+         If, on the other hand, only 128 x 96 DMR or FIRAS maps are
+         present, the factor is set to 2 by default so that images
+         will appear increased by a factor of 2.
+
+{BT}Change color table{N}  (X windows only)  lets you modify the color table
+         by selecting one of IDL's standard color tables, or else by
+         using XPALETTE so as to make changes to the current color
+         table. Additionally, XLOADCT and ADJCT can be used to load
+         or adjust color tables.
+
+{BT}Stretch contrast{N}  (X windows only)  lets you control the scaling
+         factors that are used to set the grey scale/color range.  (The
+         default is the minimum and maximum of the good data.)  You will
+         be prompted for an alternative display scaling range.
+
+{BT}Change a window title{N}  lets you change the title of a selected data 
+         object.
+
+{BT}Resize a graph{N}  (X windows only)  lets you change the display window
+         size of a graph.  You will be offered a menu of X and Y
+         dimensions for the new window; the units are 58 screen pixels
+         in the X direction and 47 pixels in the Y direction.  The size
+         of the graph's window will be modified and the graph will be
+         replotted.
+
+{BT}Change X and Y axis ranges{N}  lets you redefine the range of the X and/or
+         Y axis for a selected graph.
+
+{BT}Change graph axis labels{N}  lets you change the X and/or Y axis labels for
+         a selected graph.
+
+{BT}Change a graph's color{N}  (X windows only)  lets you change the color in
+         which a selected graph is plotted.
+
+{BT}Overlay graphs{N}  lets you overplot multiple curves together on a single
+         graph.
+
+{BT}Change Log Scaling of Graph{N} lets you choose between the various 
+         combinations of linear and log scaling for axes on graphs.
+
+{BT}Change Plot Symbol of Graph{N} lets you choose the plotting symbol
+         used for the selected graph. The valid choices are the standard
+         IDL symbols.
+
+{BT}Put Label in Window{N} lets you place a label anywhere in the selected 
+         window.
+
+{BT}Add Colorbar to Window{N} adds a color bar plus an optional label to the
+         selected window.
+
+{BT}Mark positions on a map{N} marks specified positions on a map with a 
+         defined label.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Return to MAIN MENU{N}  returns you to the UIMAGE Main Menu.
+
+--------------------------------------------------------------------------
+IMAGE ENHANCEMENT
+
+Most of the operations from this menu generate new objects from existing
+ones.
+
+{BT}Smooth an image{N}  convolves a 2-D image with a kernel that can be entered
+         from the keyboard or retrieved from a file.  If you enter the
+         kernel from the keyboard, you will be prompted for its size
+         (square, either 3, 5, or 7 map pixels on a side) and elements.
+         The kernel is assumed to be symmetric, so you are prompted only
+         for the nonredundant values. If the data object has weights
+         associated with it, then they will be used in the smoothing.
+
+         An arbitrary, asymmetric rectangular kernel may also be used
+         by creating beforehand an IDL save set containing a variable
+         called KERNEL, which need only be a 2-D array with odd
+         dimensions.  At the prompt, choose to enter a file name and
+         supply the name of the save set.
+
+         Note that the smoothing algorithm is smart enough to avoid bad
+         pixels by giving them zero weight.  It also normalizes the
+         kernel to unit area to conserve map flux.
+
+{BT}Change array resolution{N}  interpolates a skycube map either up or down
+         in resolution. (Going down in resolution is equivalent to
+         smoothing and resampling.)  Each step in resolution halves or
+         doubles the pixel size in both X and Y, so be careful when
+         stepping up:  moving from resolution 6 to 9, for example (i.e.
+         FIRAS to DIRBE) creates a 1024 x 768 map from a 128 x 96 one.
+         Too many of these will fill memory quickly and degrade
+         performance noticeably!
+
+{BT}Histogram equalization{N}  creates a new map whose data values are scaled
+         from 0 - 255 such that each value occurs with equal frequency.
+         This procedure is good for enhancing structure in maps that are
+         dominated by a few bright features, but flux is not conserved
+         and all brightness units information is lost.
+
+{BT}Edge enhancement{N}  creates a new image from a selected image by applying
+         a high pass filter (either a Roberts or a Sobel filter can be
+         used - see the IDL manual for details).  It can give strange
+         results on arrays whose resolution has been increased, since
+         the interpolated areas have small or zero derivatives. 
+
+{BT}Zoom an image{N}  (X windows only) lets you zoom in on a section of a
+         selected image.  Use the mouse to center the zoom window, and
+         the left button to create the new image. The middle button
+         gives a menu to select the zoom factor and X and Y sizes of 
+         the new window.  (X and Y dimensions are in units of
+         58 x 47 screen pixels.)  The right button terminates the
+         operation but leaves the zoomed image intact as a new object. 
+
+{BT}3-D surface plot{N}  (X windows only) lets you change the visual
+         representation of a selected image by displaying it as a
+         3-D surface plot, with contours "floating" above it in the
+         Z-direction.  THIS DOES NOT CREATE A NEW OBJECT.  The original
+         appearance of the image can be restored by invoking the
+         "Refresh an image" operation.
+
+{BT}Reprojection{N}  lets you create a reprojected map from a selected skycube
+         or face.  You will be presented with menus so you can select
+         the desired projection type (Aitoff, Mollweide, or Global
+         Sinusoidal) and the desired coordinate system (Galactic,
+         Ecliptic, or Equatorial).
+
+         The reprojection is a new object whose existence depends upon
+         the original skycube object;  if you remove the latter from
+         memory (via the "Remove an object" operation), the reprojected
+         image will also disappear.  The rasterized reprojection can be
+         passed out to a UIDL variable by going to the UIDL command line
+         and invoking UGETDATA.
+
+{BT}Plot coordinate grid{N}  lets you overlay a coordinate grid onto a
+         selected image.  After being prompted for the image to draw
+         the grid on, you will be asked for the coordinate system to
+         use (galactic, ecliptic, equatorial) and for the values of
+         the parallels and meridians you want to display. These values
+         can either be entered specifically or as an absolute increment.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Return to MAIN MENU{N}  returns you to the UIMAGE Main Menu.
+
+-----------------------------------------------------------------------
+\ALGEBRAIC IMAGE OPERATIONS
+
+This menu lets you apply algebraic operations which produce new objects
+from one or more existing objects.  Either images or graphs can be
+used as operands.
+
+With regards to image data, these operations are such that if any pixel
+is designated as bad in any of the input images (or, for some
+operations, in the sole input image), then the output image will also
+have that same pixel designated as bad.  All the input images must be of
+the same size for those operations which work with multiple images.
+
+With regards to graphs, the operations which work on more than one
+input graph produce a resulting graph whose abcissa values are only
+those where all the input graphs overlapped precisely.
+
+{BT}X1 + X2{N}
+{BT}X1 - X2{N}
+{BT}X1 * X2{N}
+{BT}X1 / X2{N}
+{BT}(X1*WT1 + X2*WT2)/(WT1 + WT2){N}
+{BT}(X1*WT1 - X2*WT2)/(WT1 + WT2){N}
+         These binary operations require that the user select two
+         operands.  Note that in the case of division, the contrast
+         stretch for the display of the result is over the range of the
+         average value plus or minus 2 sigma, rather than the whole good
+         data range. This is to prevent near-zerodivides from dominating
+         the display.  You can readjust it if desired using the "Stretch
+         contrast" option on the "DISPLAY MANIPULATION" menu. All 
+         operations will propogate weights if they exists.
+
+{BT}SQRT(X){N}
+{BT}LOG10(X){N}
+{BT}ABS(X){N}
+{BT}1./X{N}
+         The unary operations require a single operand.  Data points
+         which had a negative value in the input object get flagged as
+         bad in the result after applying the LOG10 or SQRT operators.
+
+{BT}C0 + C1*X1 + C2*X2 +...+ Cn*Xn{N}
+{BT}Average(X1, X2, X3, ..., Xn){N}
+{BT}Weighted Avg((X1*wt1,..., Xn*Wtn)/Sum(wt1-n)){N}
+         These N-ary operations first ask for the number of objects to
+         include in the operation, then repeatedly prompt you with a
+         menu of objects until the specified number have been selected.
+         When doing a weighted average, the selection of each object
+         will be followed by a prompt for a weight coefficient
+         (C1...Cn). Weighted averaging propogates the weights.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Return to MAIN MENU{N}  returns you to the UIMAGE Main Menu.
+
+-----------------------------------------------------------------------
+SPECTRUM OPERATIONS
+
+All of the operations accessible from this menu work on spectral data
+cubes (3-D objects) only.  For each operation, if there is more than
+one 3-D object in memory, then you will be presented with a data menu
+so you can identify the object to use as the operand.  If, however,
+there is only one 3-D object in memory, then that one will automatically
+be chosen as the operand.
+
+{BT}Extract spectrum from pixel{N}  lets you generate a graph of the spectrum
+         at a specified location from a selected 3-D object.
+             If you are using a non-X window terminal, you will then be
+         asked for the coordinate system that you would like to use when
+         entering the location.  After that you will be prompted for the
+         longitude and latitude.  A graph of the spectrum is then
+         produced.
+             If you are using an X window terminal, you will be asked
+         to choose either keyboard or mouse input. For the latter you are
+         presented with a menu of images derived from the 3-D object.
+         (If you get a message that says that there are no such images
+         available, then you can create such an image via the "Extract a
+         frequency slice" or "Integrate over frequency" operations).
+         Pick whichever image you would like to use as a fiduciary for
+         marking points.  Then you can use the mouse to mark a point on
+         the selected image, after which the graph of the spectrum will
+         be produced. Lastly, you will be asked if you wish the spectrum
+         dumped to an ASCII file for later use.
+
+{BT}Average spectra in an area{N}  generates a spatially-averaged spectrum for
+         a user-defined area within a selected 3-D object. If there are
+         weights associated with the selected object then they will be used
+         in the area averaging.
+             What happens after selecting this operation is almost
+         identical to what happens as described above for "Extract
+         spectrum from a pixel", only here you need to identify vertices
+         for the desired area.  X window terminal users will need to
+         mark off multiple points using the mouse (hit the leftmost
+         mouse button to mark off all points except for the last one,
+         hit the rightmost button to mark off the last point).  Non-X
+         window terminal users will have to enter in at least 3
+         coordinate pairs, one at a time, and then hit an empty carriage
+         return when done. A graph of the spectrum will then be displayed.
+         The number of pixels used in the spatial average is displayed
+         in the DECterm window. Lastly, you will be asked if you wish the 
+         spectrum dumped to an ASCII file for later use.
+
+{BT}Extract a frequency/wavelength slice{N}  creates a 2-D slice through 
+         a spectral data cube. You will be prompted for an index number in 
+         the frequency (or wavelength) direction and the name of the object
+         through which to take the slice.  The "Display a frequency
+         table" operation (described below) will be helpful to use if
+         you don't know what frequency is associated with each index.
+         If there is a 3-D weight array associated with the object then
+         a 2-D weight slice will also be created.
+
+{BT}Integrate over frequency/wavelength{N}  creates a 2-D slice by summing 
+         over the frequency (or wavelength) index in all pixels of a 
+         spectral cube. You will be shown a menu of available 3-D objects, 
+         then prompted for a range of index numbers over which to sum.
+
+{BT}Display a frequency/wavelength table{N}  displays a table of frequencies 
+         or wavelengths associated with a selected 3-D object.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Return to MAIN MENU{N}  returns you to the UIMAGE Main Menu.
+
+-----------------------------------------------------------------------
+LINE PLOTS AND STATISTICS
+
+{BT}Tek or VT200 grey scale plot{N}  lets you create a crude grey scale display
+         of a selected image on any terminal that accepts Regis or
+         Tektronix 4010-series terminal graphics commands.
+
+{BT}Cross sections, slices{N}  lets you create a graph of data values along
+         a specified great circle arc drawn on a selected image.  Users
+         of non-X window terminals can enter two pairs of longitude and
+         latitude values, which denote the endpoints of a great cirle
+         arc.  Prior to entering those values, you will be asked to
+         identify the coordinate system of the points.
+
+         Users of X window terminals have the option of either defining
+         the endpoints of the arc in the manner described above, or else
+         by marking the endpoints on the selected image via clicks of
+         the leftmost mouse button.
+
+         You may take slices through reprojected images such as Aitoff
+         displays, but be aware that for purposes of accuracy, the
+         program is invisibly going back and taking the slice through
+         the corresponding pixels of the skycube from which the
+         reprojection was made.
+
+         If you are using an X window terminal then you will encounter
+         a submenu within this operation that lets you change the mode
+         of designating endpoints of arcs (i.e., from mouse to keyboard
+         or vice versa) or to make a graph of the data values along the
+         complementary direction of the previously defined slice, i.e.,
+         the "long way around" on the great circle. 
+
+{BT}Scatter plot (2 maps){N}  lets you plot the data values of one image versus
+         the data values of another image of the same size.  You will be
+         given a menu of available images and asked to select two.  Any
+         pixel that has a bad value in one or both of the maps will not
+         appear on the plot.  RESTRICTION:  The two maps must have the
+         same quadcube resolution.  If they are single-face (as opposed
+         to full-sky) images, they must be the same face. 
+
+{BT}Contour plots{N}  lets you generate contours from a selected image.  After
+         identifying the desired image from which contours should be
+         made, you will be prompted for any changes to the default
+         contour levels and number of contours.  X window terminal users
+         are given the opportunity to have multi-colored contours, and
+         to overlay the contours on another image if desired.  After the
+         contours are drawn, you are given an option to have a
+         PostScript file produced.  Be aware that this plot file is of
+         the contours alone and does not include the underlying image.
+         X window users can use the "Create a PostScript File" operation
+         to create a PostScript plot of the complete image with contours.
+
+{BT}Single pixel information{N}  There are two pathways for this procedure.
+         Keyboard Input: returns the data value, pixel number and
+         coordinates for a keyboard selected pixel in a 2-D map.
+         Mouse Input (X windows only):  returns the data value and
+         coordinates for mouse-selected pixels in a 2-D map.  Use the
+         left mouse button to pick out pixels repeatedly.  The right
+         button terminates the operation.                     
+
+{BT}Pixel information for graphs{N} (X windows only) returns the data value,
+         coordinates, and the index of the array element for mouse-selected 
+         pixels in a 1-D graph. Use the left mouse button to pick out pixels 
+         repeatedly.  The right button terminates the operation. 
+
+{BT}Statistics & Histogram{N}  lets you calculate statistics (min, max, mean,
+         median, standard deviation, and number of pixels) for all or
+         part of a selected image.  If you want to work with just a part
+         of the selected image, then you will need to define the
+         vertices of a polygon which encloses the desired area.  X
+         window terminal users can do this by marking off an arbitrary
+         number of points on the selected image with the leftmost mouse
+         button, and then clicking the rightmost button to designate the
+         final point.  Non-X window users can identify the vertices by
+         typing in the coordinates of each point, after having identif-
+         ied the coordinate system which will be used.
+
+         To plot a histogram, you will be prompted for the number of
+         bins to use as well as the min and max x-axis range for the
+         plot.  Finally, you must choose whether the histogram should be
+         displayed as a linear or semi-log plot.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Return to MAIN MENU{N}  returns you to the UIMAGE Main Menu.
+
+--------------------------------------------------------------------------
+MODELING AND FITTING
+
+This menu lets you access fitting and/or modeling utilities.
+
+{BT}Subtract a Dipole{N}  creates a new skymap from a selected 2-D map by
+         fitting and subtracting a dipole.  After selecting the input
+         skymap, you will be asked to type in a galactic exclusion angle
+         in degrees.  Acceptable values range from 0 to 90 degrees, and
+         20 degrees is the default value.  If the object has a weight
+         array it will be applied for the calculation.  The
+         parameters which describe the dipole are calculated from the
+         selected skymap and are displayed on the screen (the mean CMBR
+         intensity, the dipole amplitude, and the galactic longitude and
+         latitude of the dipole pole).  A new skymap is then created
+         which is equal to the original skymap minus the calculated
+         dipole.
+
+{BT}Fit Spectra with a 3 B-Body Model{N} fits spectra with a three black
+         body model. One blackbody typically corresponds to the cosmic
+         background while the other two can be used to fit the residual
+         dust. Choices for inputs are a single spectrum (graph) or a
+         3-D data cube. After selecting the input spectrum(a) if there
+         are no weights you will be prompted for a Sigma which is used
+         in the output sigma calculations (e.g. for FIRAS use 2.5e-7).
+
+         You will then see a menu of possible input parameters to define.
+         If the input was a 3-D object then the first seven choices correspond
+         to any previously determined value arrays (stored as UIMAGE objects).
+         These are used only for multiple spectra fitting where each spectrum 
+         can have a different fixed input parameter. If the input was a 1-D
+         graph then these choices are not shown. The next 4 choices on the 
+         menu are more global and should be chosen only if the user does 
+         not want to use the default values.
+
+         Next, you will be prompted for a series of singular values for 
+         the initial values. These are global values for all spectra. You
+         will also be asked if you want to vary these or have them fixed.
+        
+         Lastly, a series of questions will prompt you for the various
+         output choices. If the input was a single spectrum any new spectra
+         created will be displayed. If the input was a 3-D object, due to
+         UIMAGE constraints only some of the outputs are valid. The valid
+         choices are to create a 3-D object of the residuals or to obtain
+         the parameter sigmas. Whenever a 3-D object is chosen for an input,
+         a series of 2-D maps corresponding to the parameters which were
+         varied are created.
+
+{BT}Fit Spectra with a Bose-Ein. plus BB Model{N} fits spectra with a
+         Bose-Einstein plus a residual black body spectrum.
+         Choices for inputs are a single spectrum (graph) or a
+         3-D data cube. After selecting the input spectrum(a) if there
+         are no weights you will be prompted for a Sigma which is used
+         in the output sigma calculations (e.g. for FIRAS use 2.5e-7).
+
+         You will then see a menu of possible input parameters to define.
+         If the input was a 3-D object then the first five choices correspond 
+         to any previously determined value arrays (stored as UIMAGE objects).
+         These are used only for multiple spectra fitting where each spectrum 
+         can have a different fixed input parameter. If the input was a 1-D
+         graph then these choices are not shown. The next 4 choices on the 
+         menu are more global and should be chosen only if the user does not 
+         want to use the default values.
+
+         Next, you will be prompted for a series of singular values for 
+         the initial values. These are global values for all spectra. You
+         will also be asked if you want to vary these or have them fixed.
+        
+         Lastly, a series of questions will prompt you for the various
+         output choices. If the input was a single spectrum any new spectra
+         created will be displayed. If the input was a 3-D object, due to
+         UIMAGE constraints only some of the outputs are valid. The valid
+         choices are to create a 3-D object of the residuals or to obtain
+         the parameter sigmas. Whenever a 3-D object is chosen for an input,
+         a series of 2-D maps corresponding to the parameters which were  
+         varied are created.
+
+{BT}2-D Background Modeling Tool{N} is a general background modeling
+         tool. The type of background model returned is determined by
+         the combination of input keyword parameters. The default fit
+         (using no keywords) is a quintic interpolation to pixels
+         specified interactively using the mouse. A single menu
+         is used to define the various input/output parameters. If a
+         menu choice is not selected then either the default (as listed)
+         is used OR if no default is listed, this type of fit is not
+         performed. If after viewing the specialized fit menu the user
+         wants to use the default fit then simply choosing done without
+         any other choices is sufficient. Note, if a final source subtracted 
+         map is desired then the number of standard deviations used to ID 
+         a source MUST be selected.
+    
+         The default output is the background model. This is initially
+         not an UIMAGE object but is duplicated as a hidden UIMAGE object
+         for future use. If a final source subtracted map or background
+         subtracted map is requested these are also displayed.
+
+{BT}1-D Polynomial Fitting{N} is a general polynomial fitting tool.
+         This routine fits polynomials to any UIMAGE graph using the IDL
+         userlib routine SVDFIT. A single menu is used to define the
+         various input/output parameters. The first item, the degree of 
+         polynomial, is mandatory while the other choices are optional.
+
+{BT}Subtract a Dipole + Quadrupole{N} creates a new skymap from a selected 
+         2-D map by fitting and subtracting a dipole plus a quadrupole.  
+         After selecting the input skymap, you will be asked to type in a 
+         galactic exclusion angle in degrees.  Acceptable values range from 
+         0 to 90 degrees, and 20 degrees is the default value.  If the 
+         object has a weight array it will be applied for the calculation.  
+         The parameters which describe the dipole and quadrupole are calculated
+         from the selected skymap and are displayed on the screen (the mean CMBR
+         intensity, the dipole amplitude, the galactic longitude and
+         latitude of the dipole pole, the quadrupole intensityand the five
+         quadrupole terms).  A new skymap is then created which is equal to 
+         the original skymap minus the calculated dipole plus quadrupole. The
+         pure quadrupole model is an optional output.
+
+{BT}1-D Gaussian Fitting{N} is a general gaussian fitting tool.
+         This routine fits gaussains to any UIMAGE graph using the IDL
+         routine CURVEFIT. A single menu is used to define the
+         various input/output parameters. An optional baseline can
+         be included in the fit. The baseline can either be linear
+         or quadratic.
+
+{BT}HELP{N}  invokes this information.
+
+{BT}Return to MAIN MENU{N}  returns you to the UIMAGE Main Menu.
+--------------------------------------------------------------------------
+Create a PostScript file
+
+After selecting an operand within the "Create a PostScript file" menu,
+you will be prompted for a directory name and file name to indicate where
+the output PostScript file should be placed.  Then this can be printed out
+at your leisure.  You may choose to capture either a whole data window (in
+which case all labels, coordinate grids, etc., will be included in the
+hardcopy image) or just the image itself, with no labels or overlays.
+
+--------------------------------------------------------------------------
+Associate weights with an object
+
+Tells the chosen data object to use the chosen weight object in any 
+operations involving weights. This option can be chosen multiple times 
+to overwrite previous choices. Selecting NONE for the weight objects
+cancels the previous weight.
+
+--------------------------------------------------------------------------
+Extract Face from Skymap
+
+Extracts a face from a full skycube or 3-D skycube. If there are weights 
+associated with the data then the appropriate face of the weight object 
+is also extracted.
+
+--------------------------------------------------------------------------
+Select 2D object to combine
+
+This creates a new 3D object out of the selected 2D objects. If there 
+are weights associated with the data then a set of 3D weights will be 
+created. The first object selected decides the data type (e.g. face6,
+map9) of the subsequent choices.
+
+--------------------------------------------------------------------------
+Report object attributes
+
+For any data-object that is selected from this menu, all the scalar
+information that is contained within the object will be printed out
+on the screen.
+
+--------------------------------------------------------------------------
+Remove an object
+
+Any data-object which is selected from this menu will be removed from
+memory.  The data array and related information will not be accessible
+after that point, unless they happen to be stored somewhere in a file.
+If the software is run in an X-windows environment, then any visual
+representation of the data-object (e.g., image or graph) will be removed
+from the screen.
+
+Some data-objects are linked together in such a way that one may not be
+allowed to exist without the other.  For instance, a data-object that
+contains a reprojected map is always linked to a data-object containing an
+associated sky cube.  The sky cube data is what is actually operated upon
+for many operations in which the reprojected map was selected as the
+operand.  In a situation like this, if one were to delete the sky cube
+object, then the reprojected map object needs to be deleted too.  In any
+situation in which the deletion of a selected object would necessiate
+the deletion of any other object(s), then the user will be informed of
+the impact, and then given the option to proceed with the deletion, or
+else to abort the deletion-operation.
+
+--------------------------------------------------------------------------
+Display/hide an object
+
+Used to select whether a chosen UIMAGE object is displayed or not. When 
+an object is not displayed it still exists and can be chosen as an operand 
+in any of the functions.
+
+--------------------------------------------------------------------------
+Select Map Face
+
+This lets you choose one face or all faces of a skycube.  The unfolded 
+skycube is numbered like this:
+                                           -------
+                                          |       |
+                                          |   0   |
+                                          |       |
+                   -------------------------------|
+                  |       |       |       |       |
+                  |   4   |   3   |   2   |   1   |
+                  |       |       |       |       |
+                   -------------------------------|
+                                          |       |
+                                          |   5   |
+                                          |       |
+                                           -------
+
+--------------------------------------------------------------------------
+Refresh an image
+
+This operation allows you to redraw an image, removing any overlays such
+as coordinate grids or contour plots.  This operation also changes 3-D
+surface plots back to their original skycube appearance.
+
+From this menu, choose which object you want redrawn.  UIMAGE displays 
+the image in its original form, with all overlays or any other 
+mutilations removed.
+
+--------------------------------------------------------------------------
+Window magnification factor
+
+This operation allows you to resize ALL of your image/graph windows in one 
+shot.  There are four magnification factors available; the default is 
+magnification factor 2.  (If a resolution 9 image is to be displayed, 
+the default is 1.)  If you choose a large magnification, two things may 
+happen.  The first is that an image may be too big to fit on the screen 
+in which case you will not be ALLOWED to change to that magnification 
+factor.  In the second case, your images may all individually fit on the 
+screen, but they may overlap.  UIMAGE alerts you of this but you may 
+still proceed at that mag factor.
+
+From this menu, choose a magnification factor.  UIMAGE redisplays the 
+images at the new magnification (unless an image is too large) and all 
+future objects will be displayed at that magnification, also.
+
+--------------------------------------------------------------------------
+Change color table
+
+There are four ways to change the colors in which objects are
+displayed:
+
+{BT}Standard IDL color table{N}
+To use a conventional color table, select Standard IDL color table.
+There are 16 different combinations to choose from; select one.  The
+colors in the images are altered and the color table menu returns.
+When you have found a color scheme that you like, Return to previous
+menu.  Any future images will be constructed in these colors. ("Red
+Temperature" is the default color table.) This option preserves some
+UIMAGE specific colors.
+
+{BT}XPalette{N} 
+With this operation, you have the ability to change all of
+the 256 colors.  To change a single color, first hit <MB1> on the
+color square.  Adjust the color of this box using the three intensity
+bars -- red, green, and blue-- located above the 256 color squares.
+In each bar, hold down <MB1> and slide the pointer up or down the bar
+until you have reached the desired intensity of that color; then
+release <MB1>.  The integrated color of the square is shown in the
+vertical bar on the right hand side.  Using this procedure, you can
+change any or all of the 256 colors.  Use <MB3> to exit Palette.
+
+A quicker way to use the Palette function is to interpolate between
+two colors that you define.  To do this, specify two color values in
+the manner explained above.  Then, press <MB1> on one color value and
+press <MB2> on the other; UIMAGE interpolates the color values in
+between these two.  Use <MB3> to exit Palette.
+
+{BT}XLOADCT{N}
+To use a conventional color table, select Standard IDL color table.
+There are 37 different combinations to choose from; select one.  The
+colors in the images are altered and the color table menu returns.
+When you have found a color scheme that you like, Return to previous
+menu.  Any future images will be constructed in these colors. This option
+will lose the preserved UIMAGE colors.
+
+{BT}ADJCT{N} 
+Allows the user to adjust the present color table contrast
+using the mouse. Upon entering this widget the user must choose one
+of the options at the bottom of the widget. The usercan then interactively
+adjust the contrast of the color table.
+
+--------------------------------------------------------------------------
+Standard IDL color table
+
+From this menu, choose one of IDL's standard color tables.  The colors
+in the images are altered and the color table menu returns.  When you
+have found a color scheme that you like, Return to previous menu.  Any
+future images will be constructed in these colors. ("Red Temperature"
+is the default color table.)
+
+--------------------------------------------------------------------------
+Stretch Contrast
+
+The Stretch contrast operation allows you to change the scaling range for
+an object.  The result of this is to enhance the contrasting colors of
+your image by scaling the 254 colors over a smaller range.
+
+From this menu, choose an object to enhance.  You'll be prompted for
+the new scaling min and max, which need to be entered from the
+keyboard.  The rescaled image is displayed and you may now select
+another object to assign new scaling min/max to or you may exit the
+menu.
+
+--------------------------------------------------------------------------
+Resize a graph
+
+This operation lets you change the size of a single graph.  The graph
+sizes are presented in multiples of UIMAGE's standard 56 x 47 pixel boxes.  
+
+From this menu, select which graph you want to resize.  Once chosen,
+UIMAGE prints the title of your choice in the DECterm window.  The
+dimensions of the graph axes presented in the next menu will read 6,
+8, 10, 12, and 14, corresponding to how many 56 x 47 pixel blocks the
+axis will be.  Your first dimension selection corresponds to the
+X-axis (menu title: Select X-size); now choose the Y-axis dimension
+(menu title: Select Y-size).  The resized graph will be displayed and
+you are given the option to resize the graph again.
+
+--------------------------------------------------------------------------
+Change a title
+
+When an image or graph is displayed, its default title is the name of
+the object.  This operation allows you to change the main title of any
+image or graph.
+
+From this menu, choose the image or graph whose title you would like to
+change.  Now type in the new title and your object will be redisplayed
+with its new label. 
+ 
+--------------------------------------------------------------------------
+Change X and Y axis ranges
+
+This operation lets you change the range of one or both graph axes.  
+
+From this menu, choose the graph whose ranges you would like to change.
+UIMAGE shows you the current X-range min and max and  gives you the
+option of changing them. If you decide to do so, enter the new min and
+max values for the X-axis. Do the same for the Y-axis ranges.  The graph
+will be redisplayed with its new ranges. 
+
+--------------------------------------------------------------------------
+Change graph axis labels
+
+This operation lets you change the axis labels of one or both axes. 
+
+From this menu, choose the graph whose axis labels you would like to
+change.  UIMAGE displays the current X-axis title with an option to
+change it.  If you want to change it, specify so and then enter the new
+title. Do the same for the Y-axis title.  The graph will be redisplayed
+with its new axis labels. 
+
+--------------------------------------------------------------------------
+Change a graph's color
+
+After selecting a graph, the user will then get another menu in which
+he can select a color value.  The color values avaliable for graphical
+use in UIMAGE currently number 1 through 9.  The color associated with
+each color value will be illustrated to aid the user in making a
+selection.  The selected graph will then be replotted at the specified
+color value.
+--------------------------------------------------------------------------
+Select a color value
+
+After the user selects one of the color values in the menu, the graph
+which had been selected in the previous menu will be replotted at that
+color value.
+--------------------------------------------------------------------------
+Overlay graphs
+
+Select as many graphs in the "Overlay graphs" menu as you would like to
+overlay together.  After you have selected all the ones which you'd like
+to overlay, then select the "Finish selecting - overlay the graphs"
+option.  After that, a new window will appear which shows all the selected
+graphs overlaid together.
+
+
+You can select the "Abort - return to previous menu" at any time if you'd
+like to abort the operation.
+
+--------------------------------------------------------------------------
+Change Log Scaling
+
+Choose between the various combinations of linear and log scaling for 
+axes on graphs.
+
+--------------------------------------------------------------------------
+Change a graph's plot symbol
+
+Select a graph for which a new plot symbol is desired. After this menu
+you will be prompted for one of the standard IDL plotting symbols. The
+valid choices are: 1-plus sign, 2-asterisk, 3-period, 4-diamond,
+5-triangle, 6-square, 7-X, 10-histogram mode, 0-lineplot.
+
+--------------------------------------------------------------------------
+Label Window
+
+This routine uses a GUI to allow the user to specify the text,
+size, thickness, orientation, and justification of a string.  It 
+also allows the user to see the string in a test window before
+writing it into the window of interest, and to erase a string 
+that has just been placed into the target window.  The string is
+positioned in the window using the cursor. As many strings as
+desired can be placed before exiting the routine.
+
+Text box:  User clicks on here, then enters text.  TEXT MUST END
+           WITH A CARRIAGE RETURN!
+Sliders:   Select the text size and thickness in units of
+           0.1 x IDL's default (i.e. default=10)
+           Select the orientation in degrees CCW from horizontal
+           Select the color, where the default 255 is brightest
+Menu:      Select text justification with respect to cursor
+           position.  Default = 'Center'
+Buttons:   Test:  Causes a horizontal, centered version of the
+                  string to appear in a test window.  If you
+                  don't like it, change the settings or text and
+                  click 'Test' again.
+           OK:    Will activate the cursor.  Move it to the desired    
+                  location in the window of interest, then click
+                  the left mouse button.  The text will appear with
+                  the appropriate orientation, aligned to the left,
+                  center, or right of the cursor as selected.
+           Erase: Will overwrite the most recently-placed string with
+                  the background color.
+           Done:  Exits WINLABEL, causing the widget box and test 
+                  window to disappear     
+
+--------------------------------------------------------------------------
+Add Color Bar
+
+Adds a color bar plus an optional label to the selected window. You will be
+prompted for various options all of which have defaults. Calls COLORBAR.
+
+--------------------------------------------------------------------------
+Markmap
+
+Marks specified positions on a map with a defined label. A menu of options
+is shown. Only choose those for which the default values are not acceptable.
+Calls MARKMAP.
+
+--------------------------------------------------------------------------
+Smooth an image
+
+This operation allows you to smooth an image using a kernel entered either 
+from the keyboard or from an IDL Saveset.  If an IDL Saveset is used, 
+the variable "kernel" must be defined in the saveset.
+
+From this menu, choose which image you would like to smooth.  Then
+enter the kernel you want to use, either from the keyboard or from a
+file.  After displaying the kernel to be used, UIMAGE will display the
+smoothed image.
+
+{BT}NOTE{N}: The kernels are assumed to be symmetric.  Non-symmetric
+kernels may be used by calling the kernel from an IDL Saveset.
+Kernels that are not square may also be used but the user should be
+warned that the results could be faulty.
+
+If you decide to smooth any other objects during this UIMAGE session,
+UIMAGE will remember your kernel (if you entered it from the keyboard)
+and ask you if you want to use the same one again. 
+
+--------------------------------------------------------------------------
+Change array resolution
+
+The resolution of your objects may either be increased or decreased
+using UIMAGE.  The range of possible resolutions is RES 6 to RES 9,
+where the dimensions of full right-handed T's are as follows:
+
+           Resolution 6 :  128 x  96
+           Resolution 7 :  256 x 192
+           Resolution 8 :  512 x 384
+           Resolution 9 : 1024 x 768
+
+UIMAGE is written so that any bad pixels are not included in the
+resolution reduction calculations.  This insures that the new, reduced
+arrays are not contaminated by these flagged pixel data values.
+ 
+From this menu, choose which image whose resolution you want to change. 
+Now pick the new resolution.  (The image's current resolution is not
+listed.)  UIMAGE performs the calculations and displays the image at its
+new resolution. 
+
+--------------------------------------------------------------------------
+Select new resolution
+
+The resolution of your objects may either be increased or decreased
+using UIMAGE.  The range of possible resolutions is RES 6 to RES 9,
+where the dimensions of full right-handed T's are as follows:
+
+           Resolution 6 :  128 x  96
+           Resolution 7 :  256 x 192
+           Resolution 8 :  512 x 384
+           Resolution 9 : 1024 x 768
+
+Note that the image's current resolution is not listed as a choice.
+
+UIMAGE is written so that any bad pixels are not included in the
+resolution reduction calculations.  This insures that the new, reduced
+arrays are not contaminated by these flagged pixel data values.
+
+--------------------------------------------------------------------------
+Histogram equalization
+
+Histogram equalizations are useful in increasing the color contrasts
+of an image, especially those images which seem to be dominated by one
+color or shade.  However, photometry is not conserved; the output
+images are scaled from 0 to 255.
+
+From this menu, choose which object you want to perform the
+equalization on.  UIMAGE does the calculation and displays the
+equalized image.
+
+--------------------------------------------------------------------------
+Edge enhancement
+
+This operation is used to enhance small features.  When UIMAGE
+performs an edge enhancement, bad pixels and any parts which have been
+contaminated by a neighboring bad pixel are designated as bad pixels
+in the output image.
+
+From this menu, choose which image you want to perform the edge 
+enhancement on.  Now choose a high pass filter, either Roberts or Sobel. 
+UIMAGE can now proceed with the calculation and then displays the edge
+enhanced image. 
+
+--------------------------------------------------------------------------
+Edge En. type
+
+This menu lets you choose which high pass filter to use to do the edge 
+enhancement.  The Roberts filter uses an approximation to the Roberts 
+edge enhancement operator and the Sobel filter uses an approximation of a 
+3 x 3 non-linear edge enhancement operator.
+
+From this menu, pick which filter you would like the enhancement done 
+with.  The calculation is performed and the edge enhanced image is 
+displayed.
+
+--------------------------------------------------------------------------
+Zoom an image
+
+This operation allows you to "zoom in on", or magnify, an object.  
+
+From this menu, pick an object to zoom.  After doing this, UIMAGE
+displays an empty zoom window of the default size.  To change the size
+of the zoom window or the zoom factor, put the cursor on the image
+that you selected and click <MB2>.  This pulls up the "Zoom Options"
+menu where these things can be changed.
+
+If you don't want to change the window size or zoom magnification
+factor, press <MB1> on the image where you want the center of the zoom
+to be.  A box is drawn around the part of the full image which will
+appear in the zoom window; next, this area is displayed in the
+previously empty zoom window.  If you choose another center position
+and <MB1>, the last zoom image is erased and the current zoom is
+displayed in the zoom window.  In other words, only one zoom window is
+used in one zooming session; new boxes are not constructed for each
+zoom, rather the old zoom images are just replaced. To get another
+window, you must exit (<MB3>) and begin the Zoom an image process
+again. The center pixels chosen is displayed in the DECterm window
+for each zoom.
+
+To quit the zoom operation, press <MB3> on the original image. 
+
+--------------------------------------------------------------------------
+Zoom options
+
+This menu lets you change the size of the zoom window or change the
+zoom/magnification factor.
+
+{BT}Set zoom factor{N}
+To change the zoom factor, choose Set Zoom Factor.  You can choose
+factors from 1-14; the default is 4. After you have picked one, the
+Zoom options menu disappears.
+
+{BT}Resize zoom window{N} To change the size of the zoom window,
+choose Resize Zoom Window.  The numbers in this menu set the window in
+unit of the 56 x 47 pixel boxes (56 pixels in the X direction, 47 in
+the Y direction).  The default size is 5 x 5.  Knowing this, select
+the X and Y window sizes accordingly to find the size window that you
+want.  After both X and Y values have been selected, an empty window
+of that size is displayed and you are given the option to resize
+again.  When you have successfully created the window size that you
+want, choose Exit this menu.
+
+--------------------------------------------------------------------------
+Zoom factor
+
+You can choose zoom factors from 1-14; the default is 4. After you
+have picked one, the Zoom options menu disappears.
+
+--------------------------------------------------------------------------
+Select X size
+
+The numbers in this menu represent the factor by which the 56 x 47
+pixel boxes are multiplied (56 pixels in the X direction).  The
+default size is for the X-axis is 12.  Knowing this, select the X
+window size accordingly to find the size window that you want.
+
+--------------------------------------------------------------------------
+Select Y size
+
+The numbers in this menu represent the factor by which the 56 x 47
+pixel boxes are multiplied (47 pixels in the Y direction).  The
+default size is for the Y-axis is 12.  Knowing this, select the Y
+window size accordingly to find the size window that you want.  The
+zoom window is redrawn at the new size. 
+
+--------------------------------------------------------------------------
+3-D surface plot
+
+From this menu, select which object you would like to see in a 3-D
+view.  UIMAGE replaces the existing 2-D image of the object with a 3-D
+surface plot.
+
+{BT}NOTE:{N}  Even though the object is now a 3-D surface plot, it is
+still considered to be a 2-D object by UIMAGE.
+
+To get the original image back, choose Display Manipulation from the
+UIMAGE Main Menu and then choose Refresh an image.  This will return
+the object to its original appearance.
+
+--------------------------------------------------------------------------
+Plot coordinate grid
+
+This operation allows you to overlay a coordinate grid on any 2-D object.
+
+From this menu, identify which object you would like to have a grid
+overlay and choose it.  Now select a coordinate system.  You may now
+choose your own set of parallels to be drawn or use the defaults,
+which are 0, 30, and 60 degrees.  You may now do the same for the
+meridians, where the defaults are 0, 60, 120, and 180 degrees.  You
+may enter as many parallels/meridians as you like or simply specify
+a DELTA (in degrees) and all appropriate parallels/meridians will be  
+plotted. After the lines have been selected, they are plotted on top of 
+the chosen image.
+
+To get rid of the overlay, use the Refresh an image operation.
+
+--------------------------------------------------------------------------
+Draw coordinate grid
+
+You can overlay a coordinate grid on any 2-D object.  
+
+From this menu, choose which object you would like to have a grid
+overlay.  Entering the following items from the keyboard, first select
+a coordinate system.  Now choose your own set of parallels to be drawn
+or use the defaults, which are 0, 30, and 60 degrees.  Do the same for
+the meridians, where the defaults are 0, 60, 120, and 180 degrees.
+You can choose to enter either specific values or an absolute increment
+in degrees. In the case of the latter all appropriate parallels/meridians
+will be computed. In the case of the former you may enter as many 
+parallels/meridians as you like.  After the lines have been selected, 
+they are plotted on top of the chosen image.
+
+To get rid of the overlay, use the Refresh an image operation.
+
+--------------------------------------------------------------------------
+Reprojection
+
+UIMAGE produces three types of projections: Aitoff, Global Sinusoidal,
+and Mollweide.  Aitoff projections are equal area projections with
+curved parallels.  Global Sinusoidal projections have parallel parallels
+and are equal area.  Mollweide projections are equal area and also have
+parallel parallels. 
+
+From this menu, choose an object to be reprojected.  Then you must pick 
+a type of projection and a coordinate system.  In a few moments, the 
+reprojected image is displayed.
+
+--------------------------------------------------------------------------
+New projection
+
+UIMAGE produces three types of projections: Aitoff, Global Sinusoidal,
+and Mollweide.  Aitoff projections are equal area projections with
+curved parallels.  Global Sinusoidal projections have parallel parallels
+and are equal area.  Mollweide projections are equal area and also have
+parallel parallels. 
+
+From this menu, choose a type of reprojection.  From here, you pick a 
+coordinate system.  After that, the reprojection is displayed.
+
+--------------------------------------------------------------------------
+New coordinate system
+
+UIMAGE will reproject your image into any one of three coordinate
+systems.  
+
+From this menu, choose either a galactic, ecliptic, or equatorial
+coordinate system.  UIMAGE displays the reprojection in the specified
+system.
+
+--------------------------------------------------------------------------
+ALGEBRAIC OPERATIONS
+
+UIMAGE has the ability to do algebraic calculations on one or more
+data objects or line plots.  The operations can be performed on any
+graphs or 2-D objects and are grouped according to how many data
+objects they operate on.
+
+{U}Binary Operations{N} involve two data objects or graphs.  Possible
+operations are :
+
+                  X1 + X2: addition
+                  X1 - X2: subtraction
+                  X1 * X2: multiplication
+                  X1 / X2: division 
+     (X1*WT1 + X2*WT2)/(WT1+WT2): weighted addition
+     (X1*WT1 - X2*WT2)/(WT1+WT2): weighted subtraction
+
+These operations may be performed on any two graphs or any 2-D
+objects whose array sizes are the same.  Flagged pixels are not
+included in the operations and remain flagged in the new object.  In
+the case of graphs, if the X-axis ranges of the two initial objects
+differ, the operations are performed only over those points along 
+the X-axis where there is an exact overlap.
+
+From this menu, if you chose a binary operation then you must select
+your first object.  After you have chosen it, the choices for the
+second object are appropriately narrowed by UIMAGE to include only
+those objects which are of the same dimension (i.e.  graphs or 2-D 
+objects) and, in the case of 2-D objects, the same size.  The new 
+object is constructed and displayed on the screen.
+
+In the case of displaying the result of a multiplication or a
+division, the contrast range is narrowed to two sigma instead of being
+stretched over the entire range to avoid a darkened image caused by
+any near-zero divides.  
+
+{U}Unary Operations{N} involve only one data object or graph.  Possible
+operations are:
+
+                  ABS(X): absolute value 
+                  SQRT(X): square root 
+                  LOG10(X): base-ten logarithm
+                  1./X: reciprocal
+
+These operations may be performed on any graphs or 2-D data objects,
+including any or all faces of skycubes, reprojections, and graphs.  In
+unary operations, bad pixels remain flagged in the new objects.  In
+the cases of SQRT(X) and LOG10(X), pixels with negative values are
+considered to be bad pixels in the new object.
+
+First choose the operation and then choose an image or graph from the
+menu list.  UIMAGE displays the new object.
+
+
+{U}N-ary Operations{N} involve more than two data objects or graphs.
+Possible operations are:
+
+                  C0 + C1*X1 + C2*X2 +...+Cn*Xn: weighted sum
+                  Average (X1, X2, X3, ... Xn): average
+               (X1+WT1,...Xn*WTn)/SUM(WT1,...WTn): weighted average
+
+Bad pixels remain flagged in the generated objects.
+
+Choose an operation and then choose how many objects to include in the
+calculation.  Alternating between the two, the values for the
+coefficients are entered in from the keyboard and the objects are
+selected from the object list menus.  As with the binary operations,
+the first object that you choose will narrow down the following object
+lists to include only those with compatible object type and size.
+(When finding averages, there of course are no prompts for coefficients.)
+UIMAGE then displays the result.
+
+--------------------------------------------------------------------------
+Select X1
+
+Choose the first object to be in this operation.  Remember that this
+choice narrows down the succeeding choices to include only those
+objects which have the same object type (graph or 2-D objects) and 
+in the case of 2-D objects, the same array dimensions.
+
+--------------------------------------------------------------------------
+Select Xn
+
+Choose the next object to be in the operation.  Note that the choices
+have been appropriately narrowed by UIMAGE to include only those
+objects which are of the same dimension (i.e., graphs or 2-D objects) 
+and the same size as the first object that you chose.
+
+In the case of displaying the result of a multiplication or a division
+algebraic operation, the contrast range is narrowed to two sigma
+instead of being stretched over the entire range to avoid a darkened
+image caused by the many near-zero divides.  
+
+--------------------------------------------------------------------------
+Select X
+
+Choose the object to be the operand for the operation. 
+
+--------------------------------------------------------------------------
+Extract spectrum for a pixel
+
+In the case of 3-D objects, UIMAGE can display the spectrum of a
+single pixel (i.e., the spectrum at a given position). 
+
+From this menu, choose a slice of a spectral cube.  Mark the desired
+pixel by a <MB1> click; the spectrum of that pixel/position is then
+displayed.  After each spectrum is displayed, you will be given the
+option of resizing the graph.  You may mark as many pixels as you want
+before striking <MB3> on the image to exit from the Extract spectrum
+from a pixel operation. After each selection you will be prompted if
+the spectrum shouls also be sent to an ASCII file for later use.
+
+       NOTE: There may be some confusion as to why a 2-D object (i.e.,
+a slice) is selected when wanting to do a 3-D operation.  Although the
+pixel is chosen on a 2-D object, UIMAGE is actually returning to the
+3-D object to find the data values at that pixel for all the
+frequencies of the 3-D object.  The 2-D image just serves as a way to
+identify the desired pixel.
+
+--------------------------------------------------------------------------
+Extract spectrum for an area
+
+This operation finds the average spectrum of an area. 
+
+From this menu, select a slice.  Mark off the desired area with <MB1>
+clicks on the vertices; <MB3> closes the polygon.  UIMAGE actually
+returns to the 3-D object to gather the information and then displays
+an average spectrum of the region.  Flagged or empty pixels are not
+included in this calculation. The number of pixels used in the spatial 
+average is displayed in the DECterm window. 
+
+--------------------------------------------------------------------------
+Tek or VT200 grey scale plot
+
+This operation allows you to create a grey scale image of any available
+images or objects.  For VT200 users, this is the only way to display
+images.
+
+From this menu, choose the object you want to represent as a grey
+scale image.  After picking your object, you have to option to specify
+a scaling range. Then, UIMAGE displays the plot.
+
+--------------------------------------------------------------------------
+Cross sections, slices
+
+This operation creates a spatial cross section of a 2-D object, which is
+the arc of a great circle connecting two points that you choose.  Cross
+sections may also be produced from reprojections.
+
+From this menu, choose an object.  Now that you have picked your
+object, you may choose your cross section by one of two ways.  The
+Cursor entry mode allows you to use the mouse to click on two points
+on the object.  The Longitude/latitude entry mode prompts you to enter
+two sets of coordinates from the keyboard.  (VT200 users only have
+this entry mode available.)
+
+After the points have been specified, the shorter arc connecting the
+points is drawn on the object and UIMAGE then displays a plot of
+data value vs. position for the cross section.  You may resize the
+graph if you so desire or you may exit that menu, leaving the graph at
+the default size.
+
+--------------------------------------------------------------------------
+Cross sections, Sky cuts
+
+This operation creates a spatial cross section of a 2-D object, which is
+the arc of a great circle connecting two points that you choose.  Cross
+sections may also be produced from reprojections.
+
+From this menu, choose an object.  Now that you have picked your
+object, you may choose your cross section by one of two ways.  The
+Cursor entry mode allows you to use the mouse to click on two points
+on the object.  The Longitude/latitude entry mode prompts you to enter
+two sets of coordinates from the keyboard.  (VT200 users only have
+this entry mode available.)
+
+After the points have been specified, the shorter arc connecting the
+points is drawn on the object and UIMAGE then displays a plot of
+data value vs. position for the cross section.  You may resize the
+graph if you so desire or you may exit that menu, leaving the graph at
+the default size.
+
+---------------------------------------------------------------------------
+Next action for C.S. plot
+
+There are now four choices available to you, each of which is discussed 
+below.
+
+{BT}Specify new cross section{N}  allows you to choose two new points
+to define a cross section of the same object using the same coordinate
+entry mode.  
+
+{BT}View "complementary" cross section{N} uses the same two points
+previously specified but selects the cross section to be the longer
+arc connecting the two.  You will see the other arc of the great
+circle drawn on the object and its intensity plot displayed.  The
+size of the graph will be the same as the size of the first one and
+this time you are not given the option to resize.
+
+{BT}Change entry mode{N} allows you to switch the manner in which you
+enter coordinates of an object from cursor entry to keyboard entry or
+vice versa.  After choosing your new mode of coordinate entry, the
+process of marking the points, drawing the arc, and displaying the
+graph repeats itself.  
+
+{BT}Return to previous menu{N} if you would like to perform these
+operations on a different object or exit this menu.
+
+--------------------------------------------------------------------------
+Scatter plot - select image for X-axis
+
+Choose the first object to be in the scatter plot; its intensity will
+be plotted along the X-axis.  
+
+Remember that this choice narrows down the succeeding choices to
+include only those objects which have the same object type (graphs or
+2-D) and in the case of 2-D objects, the same array dimensions.  Also,
+if the image is a single face (as opposed to a full skycube), the
+second image must be the same face.
+
+--------------------------------------------------------------------------
+Scatter plot - select image for Y-axis
+
+Choose the second object to be in the scatter plot; its intensity will
+be plotted along the Y-axis.  
+
+Remember that these choices have been narrowed down by your previous
+choice to include only those objects which have the same object type
+(graph or 2-D) and the same array dimensions as the first object.  Also,
+if your first object was a single face (as opposed to a full skycube),
+the second object must be the same face.
+
+--------------------------------------------------------------------------
+Draw contours
+
+From this list, choose which object you would like to use to draw
+contours.  You may enter the contour levels or let UIMAGE do that.
+Also, for X window users, multi-colored contours can be generated (if
+you don't like the color of the contours that are produced, then you can
+change those colors by traversing the menus and invoking XPALETTE).
+You may also choose whether or not to send the contours to a PostScript
+file.  
+
+--------------------------------------------------------------------------
+Single pixel information
+
+UIMAGE can provide information about a single pixel of a 2-D object.
+
+From this menu, select one of the available 2-D objects and then choose any
+coordinate system you want.  (Your choice of coordinate system has no
+influence on anything except the values of the outputted latitude and
+longitude.)
+
+Now select your pixels using the mouse.  After clicking <MB1> on a
+point on the object, the point will be marked with a dot on its image
+and then its corresponding information (pixel number, latitude,
+longitude, and data value) will be displayed in the DECterm window.
+You may choose as many points as you like with <MB1> clicks or by
+holding <MB1> down and dragging the pointer around the image to select
+a trail of points.  Either way, when you are finished, strike <MB3> to
+exit Single Pixel Information.  Choose whether to remove or keep the
+pixel markings on the image.
+
+--------------------------------------------------------------------------
+Keyboard pixel information
+
+UIMAGE can provide information about a single pixel of a 2-D object.
+
+From this menu, select one of the available 2-D objects. Next select
+the input format, pixel number, decimal hr/dec, or lon/lat of the
+input coordinates. In the latter 2 cases you will be asked to choose
+a coordinates system (ecliptic, equatorial or galactic). A similar
+set of choices will be presented for the output formats and coordinate
+systems. The corresponding information (pixel number, latitude,
+longitude, and data value) will be displayed in the DECterm window.
+
+--------------------------------------------------------------------------
+1-D Pixel information
+
+(X windows only) returns the data value, coordinates, and the index of 
+the array element for mouse-selected pixels in a 1-D graph. Use the 
+left mouse button to pick out pixels repeatedly.  The right button 
+terminates the operation. 
+
+--------------------------------------------------------------------------
+Statistics & Histogram
+
+From this menu, choose an object upon which you want to perform
+statistical operations.  You can either find the statistics of the
+whole object or of a selected region.  If you choose A section, draw a
+polygon with <MB1> clicks on the vertices of your region; hit <MB3> to
+close the area.  (Or the vertices can be entered in from the
+keyboard.)  UIMAGE now presents you with the minimum and maximum
+values in the region, the mean and median, the standard deviation, and
+the number of pixels in your selected area.  Bad pixels are excluded
+in these calculations.
+
+If you choose to go on and plot a histogram, you can enter in new min
+and max values or let UIMAGE use the ones it just found.  Then, enter
+the number of bins and choose whether you want linear or semi-log
+scale.  UIMAGE displays the histogram.
+
+--------------------------------------------------------------------------
+Subtract a dipole
+
+This creates a new skymap from a selected 2-D map by
+fitting and subtracting a dipole.  After selecting the input
+skymap, you will be asked to type in a galactic exclusion angle
+in degrees.  Acceptable values range from 0 to 90 degrees, and
+20 degrees is the default value.  If the object has a weight
+array it will be applied for the calculation.  The
+parameters which describe the dipole are calculated from the
+selected skymap and are displayed on the screen (the mean CMBR
+intensity, the dipole amplitude, and the galactic longitude and
+latitude of the dipole pole).  A new skymap is then created
+which is equal to the original skymap minus the calculated
+dipole.
+
+--------------------------------------------------------------------------
+Fit Spectra with a 3 B-Body Model
+
+This is a menu of possible input parameters to define.
+If the input was a 3-D object then the first seven choices correspond to 
+any previously determined value arrays (stored as UIMAGE objects). These 
+are used only for multiple spectra fitting where each spectrum can have 
+a different fixed input parameter. If the input was a 1-D graph then
+these are not displayed. The next 4 choices on the menu are more
+global and should be chosen only if the user does not want to use
+the default values. Input for masking certain elements can be given
+as a combination of single values and a range of values, e.g. 
+12,74:77,128:141, where range is specified using a colon (:).
+
+After exiting, you will be prompted for a series of singular values for 
+the initial values. These are global values for all spectra. You
+will also be asked if you want to vary these or have them fixed.
+
+Lastly, a series of questions will prompt you for the various
+output choices. If the input was a single spectrum any new spectra
+created will be displayed. If the input was a 3-D object, due to
+UIMAGE constraints only some of the outputs are valid. The valid
+choices are to create a 3-D object of the residuals or to obtain
+the parameter sigmas. Whenever a 3-D object is chosen for an input,
+a series of 2-D maps corresponding to the parameters which were
+varied are created.
+
+--------------------------------------------------------------------------
+Fit Spectra with a Bose-Ein. plus BB model
+
+This is a menu of possible input parameters to define.
+If the input was a 3-D object then the first five choices correspond to 
+any previously determined value arrays (stored as UIMAGE objects). These 
+are used only for multiple spectra fitting where each spectrum can have 
+a different fixed input parameter. If the input was a 1-D graph then
+these are not displayed. The next 4 choices on the menu are more
+global and should be chosen only if the user does not want to use
+the default values. Input for masking certain elements can be given
+as a combination of single values and a range of values, e.g. 
+12,74:77,128:141, where range is specified using a colon (:).
+
+After exiting, you will be prompted for a series of singular values for 
+the initial values. These are global values for all spectra. You
+will also be asked if you want to vary these or have them fixed.
+        
+Lastly, a series of questions will prompt you for the various
+output choices. If the input was a single spectrum any new spectra
+created will be displayed. If the input was a 3-D object, due to
+UIMAGE constraints only some of the outputs are valid. The valid
+choices are to create a 3-D object of the residuals or to obtain
+the parameter sigmas. Whenever a 3-D object is chosen for an input,
+a series of 2-D maps corresponding to the parameters which were  
+varied are created.
+
+--------------------------------------------------------------------------
+2-D Background Modeling Tool
+
+This menu is used to define the various input/output parameters. If a
+menu choice is not selected then either the default (as listed)
+is used OR if no default is listed, this type of fit is not
+performed. If after viewing the specialized fit menu the user
+wants to use the default fit (quintic interpolation to pixels specified
+interactively) then simply choosing done without
+any other choices is sufficient. Note, if a final source subtracted 
+map is desired then the number of standard deviations used to ID a source 
+MUST be selected.
+    
+--------------------------------------------------------------------------
+1-D Polynomial Fitting
+
+This is a general polynomial fitting tool. This routine fits polynomials 
+to any UIMAGE graph using the IDL userlib routine SVDFIT. A single menu 
+is used to define the various inout/output parameters. The first item, 
+the degree of polynomial, is mandatory while the other choices are optional.
+Input for masking certain elements can be given as a combination of single 
+values and a range of values, e.g. 12,74:77,128:141, where range is 
+specified using a colon (:).
+
+--------------------------------------------------------------------------
+Subtract a Quadrupole
+
+This creates a new skymap from a selected 
+2-D map by fitting and subtracting a dipole plus a quadrupole.  
+After selecting the input skymap, you will be asked to type in a 
+galactic exclusion angle in degrees.  Acceptable values range from 
+0 to 90 degrees, and 20 degrees is the default value.  If the 
+object has a weight array it will be applied for the calculation.  
+The parameters which describe the dipole and quadrupole are calculated
+from the selected skymap and are displayed on the screen (the mean CMBR
+intensity, the dipole amplitude, the galactic longitude and
+latitude of the dipole pole, the quadrupole intensityand the five
+quadrupole terms).  A new skymap is then created which is equal to 
+the original skymap minus the calculated dipole plus quadrupole. The
+pure quadrupole model is an optional output.
+
+--------------------------------------------------------------------------
+1-D Gaussian Fitting
+
+This is a general gaussian fitting tool. This routine fits gaussians 
+to any UIMAGE graph using the IDL routine CURVEFIT. If there are weights
+associated with the graph then these will be used for the fit. A single menu 
+is used to define the various input/output parameters. An optional 
+baseline can be included in the fit. The baseline can either be linear
+or quadratic. Input for masking certain elements can be given as a 
+combination of single values and a range of values, e.g. 12,74:77,128:141, 
+where range is specified using a colon (:).
+
+--------------------------------------------------------------------------
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@COBECL.DNET.NASA.GOV.
+
+

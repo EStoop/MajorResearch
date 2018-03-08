@@ -1,0 +1,145 @@
+.title
+User Library Routines
+.Help
+     ===========================================================
+     Detailed help information on these routines can be obtained
+     by typing 
+                DOC_LIBRARY, 'routine_name' 
+
+     from the IDL or UIDL prompt.
+     ============================================================
+
+ADJCT           Adjusts color table contrast function using mouse. 
+
+BAR_PLOT        Business style bar charts.
+BILINEAR        Bilinear interpolation
+BOX_CURSOR      Variable size box cursor for windows.
+
+C_EDIT          Interactive color table creation, HSV or HLS systems. 
+COLOR_EDIT      Interactive color table creation, HSV or HLS systems. 
+CONGRID         Resamples image to specified dimensions.
+CORRELATE       Simple correlation coefficient.
+COSINES         Sample function used by SVDFIT.
+CROSSP          Vector cross product.
+CURVEFIT        Nonlinear least squares fit to a function.
+
+DEFROI          Define an irregular region of interest using the mouse. 
+DERIV           Differentiation using 3_point Lagrangian interpolation. 
+DETERM          Determinant of a square matrix.
+DIGITAL_FILTER  Calculate coeffs of non_recursive digital filter. 
+DISSOLVE        Digital "dissolve" effect for images.
+DIST            Create a matrix with each element set to its Euclidean
+                    distance from the origin. 
+DOC_LIBRARY     Documents Users' library procedures.
+
+ERRPLOT         Overplots error bars.
+
+FLICK           Flicker display between two images.
+FUNCT           Sample function for CURVEFIT.
+
+GAMMA_CT        Gamma correction for color tables.
+GAUSSFIT        Fits sum of a gaussian and a quadratic.
+
+HANNING         Window function for FFT filtering.
+HILBERT         Constructs a Hilbert matrix.
+HIST_EQUAL      Histogram equalizes an image.
+HIST_EQUAL_CT   Histogram equalizes color tables from an image or
+                    display region. 
+HIST_EQUAL_INT  Interactive histogram equalization.
+HLS             Hue Lightness Saturation color system color tables. 
+HSV             Hue Saturation Value color system color tables.
+
+IMAGE_CONT      Overlay an image and its contour plot.
+INTERPOL        Linear interpolation from vectors.
+
+JULDAY          Calculate Julian Day Number from month, day, year. 
+
+LEEFILT         Lee Filter for images.
+LJLCT           Loads standard color tables for DEC LJ250 printer. 
+LN03            Produce plot files for a DEC LN03+ laser printer. 
+LOADCT          Loads standard color tables.
+
+MENUS           Crude menu facility (used by ADJCT).
+MODIFYCT        Save modified color tables in standard color table files
+MOVIE           Displays cyclic animated sequences of images (SunView). 
+MULTI           Replicates current color table, enhancing contrast. 
+
+ONLY_8BIT       Initializes Sun display for systems without monochrome
+                    planes. 
+OPLOTERR        Overplot data points with error bars.
+
+PALETTE         Interactively constructs color tables using RGB system. 
+PLOT_FIELD      Plots two_dimensional fields using arrows.
+PLOTERR         Plots data with error bars.
+POLY            Evaluates polynomials.
+POLY_AREA       Returns area of a polygon.
+POLY_FIT        Polynomial least squares fit.
+POLYCONTOUR     Fills contour paths with solid colors.
+POLYFITW        Polynomial least squares fit with weights.
+POLYWARP        Coefficients for polynomial spatial warping of images.
+POPD            Remove the top directory on the working directory stack
+                     maintained by PUSHD/POPD and make it the current 
+                     directory. 
+PRINTD          Display PUSHD/POPD's working directory stack.
+PROFILE         Extracts an image profile along an arbitrary line.
+PROFILES        Interactively plots row or column image profile.
+PSEUDO          Color tables based on LHB (Lightness, Hue and
+                     Brightness) color system. 
+
+PUSHD           Push a directory onto the working directory stack. 
+RDPIX           Interactively reads and displays image pixel values.
+READ_SRF        Reads Sun raster format files.
+READ_XED        Reads XWD (X window dump) format files.
+REGRESS         Multiple linear regression.
+REVERSE         Reverses vectors or arrays.
+ROT             Rotates/magnifies image with nearest neighbor sampling. 
+ROTINT          Rotates/magnifies an image, with bilinear interpolation. 
+
+SCALE3D         Scales three_dimensional unit cube into display area. 
+SETUP_KEYS      Defines escape sequence keys for common keyboards. 
+SHADE_SURF_IRR  Shaded surface display of irregularly gridded elevations.
+SHOW3           Combines SURFACE and CONTOUR for 3-D image display.
+SPLINE          Cubic spline interpolation.
+STDEV           Standard deviations.
+STRETCH         Linear color table contrast enhancement.
+SURFACE_FIT     Polynomial fit to a surface.
+SURFR           Duplicate rotation, translation and scaling of SURFACE. 
+SVDFIT          General least squares fit using SVD.
+
+T3D             Various three_dimensional transformations,
+TEK_COLOR       Loads Tektronix  4115 default color map.
+THREED          Plots two_dimensional array using pseudo 3-D plot
+TIFF_READ       Reads 8 bit TIFF files.
+TIFF_WRITE      Writes 8 bit TIFF files.
+
+VEL             Draws vector flow (field) plots with streamlines. 
+VELOVECT        Draws vector flow (field) plots.
+
+WRITE_SRF       Writes Sun raster file format files.
+
+XANIMATE        Cyclic animated sequences of images (SunView and X). 
+
+ZOOM            Zooms portions of the display using mouse.
+ZOOM_24         Zoom for 24 bit true-color displays.
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@ZWICKY.GSFC.NASA.GOV.
+
+

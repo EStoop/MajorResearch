@@ -1,0 +1,47 @@
+.TITLE
+Select Input Format
+.HELP
+This menu allows you to select the input format and in effect
+limits DATA I/O to certain data sets.
+
+FITS files is the option to choose to read in the COBE project
+instrument Project Data Sets (PDS) or Initial Products (IP).  
+You will be pointed to a default directory which contains the PDS/IP 
+files, or if you have your own version you can enter a directory 
+of choice.  The files will be scanned so that only valid FITS 
+format files are displayed.
+
+COBE IDL Save Sets are read through IDL's 'Restore' function.
+They must contain appropriately formatted data arrays and if they
+do not contain the meta-data, you will be prompted for it.  You
+may also use 'Restore' or 'UPutData' on these data sets.  The files
+in the directory that you specify will be scanned so that only
+valid IDL Save Set files are displayed.
+
+COBE Sky Maps are read through the Data Server and are in a
+standard COBE/VMS format.  You may also use 'BuildMap' on
+these data sets.
+
+Select 'Return to Previous Menu' to return to the previous menu.
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@ZWICKY.GSFC.NASA.GOV.
+
+

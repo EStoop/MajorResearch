@@ -1,0 +1,19 @@
+ Program: FIND Wed Mar 11 17:43:58 2009
+
+ Threshold above background:    3.0
+ Approximate FWHM:      1.90000
+ Sharpness Limits: Low -1.00  High  1.00
+ Roundness Limits: Low  0.20  High  1.00
+
+ No of sources above threshold    37
+ No. of sources rejected by SHARPNESS criteria           4
+ No. of sources rejected by ROUNDNESS criteria          33
+ No. of sources rejected by CENTROID  criteria           0
+
+             STAR       X       Y     FLUX     SHARP    ROUND
+                1 1844.19   47.69      5.1     0.62     0.26
+                2 1500.15  704.57     16.4     0.52     0.43
+                3  143.18  817.59      9.2     0.55     0.23
+                4 1241.81  835.26      3.4     0.63     0.25
+                5  420.91  894.20      9.0     0.64     0.23
+                6  853.08  938.78      4.0     0.67     0.25

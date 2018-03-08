@@ -1,0 +1,16 @@
+pro junk
+
+restore, '/Users/jkrick/idlbin/objectnew.sav'
+
+a = where(objectnew.mips24flux gt 0)
+
+openw, outlun, '/Users/jkrick/nep/mips24cat.txt', /get_lun
+
+for i = 0, n_elements(a) - 1 do begin
+   printf, outlun, objectnew[a(i)].ra, objectnew[a(i)].dec, objectnew[a(i)].mips24flux, objectnew[a(i)].mips24fluxerr
+endfor
+close, outlun
+free_lun, outlun
+
+
+end

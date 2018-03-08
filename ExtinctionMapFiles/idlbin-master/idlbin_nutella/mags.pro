@@ -1,0 +1,79 @@
+pro mags
+
+;device, true=24
+;device, decomposed=0
+;colors = GetColor(/load, Start=1)
+
+mydevice = !D.NAME
+!p.multi = [0, 0, 1]
+SET_PLOT, 'ps'
+
+
+device, filename = '/Users/jkrick/palomar/LFC/mags.ps', /portrait, $
+  BITS=8, scale_factor=0.9 , /color
+
+xc=[4567.52, 5225.94]
+yc=[5146.85,  5937.14] 
+
+
+apsize=[1,1.2,1.4,1.6,1.8,2,2.2,2.4,2.6,2.8,3.0,3.2,3.4,3.6,3.8,4.0]
+
+
+fwhm=8.5
+apsizeg = apsize*fwhm
+
+image=readfits("/Users/jkrick/palomar/LFC/coadd_g.fits",hd)
+aper,image,xc,yc,flux,eflux,sky,skyerr,1,apsizeg,[20,50],[-200,2000],/nan,/exact,/flux,setsky=0.0,/silent
+nepgmag=26.48 -2.5*alog10(flux)
+
+
+plot, apsizeg/fwhm, flux/flux(15), psym=2, yrange=[0.7,1.1], ystyle = 1,$
+      xthick=3,ythick=3,charthick=3,xtitle="x fwhm", ytitle="fraction of total flux",$
+      title="where to measure magnitudes, g band"
+
+xyad, hd, xc, yc, ra, dec
+
+
+image=readfits("/Users/jkrick/palomar/LFC/coadd_r.fits",hd)
+adxy, hd, ra, dec, x, y
+;find, image, x, y,flux,sharp, round, 5.0,4.8,[-1.0,1.0],[0.2,1.0],/silent
+fwhm=6.0
+apsizer = apsize*fwhm
+gcntrd,image,x,y,xc,yc,6,/silent
+aper,image,xc,yc,flux,eflux,sky,skyerr,1,apsizer,[30,50],[-200,20000],/nan,/exact,/flux,setsky=0.0,/silent
+neprmag=26.67 -2.5*alog10(flux)
+
+plot, apsizer/fwhm, flux/flux(15), psym=2, yrange=[0.7,1.1], ystyle = 1,$
+      title="where to measure magnitudes, r band"
+
+image=readfits("/Users/jkrick/palomar/LFC/coadd_i.fits",hd)
+adxy, hd, ra, dec, x, y
+fwhm=6.0
+apsizei = apsize*fwhm
+;find, image, x, y,flux,sharp, round, 5.0,4.8,[-1.0,1.0],[0.2,1.0],/silent
+gcntrd,image,x,y,xc,yc,6,/silent
+aper,image,xc,yc,flux,eflux,sky,skyerr,1,apsizei,[30,50],[-200,20000],/nan,/exact,/flux,setsky=0.0,/silent
+nepimag=26.35 -2.5*alog10(flux)
+
+plot, apsizei/fwhm, flux/flux(15), psym=2, yrange=[0.7,1.1], ystyle = 1,$
+      title="where to measure magnitudes, i band"
+
+
+image=readfits("/Users/jkrick/palomar/LFC/coadd_u.fits",hd)
+adxy, hd, ra, dec, x, y
+fwhm=6.0
+apsizeu = apsize*fwhm
+;find, image, x, y,flux,sharp, round, 5.0,4.8,[-1.0,1.0],[0.2,1.0],/silent
+gcntrd,image,x,y,xc,yc,6,/silent
+aper,image,xc,yc,flux,eflux,sky,skyerr,1,apsizeu,[30,50],[-200,20000],/nan,/exact,/flux,setsky=0.0,/silent
+nepumag=24.3 -2.5*alog10(flux)
+
+plot, apsizeu/fwhm, flux/flux(15), psym=2, yrange=[0.7,1.1], ystyle = 1,$
+      title="where to measure magnitudes, u band"
+
+
+device, /close
+set_plot, mydevice
+
+
+end

@@ -1,0 +1,10 @@
+pro dark_standards
+
+;combine 6 cold mission dark fields of 100s in roughly the same place.
+
+rawlist_ch1 = '/Users/jkrick/IRAC/iwic210/rawlist_ch1_100s'
+rawlist_ch2 = '/Users/jkrick/IRAC/iwic210/rawlist_ch2_100s'
+
+
+
+end

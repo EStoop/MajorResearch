@@ -1,0 +1,26 @@
+a=check_math(trap=1)
+;set_plot,'tek'
+set_plot,'x'
+device, retain=2
+!PATH = "/usr/local/idl/astron/pro/:"+$
+      	"/usr/local/idl/astron/pro/astro/:"+$
+	"/usr/local/idl/astron/pro/astrom/:"+$
+	"/usr/local/idl/astron/pro/database/:"+$
+	"/usr/local/idl/astron/pro/disk_io/:"+$
+	"/usr/local/idl/astron/pro/fits/:"+$
+	"/usr/local/idl/astron/pro/fits_bintable/:"+$
+	"/usr/local/idl/astron/pro/fits_table/:"+$
+	"/usr/local/idl/astron/pro/idlphot/:"+$
+	"/usr/local/idl/astron/pro/image/:"+$
+	"/usr/local/idl/astron/pro/jhuapl/:"+$
+	"/usr/local/idl/astron/pro/math/:"+$
+	"/usr/local/idl/astron/pro/misc/:"+$
+	"/usr/local/idl/astron/pro/plot/:"+$
+	"/usr/local/idl/astron/pro/sdas/:"+$
+	"/usr/local/idl/astron/pro/sdas_table/:"+$
+	"/usr/local/idl/astron/pro/structure/:"+$
+	"/usr/local/idl/astron/pro/tape_io/:"+$
+	"/usr/local/idl/astron/pro/tv/:"+$
+	"/home/grad/jkrick/idlbin/:"+$
+	"/home/grad/jkrick/idlbin/others/:"+$
+	!PATH

@@ -1,0 +1,259 @@
+key commands:
+
+setplot
+device
+
+remember to close the device at the end of the program
+and reset the setplot destination to 'x'.
+
+
+
+
+pro ZL_lco_plots
+
+;  Corrections for multiple scattering were added at 4pm on 30 Nov 00.
+;  
+	device, true=24
+	device, decomposed=0
+
+        colors = GetColor(/Load, Start=1)
+
+	close, /all
+	Iscat= fltarr(12)
+	L_ebl_loss= fltarr(12)
+	ut_arr = findgen(12)*.5 + 2.
+	ut_arr = 5.5/5 * findgen(6) + 2.
+	z0_arr= fltarr(12)     ; this is set to ebl_z
+	A0_arr= fltarr(12)     ; "  ebl_A
+	sun_A_arr= fltarr(12)
+	sun_z_arr= fltarr(12)
+	sun_lon_arr= fltarr(12)
+	sun_lat_arr= fltarr(12)
+	ebl_lon_arr= fltarr(12)
+	ebl_lat_arr= fltarr(12)
+
+template = {    $
+        version: 1., $
+        datastart: 0L, $
+        delimiter: 32B, $
+        missingvalue: !VALUES.F_NAN, $
+        commentsymbol: '#', $
+        fieldcount: 3L, $
+        fieldtypes: [4, 4, 4], $
+        fieldnames: ['lat', 'lon', 'zodflux'], $
+        fieldlocations: [0, 9, 18], $
+        fieldgroups: [0,1,2] }
+
+;data = read_ascii('/data4/howland/rab/2000zod/sphere_int.out', template=template)
+
+;zodflux_grid = REFORM( data.zodflux, 361, 181 )
+
+	!p.multi = [0, 1, 1]
+
+	r_earth = 6371.0e5
+	local_lon = -70.69333
+	local_lat = -29.00361
+	ebl_pos = [45.08333, -20.17917] 	; ebl coords in ra, dec
+
+	t_r_0 = [0.05, 0.1,  0.15, 0.2, 0.3, 0.4]
+	F_ms_arr  = [1.12, 1.22, 1.33, 1.44, 1.66, 1.88]
+
+	sigma0  = 2.282e5 + r_earth
+	; top of the atmosphere is at 
+	; 	sigma_max = r_earth+200. = 6371.e5 +200.e5
+
+	Ns_step = 500/30
+	Nphi_step = 45 /2
+	NAp_step = 90 /2
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;***************************
+
+    for q = 0,12  do begin
+;     q=0
+
+	lam = 3900.e-8 + 1200.e-8/12. * q
+	C_lam = 1.125e-24/(lam)^4 
+        F_ms = interpol(F_ms_arr, t_r_0, C_lam*7.99e5*exp( (sigma0-r_earth)/(-7.99e5) ) )
+	print, 'C_lam*h, F_ms  ',   C_lam*7.99e5*exp( (sigma0-r_earth)/(-7.99e5) ), F_ms
+
+
+	if (q lt 10) then junk = string(q,format='(I1)') else junk = string(q,format='(I2)')
+
+	; ------------------------------  once through loop for each zenith angle
+
+	jj=-1
+	jj= [0,0, 0,3,3,3,2,2,2,1,1,1]
+;	for j = 0,11 do begin 
+	j = 0
+
+	set_plot, 'ps'
+	if (j lt 10) then newpicture = 'Ecl_ut_even'+string(j,format='(I1)')+'.ps'
+	if (j gt 9) then newpicture = 'Ecl_ut_even'+string(j,format='(I2)')+'.ps'
+	device, /encapsulated, filename=newpicture, /portrait,$
+        	BITS=8, scale_factor=0.9 , /color,  xoffset=0, yoffset=0
+
+	MAP_SET, 0.,0., /Aitoff, /isotropic, /horizon, /grid, $ ; limit=[-90.,0.,90.,360.],$
+		glinethick=3, glinestyle=0,$
+		xmargin=3, ymargin=[1,5], color=0,$
+		title='UT='+string(ut_arr[j],format='(f4.1)')
+
+;;	    !p.multi = [jj[j],2,2]
+;;
+;;	    if ( j eq 0) then $
+;;		MAP_SET, 0.,0., /Aitoff, /isotropic, /grid, /horizon, $
+;;			limit=[-90.,0.,90.,360.], glinethick=2 $
+;;	    else $
+;;	        MAP_SET, 0.,0., /Aitoff, /isotropic, /grid, /horizon, $
+;;			limit=[-90.,0.,90.,360.], glinethick=2,/noerase
+
+;	    MAP_SET, 0.,0., /Aitoff, /isotropic, /horizon, limit=[-90.,0.,90.,360.]
+
+	MAP_GRID, /label, latlab=-5, lonlab=5 , $
+	 glinestyle=0, glinethick=3, color=0, charsize=1.2,longalign=0.
+
+	    ut = ut_arr[j]
+	    ct2lst, lst, local_lon, 0, ut , 29, 11, 1995 
+	    jdcnv, 1995, 11, 29, 2.00, jd
+	    sunpos, jd, ra, dec
+	    sun_pos = [ra, dec] 			; coords of sun in ra, dec
+	    print, 'UT is = ', ut
+	    ; print, 'lst in hours= ', lst, '  lst in degrees= ', lst*360./24.
+	    ; print, ' ' 
+
+	    lstrad = lst *360./24.* !dtor
+	    geolatrad= local_lat * !dtor
+
+	    ra  = sun_pos[0] 
+	    dec = sun_pos[1] 
+	    A = 0           ; just resetting. to be sure wcsrotate is going the right way
+	    lat = 0 
+	    wcs_rotate, A, lat, ra, dec, $
+			[lstrad/!dtor, local_lat], longpole = lstrad/!dtor , /reverse
+	    z  = 90-lat
+
+	    sun_A = A
+	    sun_z = z
+	    sun_z_arr[j] = z
+	    sun_A_arr[j] = A
+
+	    euler, sun_pos[0], sun_pos[1], sun_lon, sun_lat, 3
+	    sun_lon_arr[j] = sun_lon
+	    sun_lat_arr[j] = sun_lat
+;	    print, FORMAT = '("Sun pos:         A, Zeta ", F8.2, F8.2)', sun_A, sun_z
+
+	    ra  = ebl_pos[0] 
+	    dec = ebl_pos[1] 
+	    A = 0 
+	    lat = 0 
+	    wcs_rotate, A, lat, ra, dec, $
+			[lstrad/!dtor, local_lat], longpole = lstrad/!dtor, /reverse
+	    z  = 90-lat
+
+	    ebl_A = A
+	    ebl_z = z
+;	    print, FORMAT = '("EBL pos:         A, Zeta ", F8.2, F8.2)', ebl_A, ebl_z
+
+A = FINDGEN(17) * (!PI*2/16.)
+USERSYM, COS(A), SIN(A),/fill
+latzod=[0,   0,  0, 0,   0,   0,   0]
+lonzod=[30, 20, 10, 0, -10, -20, -30] + sun_lon
+
+	    OPLOT, lonzod, latzod, thick=10, color=colors.orange
+	    OPLOT, [sun_lon], [sun_lat], psym = 2, color=colors.orange,  thick=2, symsize=5
+	    OPLOT, [sun_lon], [sun_lat], psym = 8, color=colors.orange,  thick=2, symsize=3
+;	    OPLOT, [35.5], [-35.5]     , psym = 2, color=colors.blue, thick=2, symsize=1.5
+;	    OPLOT, [35.5], [-35.5]     , psym = 8, color=colors.blue, thick=2, symsize=1.
+
+;print,'sun_lon', sun_lon
+;print,'sun_lat', sun_lat
+
+	    ; OPLOT, [sun_A], [90-sun_z], psym = 6, color=50
+	    ; OPLOT, [ebl_A], [90-ebl_z], psym = 6, color=200
+	    ; OPLOT, [sun_A,ebl_A], [90-sun_z,90-ebl_z], color=50
+
+
+		; ======  go from (ra, dec) to (ecl_lon, ecl_lat)
+
+		euler, ebl_pos[0], ebl_pos[1], ebl_lon, ebl_lat, 3
+
+		ebl_lon_arr[j]=ebl_lat
+		ebl_lat_arr[j]=ebl_lon
+		ebl_lat = sqrt(ebl_lat^2)
+		ebl_lon = abs(sun_lon - ebl_lon)
+		ebl_lon = (ebl_lon gt 180.) ? 360.-ebl_lon : ebl_lon
+
+		; ======  round (lon, lat) to the nearest 0.5 degree
+
+;	        print, FORMAT = '("EBL pos:         A, Zeta ", F8.2, F8.2)', ebl_A, ebl_z
+
+		ebl_lon = round(ebl_lon*2.)
+		ebl_lat = round(ebl_lat*2.)
+
+; 		L_ebl = zodflux_grid[ebl_lon,ebl_lat]
+;		extinction = (1.- exp(-1.*C_lam*(7.99e5 * exp(-1*(sigma0-r_earth)/7.99e5)) /cos(z*!dtor)))
+;		L_ebl_loss[j] = L_ebl * extinction
+		print, 'lam, Tau0: ', $
+			lam*1.e8,C_lam*(7.99e5*exp(-1* (sigma0-r_earth)/7.99e5))
+
+		; ======  get on with it.
+
+	    z0 = ebl_z
+	    A0 = ebl_A
+	    z0_arr[j] = z0
+	    A0_arr[j] = A0
+
+    	    Smax = sqrt(6571.e5^2 - sigma0^2 * (sin(z0*!dtor))^2 )  $
+		- sigma0 *cos(z0*!dtor)
+	
+	    Ap_max = ( 2.* !pi) /!dtor
+    
+	    s   = findgen(Ns_step)   * Smax/(float(Ns_step)-1.)
+	    Ap  = findgen(NAp_step)  * Ap_max/(float(NAp_step)-1.)
+
+	    Integrand = fltarr(Ns_step,Nphi_step,NAp_step)
+
+ 	    for i= 1, fix((Ns_step-1)/4.) do begin
+                sigma = sqrt( sigma0^2 + s[i]^2 + 2. * sigma0 * s[i] * cos(z0*!dtor) )
+	        phi_max= ( !pi / 2. + acos( r_earth/sigma) ) /!dtor
+                phi = findgen(Nphi_step) * phi_max/(float(Nphi_step)-1.)
+
+
+	        for ii=0, Nphi_step-1   do begin
+	
+		   for iii = 0, NAp_step-1 do begin
+
+	              zeta = phi[ii]
+		      A = Ap[iii]
+		      ; ======  go from (A, Zeta) to (ra, dec)
+		      wcs_rotate, A, 90-Zeta, ra, dec, $
+			      [lstrad/!dtor, local_lat], longpole = lstrad/!dtor
+
+		      ; ======  go from (ra, dec) to (ecl_lon, ecl_lat)
+		      euler, ra, dec, lon, lat, 3
+
+		      OPLOT, [lon], [lat], psym=8, color=colors.black, thick=2, symsize=0.3
+
+	           endfor
+	        endfor
+	    endfor
+
+USERSYM, [-1,-1,1,1], [-1,1,1,-1],/fill
+;	    OPLOT, [35.5], [-35.5]     , psym = 2, color=colors.blue, thick=2, symsize=1.5
+;	    OPLOT, [35.5], [-35.5]     , psym = 8, color=colors.blue, thick=2, symsize=1.
+	    OPLOT, [35.5], [-35.5]     , psym = 8, color=colors.blue, thick=2, symsize=1.5
+
+	device, /close_file
+      endfor
+
+;endfor
+
+	set_plot, 'x'
+
+end
+
+
+
+
+
+
+

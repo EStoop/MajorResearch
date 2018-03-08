@@ -1,0 +1,59 @@
+.Title
+ Using UHelp
+.SubTopics
+ UHelp MAIN MENU Options              ==> MainOpt.Hlp
+ COBE Help Tree Categories            ==> TreeCat.Hlp
+ UHelp at the UIDL Command Line       ==> ComLine.Hlp
+
+ Return to "Using Help"               ==> Prev
+ Return to MAIN MENU                  ==> Return
+ Exit UHelp                           ==> Quit
+.Help
+
+   {BT}{U}Using UHelp{N}
+
+   UHelp provides menu access to help on UIDL routines through three
+   methods:
+
+              o Specifying a routine name explicitly,
+
+              o Performing a keyword search of the UIDL Routine List,
+
+              o Searching manually through a category tree of
+                menus (COBE Help Tree).
+
+   Once a routine is found, the text is displayed in same type of
+   window as this help screen.  Help on how to use the text display
+   is available by pushing the {BT}h{N} key.  Pressing the {BT}h{N} key will
+   display information on how to advance through the text, move
+   backwards, exit the text screen, and several other features. 
+
+   Normally the {BT}tab{N} key is used to exit the text screen and re-
+   turn to the previous menu.  However, if the {BT}q{N} key is pressed
+   while viewing text, UHelp exits immediately to the UIDL prompt,
+   leaving the displayed text on the screen.  This is useful for
+   typing UIDL commands while the help information is still on the
+   screen.
+
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@ZWICKY.GSFC.NASA.GOV.
+
+

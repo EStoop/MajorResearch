@@ -1,0 +1,117 @@
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@COBECL.DNET.NASA.GOV.
+
+dir=getenv('CGIS_DATA')
+; Build aitoff ecliptic
+;
+projbld,128,proj='a',coord='e',ait_ecl_i,ait_ecl_j,ait_ecl_mask
+save,filename=dir+'ait_ecl.lut',ait_ecl_i,ait_ecl_j,ait_ecl_mask
+delvar,ait_ecl_i,ait_ecl_j,ait_ecl_mask
+;
+; Build aitoff equatorial
+;
+projbld,128,proj='a',coord='q',ait_equ_i,ait_equ_j,ait_equ_mask
+save,filename=dir+'ait_equ.lut',ait_equ_i,ait_equ_j,ait_equ_mask
+delvar,ait_equ_i,ait_equ_j,ait_equ_mask
+;
+; Build aitoff galactic
+;
+projbld,128,proj='a',coord='g',ait_gal_i,ait_gal_j,ait_gal_mask
+save,filename=dir+'ait_gal.lut',ait_gal_i,ait_gal_j,ait_gal_mask
+delvar,ait_gal_i,ait_gal_j,ait_gal_mask
+;
+; Build global sinusoidal ecliptic
+;
+projbld,128,proj='s',coord='e',gs_ecl_i,gs_ecl_j,gs_ecl_mask
+save,filename=dir+'gs_ecl.lut',gs_ecl_i,gs_ecl_j,gs_ecl_mask
+delvar,gs_ecl_i,gs_ecl_j,gs_ecl_mask
+;
+; Build global sinusoidal equatorial
+;
+projbld,128,proj='s',coord='q',gs_equ_i,gs_equ_j,gs_equ_mask
+save,filename=dir+'gs_equ.lut',gs_equ_i,gs_equ_j,gs_equ_mask
+delvar,gs_equ_i,gs_equ_j,gs_equ_mask
+;
+; Build global sinusoidal galactic
+;
+projbld,128,proj='s',coord='g',gs_gal_i,gs_gal_j,gs_gal_mask
+save,filename=dir+'gs_gal.lut',gs_gal_i,gs_gal_j,gs_gal_mask
+delvar,gs_gal_i,gs_gal_j,gs_gal_mask
+;
+; Build mollweide ecliptic
+;
+projbld,128,proj='m',coord='e',mwd_ecl_i,mwd_ecl_j,mwd_ecl_mask
+save,filename=dir+'mwd_ecl.lut',mwd_ecl_i,mwd_ecl_j,mwd_ecl_mask
+delvar,mwd_ecl_i,mwd_ecl_j,mwd_ecl_mask
+;
+; Build mollweide equatorial
+;
+projbld,128,proj='m',coord='q',mwd_equ_i,mwd_equ_j,mwd_equ_mask
+save,filename=dir+'mwd_equ.lut',mwd_equ_i,mwd_equ_j,mwd_equ_mask
+delvar,mwd_equ_i,mwd_equ_j,mwd_equ_mask
+;
+; Build mollweide galactic
+;
+projbld,128,proj='m',coord='g',mwd_gal_i,mwd_gal_j,mwd_gal_mask
+save,filename=dir+'mwd_gal.lut',mwd_gal_i,mwd_gal_j,mwd_gal_mask
+delvar,mwd_gal_i,mwd_gal_j,mwd_gal_mask
+;
+; Build large aitoff ecliptic
+;
+projbld,256,proj='a',coord='e',big_ait_ecl_i,big_ait_ecl_j,big_ait_ecl_msk
+save,filename=dir+'big_ait_ecl.lut',big_ait_ecl_i,big_ait_ecl_j,$
+big_ait_ecl_msk
+delvar,big_ait_ecl_i,big_ait_ecl_j,big_ait_ecl_msk
+;
+; Build large aitoff galactic
+;
+projbld,256,proj='a',coord='g',big_ait_gal_i,big_ait_gal_j,big_ait_gal_msk
+save,filename=dir+'big_ait_gal.lut',big_ait_gal_i,big_ait_gal_j,$
+big_ait_gal_msk
+delvar,big_ait_gal_i,big_ait_gal_j,big_ait_gal_msk
+;
+; Build large mollweide ecliptic
+;
+projbld,256,proj='m',coord='e',big_mwd_ecl_i,big_mwd_ecl_j,big_mwd_ecl_msk
+save,filename=dir+'big_mwd_ecl.lut',big_mwd_ecl_i,big_mwd_ecl_j,$
+big_mwd_ecl_msk
+delvar,big_mwd_ecl_i,big_mwd_ecl_j,big_mwd_ecl_msk
+;
+; Build large mollweide galactic
+;
+projbld,256,proj='m',coord='g',big_mwd_gal_i,big_mwd_gal_j,big_mwd_gal_msk
+save,filename=dir+'big_mwd_gal.lut',big_mwd_gal_i,big_mwd_gal_j,$
+big_mwd_gal_msk
+delvar,big_mwd_gal_i,big_mwd_gal_j,big_mwd_gal_msk
+;
+; Build large global sinusoidal ecliptic
+;
+projbld,256,proj='s',coord='e',big_gs_ecl_i,big_gs_ecl_j,big_gs_ecl_msk
+save,filename=dir+'big_gs_ecl.lut',big_gs_ecl_i,big_gs_ecl_j,$
+big_gs_ecl_msk
+delvar,big_gs_ecl_i,big_gs_ecl_j,big_gs_ecl_msk
+;
+; Build large global sinusoidal galactic
+;
+projbld,256,proj='s',coord='g',big_gs_gal_i,big_gs_gal_j,big_gs_gal_msk
+save,filename=dir+'big_gs_gal.lut',big_gs_gal_i,big_gs_gal_j,$
+big_gs_gal_msk
+delvar,big_gs_gal_i,big_gs_gal_j,big_gs_gal_msk

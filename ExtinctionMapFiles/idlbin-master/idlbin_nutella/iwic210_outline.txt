@@ -1,0 +1,46 @@
+How to measure the noise as a function of temperature and voltages
+-------------------------------------------------------
+
+Get appropriate raw & bcd data from the central directory.
+    make files with lists of raw images for input; ignore the first frame
+    grab headers from bcd's so that I have ra and dec info
+    use test data from raw darks we already have.
+    	exptime in bcd header or fowlnum and wait in raw header
+
+get/make a mask image of the dark field data. = /IRAC/iwic210/dark_mask.fits
+	 do the whole field since we don't know when observations will happen.
+	 This is a SExtractor object image
+	 0's for all backgroud pixels, >0's for all object pixels
+	 is not perfect, but is a reasonabe compromise between covering too much area, and getting all object flux masked
+
+define a good region of the frame to look at, eg., don't use bad data in terms of bad flat fielding effect.
+       will just be an image section
+
+for each frame time
+    for each sky position
+    	 read in (6) raw data images ; ignore the first frame
+     	 for all images
+              select background pixels based on source mask and based on only a good region of the frame
+	      	     will need to do the comparison by ra and dec
+		     	  is this going to be a problem with pixels not exactly overlapping the mask image?
+     	      measure the stddev within each pixel
+	      plot histogram of stddevs of all unmasked pixels
+	      	   determine a cut for background vs. bad pixel etc. 
+		   	     this shouldn't be so critical since we have masked objects
+	      	   measure and print mean, median, stddev,(of the stddev) and 1/sqrt(Q)
+	       	        measure these by fitting a gaussian, or just from a straight average for first 2
+		    	Q =1/<sigma(i)^2>(i)
+			mmm.pro should do this and the outlier rejection in the same step.
+ 			keep track of medians
+
+		make a measurement of number of hot pixels
+		     look at tail of the distribution
+		     how will i differentiate these from CR?  maybe brightness
+
+     make a combination of all three positions (18 values per pixel)
+     	  repeat the histogram and measurement values
+
+     plot image median of background regions vs frame number for each frame, each position
+
+
+ 

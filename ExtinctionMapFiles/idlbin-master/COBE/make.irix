@@ -1,0 +1,40 @@
+# This "make" file is suitable for compiling the ancillary 
+# C routines used in the COBE Guest Investigator Software
+# package.
+#
+# The file MAKE.SUN should be used when compiling on a SUN/UNIX
+# machine.
+#
+CC = cc
+LD = ld -o 
+# assume that export.h is in the following directory:
+INCLUDE=/usr/local/rsi/idl_5/external
+# assume idl shared libraries are in the following directory:
+INCLUDE2=/usr/local/rsi/idl_5/bin
+.SUFFIXES: .c .o 
+
+.c.o:
+	$(CC) -KPIC -I$(INCLUDE) -c $< 
+
+LIBS = -lc -lm -L$(INCLUDE2) -lidl 
+
+OFILES = cconv.o cpusec.o adt2zulu.o rastr.o inpoly.o \
+	zulu2adt.o pixavg.o projtran.o dblsvd.o qrdcmp.o        
+#
+comps: $(OFILES) 
+	echo "Done compiling the C programs"
+
+	$(LD) cconv.so -shared cconv.o $(LIBS) 
+	$(LD) cpusec.so -shared cpusec.o $(LIBS) 
+	$(LD) adt2zulu.so -shared adt2zulu.o $(LIBS) 
+	$(LD) rastr.so -shared rastr.o $(LIBS) 
+	$(LD) inpoly.so -shared inpoly.o $(LIBS) 
+	$(LD) zulu2adt.so -shared zulu2adt.o  $(LIBS) 
+	$(LD) pixavg.so -shared pixavg.o $(LIBS) 
+	$(LD) projtran.so -shared projtran.o $(LIBS) 
+	$(LD) dblsvd.so -shared dblsvd.o $(LIBS) 
+	$(LD) qrdcmp.so -shared qrdcmp.o $(LIBS) 
+	echo "Done linking C routines."
+
+	rm *.o
+	echo "Cleaned up *.o files."

@@ -1,0 +1,72 @@
+pro get_lir,z,inf24,inf24err,lir,lirerr
+
+; give a list of z, f24 and f24err
+; calculate lir by the dole way
+; calculate lir by the ce way
+; take the avg of the two as the lir 
+; take the diff of the two as the systematic error
+; quadrature sum systematic with the statistical error
+; rchary@caltech.edu Aug 2004
+
+COMMON FILTERCURVE,filters
+get_filt
+
+snmax = 2        ; this is the maximum S/N to consider as a detection
+nsrc = n_elements(z)
+
+lir = fltarr(nsrc)
+lirerr = fltarr(nsrc)
+mipslir1 = fltarr(nsrc)
+mipslir2 = fltarr(nsrc)
+f24 = inf24
+f24err = inf24err
+
+snr24 = f24/f24err
+ix = where(snr24 lt snmax and f24err gt 0)
+if (ix[0] ne -1) then f24[ix] = snmax*f24err[ix]
+
+restore,'./rrcsedsforevol.save'
+restore,'./templatelumatirbands.save'
+
+for ct=0,nsrc-1 do begin
+  cz = z[ct]
+  getdist,cz,dl,to
+  d2fac = 4.*!dpi*dl*dl*(3.0857d22^2)
+
+  tf24 = fltarr(105)
+  for ct2 = 0,104 do begin
+      tf24[ct2] = obsv_filter((1.+cz)*lambda,nulnuinlsun[ct2,*]*3.8d26,/mips24)*1d32/d2fac
+  endfor
+  fdiff = abs(tf24-f24[ct])
+  minfdiff = min(fdiff,minix)
+  nfac = f24[ct]/tf24[minix]
+  mipslir1[ct] = templir[minix]*nfac
+endfor
+
+;-----
+restore,'./Edited_Dale_Spec.save'
+
+for ct=0,nsrc-1 do begin
+  cz = z[ct]
+  getdist,cz,dl,to
+  d2fac = 4.*!dpi*dl*dl*(3.0857d22^2)
+
+  tf24 = fltarr(105)
+  for ct2 = 0,104 do begin
+      tf24[ct2] = obsv_filter((1.+cz)*lambda,nulnuinlsun[ct2,*]*3.8d26,/mips24)*1d32/d2fac
+  endfor
+  fdiff = abs(tf24-f24[ct])
+  minfdiff = min(fdiff,minix)
+  nfac = f24[ct]/tf24[minix]
+  mipslir2[ct] = templir[minix]*nfac
+endfor
+;-----
+
+for ct=0,nsrc-1 do begin
+  syserr = abs(mipslir1[ct]-mipslir2[ct])*0.5
+  lir[ct] = 0.5*(mipslir1[ct]+mipslir2[ct])
+  staterr = f24err[ct]*lir[ct]/f24[ct]
+  lirerr[ct] = sqrt(staterr^2 + syserr^2)
+endfor
+
+end

@@ -1,0 +1,885 @@
+#IMAGE PARAMETERS
+A) center.fits
+B) centermulti.fits
+C) noisecenter.fits
+D) psf.small.fits
+E)  none
+F) const.test	       # Parameter constraint file (ASCII)
+G) 100 500 100 500  # Image region to fit (xmin xmax ymin ymax)
+I) 80 80            # Size of convolution box (x y)
+J) 25.0              # Magnitude photometric zeropoint 
+K) 0.259   0.259         # Plate scale (dx dy)  [arcsec/pix.  Only for Nuker.]
+O) both                # Display type (regular, curses, both)
+P) 0                   # Create output image only? (1=yes; 0=optimize) 
+S) 0		       # Modify/create objects interactively?
+###########################################################################
+ 0) sky
+ 1) 2       1       # sky background       [ADU counts]
+ 2) 0.0    1       # dsky/dx (sky gradient in x) 
+ 3) 0.0    1       # dsky/dy (sky gradient in y) 
+ Z) 0                  # output image
+###########################################################################
+ 0) devauc             # Object type
+ 1)        204.42200         375.11600 1 1    # position x, y        [pixel]
+ 3)        18.603800        1       # total magnitude    
+ 4)        5.5488738        1       #     R_e              [Pixels]
+ 8)       0.64158576       1       # axis ratio (b/a)   
+ 9)       -167.89999 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        264.47000         161.53799 1 1    # position x, y        [pixel]
+ 3)        21.405300        1       # total magnitude    
+ 4)        2.8705401        1       #     R_e              [Pixels]
+ 8)       0.11321265       1       # axis ratio (b/a)   
+ 9)       -116.10000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        312.96100         191.21500 1 1    # position x, y        [pixel]
+ 3)        20.097200        1       # total magnitude    
+ 4)        4.4000001        1       #     R_e              [Pixels]
+ 8)       0.62515885       1       # axis ratio (b/a)   
+ 9)       -165.60001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        439.35501         181.55901 1 1    # position x, y        [pixel]
+ 3)        17.320900        1       # total magnitude    
+ 4)        7.3898580        1       #     R_e              [Pixels]
+ 8)       0.75576921       1       # axis ratio (b/a)   
+ 9)       -114.70000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        381.88101         174.77800 1 1    # position x, y        [pixel]
+ 3)        17.771700        1       # total magnitude    
+ 4)        4.7222877        1       #     R_e              [Pixels]
+ 8)       0.62904497       1       # axis ratio (b/a)   
+ 9)       -29.900002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        359.61200         173.72800 1 1    # position x, y        [pixel]
+ 3)        18.221100        1       # total magnitude    
+ 4)        3.8768545        1       #     R_e              [Pixels]
+ 8)       0.81924878       1       # axis ratio (b/a)   
+ 9)       -42.000000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        260.82999         100.42900 1 1    # position x, y        [pixel]
+ 3)        19.418800        1       # total magnitude    
+ 4)        3.5227830        1       #     R_e              [Pixels]
+ 8)       0.93173434       1       # axis ratio (b/a)   
+ 9)       -55.000000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        191.86301         276.74500 1 1    # position x, y        [pixel]
+ 3)        19.692600        1       # total magnitude    
+ 4)        4.6722586        1       #     R_e              [Pixels]
+ 8)       0.69373777       1       # axis ratio (b/a)   
+ 9)       -38.099998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        168.49400         397.91501 1 1    # position x, y        [pixel]
+ 3)        17.571199        1       # total magnitude    
+ 4)        8.9493018        1       #     R_e              [Pixels]
+ 8)       0.86763011       1       # axis ratio (b/a)   
+ 9)       -49.599998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        440.79001         146.72900 1 1    # position x, y        [pixel]
+ 3)        18.965799        1       # total magnitude    
+ 4)        3.7215589        1       #     R_e              [Pixels]
+ 8)       0.88375164       1       # axis ratio (b/a)   
+ 9)       -136.80000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        414.47101         120.06600 1 1    # position x, y        [pixel]
+ 3)        21.979099        1       # total magnitude    
+ 4)        2.1794495        1       #     R_e              [Pixels]
+ 8)       0.64485982       1       # axis ratio (b/a)   
+ 9)       -6.9000015 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        429.17499         120.29700 1 1    # position x, y        [pixel]
+ 3)        21.844000        1       # total magnitude    
+ 4)        2.2516661        1       #     R_e              [Pixels]
+ 8)       0.81874036       1       # axis ratio (b/a)   
+ 9)       -170.80000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        298.38800         110.94800 1 1    # position x, y        [pixel]
+ 3)        22.526501        1       # total magnitude    
+ 4)        1.4000000        1       #     R_e              [Pixels]
+ 8)       0.88059705       1       # axis ratio (b/a)   
+ 9)       -117.90000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        391.35400         110.16000 1 1    # position x, y        [pixel]
+ 3)        22.210699        1       # total magnitude    
+ 4)        2.1908903        1       #     R_e              [Pixels]
+ 8)       0.55423122       1       # axis ratio (b/a)   
+ 9)       -117.40000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        384.54800         101.65500 1 1    # position x, y        [pixel]
+ 3)        22.968599        1       # total magnitude    
+ 4)        1.5588458        1       #     R_e              [Pixels]
+ 8)       0.40544630       1       # axis ratio (b/a)   
+ 9)       -125.70000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        392.35901         133.54500 1 1    # position x, y        [pixel]
+ 3)        20.506300        1       # total magnitude    
+ 4)        3.3090785        1       #     R_e              [Pixels]
+ 8)       0.55033004       1       # axis ratio (b/a)   
+ 9)       -82.000000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        281.65500         124.40100 1 1    # position x, y        [pixel]
+ 3)        20.826099        1       # total magnitude    
+ 4)        2.5670996        1       #     R_e              [Pixels]
+ 8)       0.71920291       1       # axis ratio (b/a)   
+ 9)       -110.10000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        358.58899         201.45599 1 1    # position x, y        [pixel]
+ 3)        18.357700        1       # total magnitude    
+ 4)        4.3150899        1       #     R_e              [Pixels]
+ 8)       0.83166107       1       # axis ratio (b/a)   
+ 9)       -62.700001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        123.86400         256.52301 1 1    # position x, y        [pixel]
+ 3)        19.280399        1       # total magnitude    
+ 4)        4.1267421        1       #     R_e              [Pixels]
+ 8)       0.51975307       1       # axis ratio (b/a)   
+ 9)       -168.70000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        305.69400         165.29700 1 1    # position x, y        [pixel]
+ 3)        21.842400        1       # total magnitude    
+ 4)        2.5377155        1       #     R_e              [Pixels]
+ 8)       0.85581393       1       # axis ratio (b/a)   
+ 9)       -138.50000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        480.89899         211.78600 1 1    # position x, y        [pixel]
+ 3)        19.829000        1       # total magnitude    
+ 4)        3.5749126        1       #     R_e              [Pixels]
+ 8)       0.84724181       1       # axis ratio (b/a)   
+ 9)       -20.300003 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        361.58301         278.57901 1 1    # position x, y        [pixel]
+ 3)        19.440300        1       # total magnitude    
+ 4)        3.9115215        1       #     R_e              [Pixels]
+ 8)       0.65029935       1       # axis ratio (b/a)   
+ 9)       -155.60001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        421.52499         150.27699 1 1    # position x, y        [pixel]
+ 3)        20.345100        1       # total magnitude    
+ 4)        2.0024985        1       #     R_e              [Pixels]
+ 8)       0.80718337       1       # axis ratio (b/a)   
+ 9)       -53.400002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        230.98801         163.51300 1 1    # position x, y        [pixel]
+ 3)        21.117500        1       # total magnitude    
+ 4)        2.1377559        1       #     R_e              [Pixels]
+ 8)       0.96820805       1       # axis ratio (b/a)   
+ 9)       -25.300003 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        117.00900         168.10500 1 1    # position x, y        [pixel]
+ 3)        21.678301        1       # total magnitude    
+ 4)        2.1213204        1       #     R_e              [Pixels]
+ 8)       0.88210528       1       # axis ratio (b/a)   
+ 9)       -89.400002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        400.14200         152.44000 1 1    # position x, y        [pixel]
+ 3)        20.992399        1       # total magnitude    
+ 4)        1.5588458        1       #     R_e              [Pixels]
+ 8)       0.95508273       1       # axis ratio (b/a)   
+ 9)       -46.900002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        191.11400         495.50699 1 1    # position x, y        [pixel]
+ 3)        23.505199        1       # total magnitude    
+ 4)        1.0246951        1       #     R_e              [Pixels]
+ 8)       0.83464564       1       # axis ratio (b/a)   
+ 9)       -147.20000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        411.81601         405.63699 1 1    # position x, y        [pixel]
+ 3)        21.980801        1       # total magnitude    
+ 4)        1.8841444        1       #     R_e              [Pixels]
+ 8)       0.82964602       1       # axis ratio (b/a)   
+ 9)       -16.000000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        128.59500         351.09201 1 1    # position x, y        [pixel]
+ 3)        23.933399        1       # total magnitude    
+ 4)       0.98994951        1       #     R_e              [Pixels]
+ 8)       0.80808083       1       # axis ratio (b/a)   
+ 9)       -11.199997 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        464.62201         348.38400 1 1    # position x, y        [pixel]
+ 3)        23.556499        1       # total magnitude    
+ 4)       0.96953599        1       #     R_e              [Pixels]
+ 8)       0.80645161       1       # axis ratio (b/a)   
+ 9)       -66.500000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        303.50900         439.09900 1 1    # position x, y        [pixel]
+ 3)        17.708000        1       # total magnitude    
+ 4)        4.0074930        1       #     R_e              [Pixels]
+ 8)       0.78953484       1       # axis ratio (b/a)   
+ 9)       -92.400002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        458.02600         327.16199 1 1    # position x, y        [pixel]
+ 3)        20.348801        1       # total magnitude    
+ 4)        2.0420578        1       #     R_e              [Pixels]
+ 8)       0.77308710       1       # axis ratio (b/a)   
+ 9)       -141.00000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        302.36801         421.43701 1 1    # position x, y        [pixel]
+ 3)        18.004400        1       # total magnitude    
+ 4)        3.8794330        1       #     R_e              [Pixels]
+ 8)       0.88809528       1       # axis ratio (b/a)   
+ 9)       -77.300003 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        423.51300         266.31601 1 1    # position x, y        [pixel]
+ 3)        23.312700        1       # total magnitude    
+ 4)        1.2000000        1       #     R_e              [Pixels]
+ 8)       0.46534650       1       # axis ratio (b/a)   
+ 9)       -118.40000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        189.79401         471.79099 1 1    # position x, y        [pixel]
+ 3)        22.074200        1       # total magnitude    
+ 4)        2.5337719        1       #     R_e              [Pixels]
+ 8)       0.76422097       1       # axis ratio (b/a)   
+ 9)       -115.50000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        360.23001         315.87601 1 1    # position x, y        [pixel]
+ 3)        17.674900        1       # total magnitude    
+ 4)        2.8740216        1       #     R_e              [Pixels]
+ 8)       0.98596493       1       # axis ratio (b/a)   
+ 9)       -124.30000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        497.58600         199.23900 1 1    # position x, y        [pixel]
+ 3)        22.991699        1       # total magnitude    
+ 4)        1.5459625        1       #     R_e              [Pixels]
+ 8)       0.70817841       1       # axis ratio (b/a)   
+ 9)       -42.400002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        421.48801         253.42700 1 1    # position x, y        [pixel]
+ 3)        23.263500        1       # total magnitude    
+ 4)        1.2000000        1       #     R_e              [Pixels]
+ 8)       0.93968252       1       # axis ratio (b/a)   
+ 9)       -163.89999 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        362.69299         244.23000 1 1    # position x, y        [pixel]
+ 3)        21.736500        1       # total magnitude    
+ 4)        2.7784888        1       #     R_e              [Pixels]
+ 8)       0.63800516       1       # axis ratio (b/a)   
+ 9)       -140.80000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        278.88800         188.37000 1 1    # position x, y        [pixel]
+ 3)        21.520100        1       # total magnitude    
+ 4)        1.9824228        1       #     R_e              [Pixels]
+ 8)       0.67932493       1       # axis ratio (b/a)   
+ 9)       -126.00000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        409.63400         361.53201 1 1    # position x, y        [pixel]
+ 3)        20.922300        1       # total magnitude    
+ 4)        1.8138357        1       #     R_e              [Pixels]
+ 8)       0.78779070       1       # axis ratio (b/a)   
+ 9)       -86.599998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        297.73801         195.70500 1 1    # position x, y        [pixel]
+ 3)        22.236601        1       # total magnitude    
+ 4)        1.6673332        1       #     R_e              [Pixels]
+ 8)       0.64040408       1       # axis ratio (b/a)   
+ 9)       -30.500000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        212.43201         316.59000 1 1    # position x, y        [pixel]
+ 3)        22.845200        1       # total magnitude    
+ 4)        1.7521416        1       #     R_e              [Pixels]
+ 8)       0.65525984       1       # axis ratio (b/a)   
+ 9)       -33.299999 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        187.68300         310.37799 1 1    # position x, y        [pixel]
+ 3)        22.839600        1       # total magnitude    
+ 4)        1.5905974        1       #     R_e              [Pixels]
+ 8)       0.60508472       1       # axis ratio (b/a)   
+ 9)       -7.0000000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        303.43799         486.64499 1 1    # position x, y        [pixel]
+ 3)        20.264500        1       # total magnitude    
+ 4)        3.9849718        1       #     R_e              [Pixels]
+ 8)       0.84608916       1       # axis ratio (b/a)   
+ 9)       -48.000000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        414.36401         322.18301 1 1    # position x, y        [pixel]
+ 3)        21.574100        1       # total magnitude    
+ 4)        1.4730920        1       #     R_e              [Pixels]
+ 8)       0.95470387       1       # axis ratio (b/a)   
+ 9)       -137.39999 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        406.46899         318.97699 1 1    # position x, y        [pixel]
+ 3)        23.701200        1       # total magnitude    
+ 4)       0.70710679        1       #     R_e              [Pixels]
+ 8)       0.86111111       1       # axis ratio (b/a)   
+ 9)       -71.300003 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        476.82001         493.98700 1 1    # position x, y        [pixel]
+ 3)        23.570101        1       # total magnitude    
+ 4)       0.88317610        1       #     R_e              [Pixels]
+ 8)       0.90717308       1       # axis ratio (b/a)   
+ 9)       -159.20000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        178.92599         344.92999 1 1    # position x, y        [pixel]
+ 3)        20.421400        1       # total magnitude    
+ 4)        2.9342802        1       #     R_e              [Pixels]
+ 8)       0.89259261       1       # axis ratio (b/a)   
+ 9)       -47.400002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        252.58900         301.87601 1 1    # position x, y        [pixel]
+ 3)        23.762400        1       # total magnitude    
+ 4)       0.92736186        1       #     R_e              [Pixels]
+ 8)       0.95454539       1       # axis ratio (b/a)   
+ 9)       -141.30000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        254.60300         341.32199 1 1    # position x, y        [pixel]
+ 3)        22.598700        1       # total magnitude    
+ 4)        1.8520259        1       #     R_e              [Pixels]
+ 8)       0.65367318       1       # axis ratio (b/a)   
+ 9)       -129.70000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        397.44000         297.38901 1 1    # position x, y        [pixel]
+ 3)        20.541901        1       # total magnitude    
+ 4)        2.0297783        1       #     R_e              [Pixels]
+ 8)       0.67139478       1       # axis ratio (b/a)   
+ 9)       -25.199997 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        325.40399         292.52399 1 1    # position x, y        [pixel]
+ 3)        21.699600        1       # total magnitude    
+ 4)        1.3892444        1       #     R_e              [Pixels]
+ 8)       0.81362008       1       # axis ratio (b/a)   
+ 9)       -39.700001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        366.24100         502.40399 1 1    # position x, y        [pixel]
+ 3)        22.881800        1       # total magnitude    
+ 4)        1.4247807        1       #     R_e              [Pixels]
+ 8)       0.68000001       1       # axis ratio (b/a)   
+ 9)       -70.099998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        146.38400         269.54700 1 1    # position x, y        [pixel]
+ 3)        23.913500        1       # total magnitude    
+ 4)        1.0677078        1       #     R_e              [Pixels]
+ 8)       0.50917430       1       # axis ratio (b/a)   
+ 9)       -140.80000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        369.21301         485.21399 1 1    # position x, y        [pixel]
+ 3)        21.676201        1       # total magnitude    
+ 4)        2.8861740        1       #     R_e              [Pixels]
+ 8)       0.37064846       1       # axis ratio (b/a)   
+ 9)       -72.599998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        489.37601         267.70401 1 1    # position x, y        [pixel]
+ 3)        19.905899        1       # total magnitude    
+ 4)        2.5980763        1       #     R_e              [Pixels]
+ 8)       0.87740390       1       # axis ratio (b/a)   
+ 9)       -32.700001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        298.54901         274.44699 1 1    # position x, y        [pixel]
+ 3)        21.010201        1       # total magnitude    
+ 4)        2.3237900        1       #     R_e              [Pixels]
+ 8)       0.77412732       1       # axis ratio (b/a)   
+ 9)       -2.0999985 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        316.71600         273.35199 1 1    # position x, y        [pixel]
+ 3)        23.003901        1       # total magnitude    
+ 4)        1.2124356        1       #     R_e              [Pixels]
+ 8)       0.76038340       1       # axis ratio (b/a)   
+ 9)       -54.200001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        110.55600         291.67200 1 1    # position x, y        [pixel]
+ 3)        22.323299        1       # total magnitude    
+ 4)        1.5231546        1       #     R_e              [Pixels]
+ 8)       0.55882353       1       # axis ratio (b/a)   
+ 9)       -18.800003 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        272.25400         251.09801 1 1    # position x, y        [pixel]
+ 3)        23.060200        1       # total magnitude    
+ 4)        1.3747727        1       #     R_e              [Pixels]
+ 8)       0.60560345       1       # axis ratio (b/a)   
+ 9)       -44.099998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        250.37801         251.17500 1 1    # position x, y        [pixel]
+ 3)        21.050200        1       # total magnitude    
+ 4)        2.0174241        1       #     R_e              [Pixels]
+ 8)       0.89918253       1       # axis ratio (b/a)   
+ 9)       -113.50000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        416.13901         282.82401 1 1    # position x, y        [pixel]
+ 3)        23.330099        1       # total magnitude    
+ 4)       0.96953599        1       #     R_e              [Pixels]
+ 8)       0.94418599       1       # axis ratio (b/a)   
+ 9)       -120.00000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        405.35901         466.77899 1 1    # position x, y        [pixel]
+ 3)        23.034901        1       # total magnitude    
+ 4)        1.5000000        1       #     R_e              [Pixels]
+ 8)       0.40619902       1       # axis ratio (b/a)   
+ 9)       -6.4000015 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        350.62601         361.79199 1 1    # position x, y        [pixel]
+ 3)        19.480400        1       # total magnitude    
+ 4)        4.4665424        1       #     R_e              [Pixels]
+ 8)       0.49539878       1       # axis ratio (b/a)   
+ 9)       -137.50000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        298.42801         351.79001 1 1    # position x, y        [pixel]
+ 3)        19.566401        1       # total magnitude    
+ 4)        4.8815982        1       #     R_e              [Pixels]
+ 8)       0.87075926       1       # axis ratio (b/a)   
+ 9)       -79.099998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        374.24799         196.16299 1 1    # position x, y        [pixel]
+ 3)        20.072701        1       # total magnitude    
+ 4)        1.5556349        1       #     R_e              [Pixels]
+ 8)       0.70208328       1       # axis ratio (b/a)   
+ 9)       -69.800003 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        294.10901         239.82300 1 1    # position x, y        [pixel]
+ 3)        23.294399        1       # total magnitude    
+ 4)        1.2041595        1       #     R_e              [Pixels]
+ 8)       0.80645164       1       # axis ratio (b/a)   
+ 9)       -132.80000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        404.92499         329.80499 1 1    # position x, y        [pixel]
+ 3)        23.863300        1       # total magnitude    
+ 4)       0.86602542        1       #     R_e              [Pixels]
+ 8)       0.69288388       1       # axis ratio (b/a)   
+ 9)       -95.400002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        163.88499         234.31700 1 1    # position x, y        [pixel]
+ 3)        23.234800        1       # total magnitude    
+ 4)        1.1135529        1       #     R_e              [Pixels]
+ 8)       0.89122809       1       # axis ratio (b/a)   
+ 9)       -124.30000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        224.56000         219.92400 1 1    # position x, y        [pixel]
+ 3)        22.470200        1       # total magnitude    
+ 4)        1.8384777        1       #     R_e              [Pixels]
+ 8)       0.76538465       1       # axis ratio (b/a)   
+ 9)       -28.000000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        137.76300         281.55499 1 1    # position x, y        [pixel]
+ 3)        21.957300        1       # total magnitude    
+ 4)        1.7233688        1       #     R_e              [Pixels]
+ 8)       0.87428570       1       # axis ratio (b/a)   
+ 9)       -136.89999 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        192.24100         430.95300 1 1    # position x, y        [pixel]
+ 3)        22.141701        1       # total magnitude    
+ 4)        1.6217275        1       #     R_e              [Pixels]
+ 8)       0.90174676       1       # axis ratio (b/a)   
+ 9)       -150.20000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        251.30299         205.88300 1 1    # position x, y        [pixel]
+ 3)        21.290001        1       # total magnitude    
+ 4)        1.8411953        1       #     R_e              [Pixels]
+ 8)       0.78787873       1       # axis ratio (b/a)   
+ 9)       -175.50000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        198.15500         313.83099 1 1    # position x, y        [pixel]
+ 3)        23.507200        1       # total magnitude    
+ 4)        1.1090537        1       #     R_e              [Pixels]
+ 8)       0.76851852       1       # axis ratio (b/a)   
+ 9)       -170.39999 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        187.47900         183.30400 1 1    # position x, y        [pixel]
+ 3)        23.939199        1       # total magnitude    
+ 4)       0.94339813        1       #     R_e              [Pixels]
+ 8)       0.87410075       1       # axis ratio (b/a)   
+ 9)       -92.900002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        383.38599         460.74301 1 1    # position x, y        [pixel]
+ 3)        20.111401        1       # total magnitude    
+ 4)        4.7413079        1       #     R_e              [Pixels]
+ 8)       0.46904112       1       # axis ratio (b/a)   
+ 9)       -29.700001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        450.70801         254.23100 1 1    # position x, y        [pixel]
+ 3)        19.819000        1       # total magnitude    
+ 4)        2.8618176        1       #     R_e              [Pixels]
+ 8)       0.79651168       1       # axis ratio (b/a)   
+ 9)       -108.70000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        441.28601         238.46300 1 1    # position x, y        [pixel]
+ 3)        19.947901        1       # total magnitude    
+ 4)        3.6496576        1       #     R_e              [Pixels]
+ 8)       0.60192102       1       # axis ratio (b/a)   
+ 9)       -105.70000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        142.83701         429.83600 1 1    # position x, y        [pixel]
+ 3)        22.224800        1       # total magnitude    
+ 4)        1.6124516        1       #     R_e              [Pixels]
+ 8)       0.89976688       1       # axis ratio (b/a)   
+ 9)       -103.50000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        346.86600         411.35001 1 1    # position x, y        [pixel]
+ 3)        20.393200        1       # total magnitude    
+ 4)        3.0116441        1       #     R_e              [Pixels]
+ 8)       0.74714827       1       # axis ratio (b/a)   
+ 9)       -96.099998 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        144.58200         419.18100 1 1    # position x, y        [pixel]
+ 3)        23.011101        1       # total magnitude    
+ 4)       0.90000001        1       #     R_e              [Pixels]
+ 8)       0.74385963       1       # axis ratio (b/a)   
+ 9)       -101.80000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        372.67401         395.82700 1 1    # position x, y        [pixel]
+ 3)        20.129000        1       # total magnitude    
+ 4)        4.0410395        1       #     R_e              [Pixels]
+ 8)       0.77937450       1       # axis ratio (b/a)   
+ 9)       -110.40000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        391.17899         382.47101 1 1    # position x, y        [pixel]
+ 3)        22.253799        1       # total magnitude    
+ 4)        1.4352700        1       #     R_e              [Pixels]
+ 8)       0.65333335       1       # axis ratio (b/a)   
+ 9)       -60.700001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        392.39099         507.48300 1 1    # position x, y        [pixel]
+ 3)        23.286301        1       # total magnitude    
+ 4)        1.3527749        1       #     R_e              [Pixels]
+ 8)       0.69463871       1       # axis ratio (b/a)   
+ 9)       -121.70000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        265.29901         374.73801 1 1    # position x, y        [pixel]
+ 3)        20.252399        1       # total magnitude    
+ 4)        3.4669872        1       #     R_e              [Pixels]
+ 8)       0.38729197       1       # axis ratio (b/a)   
+ 9)       -46.900002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        253.59900         376.72601 1 1    # position x, y        [pixel]
+ 3)        22.471600        1       # total magnitude    
+ 4)        1.3341664        1       #     R_e              [Pixels]
+ 8)       0.81841432       1       # axis ratio (b/a)   
+ 9)       -32.700001 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        348.44000         450.84299 1 1    # position x, y        [pixel]
+ 3)        19.322800        1       # total magnitude    
+ 4)        3.8052596        1       #     R_e              [Pixels]
+ 8)       0.84188038       1       # axis ratio (b/a)   
+ 9)       -75.900002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        251.77699         465.27100 1 1    # position x, y        [pixel]
+ 3)        19.173800        1       # total magnitude    
+ 4)        4.2178194        1       #     R_e              [Pixels]
+ 8)       0.60465114       1       # axis ratio (b/a)   
+ 9)       -141.20000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        234.97701         451.67401 1 1    # position x, y        [pixel]
+ 3)        19.184999        1       # total magnitude    
+ 4)        4.5902070        1       #     R_e              [Pixels]
+ 8)       0.76878612       1       # axis ratio (b/a)   
+ 9)       -153.20000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        249.90100         394.08301 1 1    # position x, y        [pixel]
+ 3)        20.929199        1       # total magnitude    
+ 4)        3.5000001        1       #     R_e              [Pixels]
+ 8)       0.81587835       1       # axis ratio (b/a)   
+ 9)       -28.799999 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        410.81100         378.73401 1 1    # position x, y        [pixel]
+ 3)        22.436100        1       # total magnitude    
+ 4)        1.5779734        1       #     R_e              [Pixels]
+ 8)       0.46644295       1       # axis ratio (b/a)   
+ 9)       -95.900002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        420.55200         427.44199 1 1    # position x, y        [pixel]
+ 3)        23.105400        1       # total magnitude    
+ 4)        1.3228757        1       #     R_e              [Pixels]
+ 8)       0.82521493       1       # axis ratio (b/a)   
+ 9)       -130.20000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        425.01599         481.47299 1 1    # position x, y        [pixel]
+ 3)        21.110500        1       # total magnitude    
+ 4)        2.6925824        1       #     R_e              [Pixels]
+ 8)       0.70791370       1       # axis ratio (b/a)   
+ 9)       -107.00000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        432.89999         457.95499 1 1    # position x, y        [pixel]
+ 3)        23.512899        1       # total magnitude    
+ 4)       0.96436509        1       #     R_e              [Pixels]
+ 8)       0.95515699       1       # axis ratio (b/a)   
+ 9)       -48.900002 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################
+ 0) devauc             # Object type
+ 1)        277.59900         419.38501 1 1    # position x, y        [pixel]
+ 3)        20.165300        1       # total magnitude    
+ 4)        2.7910572        1       #     R_e              [Pixels]
+ 8)       0.92398428       1       # axis ratio (b/a)   
+ 9)       -145.80000 1       # position angle (PA)  [Degrees: Up=0, Left=90]
+ 10) 0          0       # diskiness (< 0) or boxiness (> 0)
+ Z) 0                  # output image (see above)
+###########################################################################

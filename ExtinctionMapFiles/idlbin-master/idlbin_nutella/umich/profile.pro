@@ -1,0 +1,762 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;February 2002
+;Jessica Krick
+;
+;This program creates a radial profile of a star(or anythiing really) in a fits image.  
+; first it blocks out the bad column and diffraction spikes, if given,
+; then it displays the image on the screen.  The radial distance from the
+; center, and the counts at that distance are stored in an array. counts 
+; above and below a threshold are not included in the array.  The array
+; is binned into 1 pixel radii, and the counts are averaged within the bin.
+; The counts are then normalized and plotted.
+; 
+;
+;input: filename, xcenter, ycenter, location of bad columns, and saturated stars
+;output: fielname.prof, idlprof.ps
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+pro profile;, filename;, xcenter, ycenter    ;if I want to make them command line arguments
+
+;xcenter= xcenter-1.
+;ycenter=ycenter-1.
+device, true=24
+device, decomposed=0
+
+close, /all		;close all files = tidiness
+
+colors = GetColor(/Load, Start=1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;declare variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;xcenter = ulong(2180)           ; x coord of center of the star
+;ycenter = ulong(405)		; y coord of center of the star
+;filename = strarr(1)     	; declare filename to be a stringarray
+x = ulong(0)			; x pixel coord
+y = ulong(0)			; y pixel coord
+r = float(0.0)			; radius from center in pixels
+p = float(0.0)			; count at a particular radius
+sum = float(0.0)
+arad = float(0.0)
+
+;max = 30.
+;max = 67.
+max = 930.
+radius = FLTARR((3*max)^2 )	; array of radius (float)
+counts = FLTARR((3*max)^2 )	; array of counts (float)
+
+; create file names
+;filename = "/n/Godiva1/jkrick/A3888/centerV.div"
+;filename = "/n/Godiva1/jkrick/A3888/ellipgal"
+filename = "/n/Godiva1/jkrick/A3888/final/largeV2"
+
+imagefile = filename + '.fits'
+datafile = filename + '.prof'
+;datafile = "/n/Godiva1/jkrick/satstar/new/ccd3126.m.prof"
+
+xcenter = 1002.5
+ycenter = 1699.75
+
+; read in image
+FITS_READ, imagefile, data, header
+
+;set bad column = -100
+;data[1012:1015,640:2030] = -100
+;data[1005:1015,640:661] = -100
+
+;set diffraction spikes = -100
+;for ccd3126
+;data[1052:1073,1022:1522] = -100
+;data[1052:1073,496:996] = -100
+;data[1077:1577,1008:1021] = -100
+;data[551:1051,998:1009] = -100
+
+; make an array of radii from the central pixel, and counts for the 
+; corresponding radii
+;--------------------------------------------------------------------------------
+
+;error check, check to make sure that the edges of the box are
+;not off the image, whoops!
+; !!!!!!!!!!!!!!need to add one for greater than 2048
+
+;need to make it smarter than this.  will want it to continue, just
+;not off the edge, ie don't change max, change boundaries.
+xmin = 800.
+xmax = 1200;400.
+ymin = 1500.
+ymax = 1900;400.
+
+;IF (xcenter - max LT 0) THEN BEGIN
+;	max = float(xcenter - 0)
+;	print, "radius range is not allowed in x, reseting max = ", max
+;ENDIF;
+
+;IF (ycenter - max LT 0) THEN BEGIN
+;	max = float(ycenter - 0)
+;	print, "radius range is not allowed in y, reseting max = ", max
+;ENDIF
+
+
+
+; two for loops get all x and y in a square = 2*max around the center
+;it then outputs the radius and counts to a file and into two arrays
+
+j = ulong64(0)						;counter
+increment = 1						;sampling distance
+FOR x = xmin,xmax-1, increment DO BEGIN
+	FOR y = ymin,ymax-1, increment DO BEGIN
+		s = float(xcenter - x)
+		t = float(ycenter - y)
+		r = float(sqrt(s^(2)+(t^2)))  		;pythagoras
+		p = data[x,y]
+		IF (p GT -0.1 AND p LT 5000) THEN BEGIN	;block the bad data pts
+			;print,j," j ",r," r ",p, " p "	;output to datafile
+			counts(j) = p
+			radius(j) = r
+			j= j + 1
+		ENDIF
+	ENDFOR 
+ENDFOR
+
+;shorten the arrays to be only as long as need be
+radius = radius(0:j-1)
+counts = counts(0:j-1)
+
+
+;sort the radius array, and then apply that sorting order to the counts
+;this way both arrays get sorted appropriately
+sortindex = Sort(radius)
+sortedradius = radius[sortindex]
+sortedcounts = counts[sortindex]
+
+
+;binning
+;----------------------------------------------------------------------------------
+
+OPENW, lun, datafile, /GET_LUN
+
+c = 0.0				;counter to keep track of radius (starting value of bin)
+dx = 1.0			;bin width
+k = ulong(0)			;location in sortedarray
+l = 0.0				;bin number
+average = 0.0			;average counts per bin
+rad = FLTARR(j) 		;array of radii of center of bin
+averagearr = FLTARR(j)  	;array of average values corresponding to radii
+err = FLTARR(j)                 ;array of scatter within the bin
+a = sortedradius[k]		;individual radius
+b = sortedcounts[k]		;individual counts
+
+
+;pick off the first one, and then bin the rest
+rad(l) = a
+averagearr(l) = b
+err(l) = 1.0
+l = l+1
+k = k + 1
+a = sortedradius[k]		;individual radius
+b = sortedcounts[k]		;individual counts
+c = c + 0.5
+
+
+;this set of loops bins the data, and then averages the counts in each
+;bin
+c = fix(a)
+WHILE (c LT sortedradius(j-1)) DO BEGIN
+    sum = 0.0			;sum of counts in the bin
+    i = 0                       ;number of individual measurements in the bin
+    arad = 0.0			;average radius
+    big = -1.0
+    small = 1.0
+    WHILE (a LT (c + dx)) AND  (a LT sortedradius(j-1)) DO BEGIN ;while in the bin
+        
+        sum = sum + b           ;add the value of counts to the sum
+        k = k+ 1                ;increment how many counts overall
+        arad = arad +a
+        
+        IF b GT big THEN big = b ;find the scatter to put some sort of err bars
+        IF b LT small THEN small = b
+        
+        a = sortedradius[k]     ;read in new set of raddi and counts
+        b = sortedcounts[k]
+        i = i+1                 ;increment number of measurements in bin
+    ENDWHILE
+    
+    IF (i EQ 0 ) THEN BEGIN     ; no measurements in the bin = totally blocked
+                                ;SKIP IT, make it the previous value
+        rad(l) = rad(l-1) + dx  ;radius at the average of the radii within the bin
+        averagearr(l) = average ;add the radii and averages to arrays
+        
+    ENDIF ELSE BEGIN
+        average = sum/i         ;calculate average in the bin
+        arad = arad /i          ;calculate the average radius within the bin
+        
+        rad(l) = arad           ;record the radius at the average of the radii within the bin
+        averagearr(l) = average ;add the radii and averages to arrays
+       
+    ENDELSE
+    
+    scatter = big - small
+    err(l) = scatter
+    IF(averagearr(l) GT 28000) THEN BEGIN
+        averagearr(l) = averagearr(l-1)
+        print, "definitely shouldn't be here"
+    ENDIF
+    c = c+dx                    ;change to the next bin
+    l = l+ 1                    ;
+    
+ENDWHILE
+
+
+;shorten the arrays to be only as long as they need to be
+rad= rad(0:l-1)
+averagearr = averagearr(0:l-1)
+err = err(0:l-1)
+;print, rad, averagearr
+;print, "l", l
+counter = ulong64(0)
+;print out values to a file
+;FOR counter = 0, l-2, 1 DO BEGIN
+;    printf, lun, rad(l), averagearr(l)
+;ENDFOR
+
+
+df = fltarr(l-1)
+dfsum = fltarr(l-1)
+FOR j = 0,l - 2,1 DO BEGIN
+
+    df(j) =  averagearr(j)- averagearr(j+1)
+    dfsum(j) =  averagearr(j) - (1./(l-1.-j))*(total(averagearr(j:l-1.))) 
+ENDFOR
+
+
+
+;only really want error bars on every tenth point so I can see them on
+;the graph, so make smaller arrays with every tenth data point
+radnew = fltarr(l)
+averagenew = fltarr(l)
+errnew = fltarr(l)
+
+i = 0
+FOR z =0, l-1,10 DO BEGIN
+    radnew(i) = rad(z)
+    averagenew(i) = averagearr(z)
+    errnew(i) = err(z)
+    i = i+1
+ENDFOR
+
+radnew = radnew(0:i-1)
+averagenew = averagenew(0:i-1)
+errnew = errnew(0:i-1)
+
+
+;curve fitting
+;------------------------------------------------------------------------------
+err = dindgen(l) - dindgen(l) + 1         ;make a simple error array, all even errors
+
+weight = findgen(max)                    ;change the weights by eye
+;weight(0:200) = 1
+;weight(200:500) = 2000
+;weight(500:fix(max)-1) = 1
+weight(0:10) = 1
+weight(10:250) = 2000
+weight(250:399) = 1
+;pi = replicate({fixed:0, limited:[0,0], limits:[0.D,0.D]},2)
+;pi(1).limited(0) = 1
+;pi(1).limits(0) =0.1
+averagearr = averagearr - 2
+sortedcounts = sortedcounts - 2
+
+;print, "sortedradius", sortedradius
+;print, "sortedcounts", sortedcounts
+
+FOR t = 0, j - 1, 1 DO BEGIN
+    IF (sortedcounts[t] LT 0) THEN sortedcounts[t] = sortedcounts[t - 1]
+endfor
+
+newcounts = rebin(sortedcounts, 100)
+newrad = rebin(sortedradius, 100)
+start = [0.01,500.0]
+;result = MPFITFUN('exponential',rad(4:l-1),averagearr(4:l-1), err, start);,PARINFO=pi);, weights=weight)
+;result = MPFITFUN('exponential',rad,averagearr, err, start, weights=weight);,PARINFO=pi);, weights=weight)
+
+;start = [29, 189.0]
+;result = MPFITFUN('exponential',rad, averagearr, err, start, weights=weight)
+
+;start = [0.027, 3.0]
+;result = MPFITFUN('moffat',rad, averagearr, err, start);, weights=weight)
+
+;print, "exponential result", result
+
+;openw, outlun, "/n/Godiva7/jkrick/galfit/expback/listresults",  /GET_LUN, /append
+;printf, outlun, xcenter+1 ,ycenter+1, result
+;close, outlun
+;free_lun, outlun
+
+;plotting
+;---------------------------------------------------------------------------
+
+value = fltarr(800)
+
+FOR m=0,j,1 DO BEGIN
+    value(m) = rad(m) / 0.259
+endfor
+
+mydevice = !D.NAME
+!p.multi = [0, 0, 1]
+SET_PLOT, 'ps'
+
+device, filename='/n/Godiva1/jkrick/A3888/final/galprofile.ps', /portrait,$
+  BITS=8, scale_factor=0.9 , /color
+
+a = [0,0]
+b = [0,0]
+plot, a, b, xrange = [0,50], yrange = [30,20]
+oplot, rad, 24.3 - 2.5*alog10(averagearr/(0.259^2)),thick = 3,color = colors.green
+;, psym = 3;,yrange = [1E-3, 2E-2],/ylog, thick = 3, charthick = 3
+
+;oplot, rad, result(0)*exp(-rad/result(1)), color= colors.blue
+
+p = fltarr(800)
+FOR m = 0, 799,1 DO BEGIN
+    p(m) = 29.5
+ENDFOR
+n = fltarr(800)
+FOR m = 0, 799,1 DO BEGIN
+    n(m) = 30.6
+ENDFOR
+
+
+
+close, lun
+free_lun, lun
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;declare variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;xcenter = ulong(2180)           ; x coord of center of the star
+;ycenter = ulong(405)		; y coord of center of the star
+;filename = strarr(1)     	; declare filename to be a stringarray
+x = ulong(0)			; x pixel coord
+y = ulong(0)			; y pixel coord
+r = float(0.0)			; radius from center in pixels
+p = float(0.0)			; count at a particular radius
+sum = float(0.0)
+arad = float(0.0)
+
+;max = 30.
+;max = 67.
+max = 930.
+radius = FLTARR((3*max)^2 )	; array of radius (float)
+counts = FLTARR((3*max)^2 )	; array of counts (float)
+
+; create file names
+;filename = "/n/Godiva1/jkrick/A3888/centerV.div"
+;filename = "/n/Godiva1/jkrick/A3888/ellipgal"
+filename = "/n/Godiva1/jkrick/A3888/final/larger2"
+
+imagefile = filename + '.fits'
+datafile = filename + '.prof'
+;datafile = "/n/Godiva1/jkrick/satstar/new/ccd3126.m.prof"
+
+xcenter = 1002.5
+ycenter = 1699.75
+
+; read in image
+FITS_READ, imagefile, data, header
+
+;set bad column = -100
+;data[1012:1015,640:2030] = -100
+;data[1005:1015,640:661] = -100
+
+;set diffraction spikes = -100
+;for ccd3126
+;data[1052:1073,1022:1522] = -100
+;data[1052:1073,496:996] = -100
+;data[1077:1577,1008:1021] = -100
+;data[551:1051,998:1009] = -100
+
+; make an array of radii from the central pixel, and counts for the 
+; corresponding radii
+;--------------------------------------------------------------------------------
+
+;error check, check to make sure that the edges of the box are
+;not off the image, whoops!
+; !!!!!!!!!!!!!!need to add one for greater than 2048
+
+;need to make it smarter than this.  will want it to continue, just
+;not off the edge, ie don't change max, change boundaries.
+xmin = 800.
+xmax = 1200;400.
+ymin = 1500.
+ymax = 1900;400.
+
+;IF (xcenter - max LT 0) THEN BEGIN
+;	max = float(xcenter - 0)
+;	print, "radius range is not allowed in x, reseting max = ", max
+;ENDIF;
+
+;IF (ycenter - max LT 0) THEN BEGIN
+;	max = float(ycenter - 0)
+;	print, "radius range is not allowed in y, reseting max = ", max
+;ENDIF
+
+
+
+; two for loops get all x and y in a square = 2*max around the center
+;it then outputs the radius and counts to a file and into two arrays
+
+j = ulong64(0)						;counter
+increment = 1						;sampling distance
+FOR x = xmin,xmax-1, increment DO BEGIN
+	FOR y = ymin,ymax-1, increment DO BEGIN
+		s = float(xcenter - x)
+		t = float(ycenter - y)
+		r = float(sqrt(s^(2)+(t^2)))  		;pythagoras
+		p = data[x,y]
+		IF (p GT -0.1 AND p LT 5000) THEN BEGIN	;block the bad data pts
+			;print,j," j ",r," r ",p, " p "	;output to datafile
+			counts(j) = p
+			radius(j) = r
+			j= j + 1
+		ENDIF
+	ENDFOR 
+ENDFOR
+
+;shorten the arrays to be only as long as need be
+radius = radius(0:j-1)
+counts = counts(0:j-1)
+
+
+;sort the radius array, and then apply that sorting order to the counts
+;this way both arrays get sorted appropriately
+sortindex = Sort(radius)
+sortedradius = radius[sortindex]
+sortedcounts = counts[sortindex]
+
+
+;binning
+;----------------------------------------------------------------------------------
+
+OPENW, lun, datafile, /GET_LUN
+
+c = 0.0				;counter to keep track of radius (starting value of bin)
+dx = 1.0			;bin width
+k = ulong(0)			;location in sortedarray
+l = 0.0				;bin number
+average = 0.0			;average counts per bin
+rad = FLTARR(j) 		;array of radii of center of bin
+averagearr = FLTARR(j)  	;array of average values corresponding to radii
+err = FLTARR(j)                 ;array of scatter within the bin
+a = sortedradius[k]		;individual radius
+b = sortedcounts[k]		;individual counts
+
+
+;pick off the first one, and then bin the rest
+rad(l) = a
+averagearr(l) = b
+err(l) = 1.0
+l = l+1
+k = k + 1
+a = sortedradius[k]		;individual radius
+b = sortedcounts[k]		;individual counts
+c = c + 0.5
+
+
+;this set of loops bins the data, and then averages the counts in each
+;bin
+c = fix(a)
+WHILE (c LT sortedradius(j-1)) DO BEGIN
+    sum = 0.0			;sum of counts in the bin
+    i = 0                       ;number of individual measurements in the bin
+    arad = 0.0			;average radius
+    big = -1.0
+    small = 1.0
+    WHILE (a LT (c + dx)) AND  (a LT sortedradius(j-1)) DO BEGIN ;while in the bin
+        
+        sum = sum + b           ;add the value of counts to the sum
+        k = k+ 1                ;increment how many counts overall
+        arad = arad +a
+        
+        IF b GT big THEN big = b ;find the scatter to put some sort of err bars
+        IF b LT small THEN small = b
+        
+        a = sortedradius[k]     ;read in new set of raddi and counts
+        b = sortedcounts[k]
+        i = i+1                 ;increment number of measurements in bin
+    ENDWHILE
+    
+    IF (i EQ 0 ) THEN BEGIN     ; no measurements in the bin = totally blocked
+                                ;SKIP IT, make it the previous value
+        rad(l) = rad(l-1) + dx  ;radius at the average of the radii within the bin
+        averagearr(l) = average ;add the radii and averages to arrays
+        
+    ENDIF ELSE BEGIN
+        average = sum/i         ;calculate average in the bin
+        arad = arad /i          ;calculate the average radius within the bin
+        
+        rad(l) = arad           ;record the radius at the average of the radii within the bin
+        averagearr(l) = average ;add the radii and averages to arrays
+       
+    ENDELSE
+    
+    scatter = big - small
+    err(l) = scatter
+    IF(averagearr(l) GT 28000) THEN BEGIN
+        averagearr(l) = averagearr(l-1)
+        print, "definitely shouldn't be here"
+    ENDIF
+    c = c+dx                    ;change to the next bin
+    l = l+ 1                    ;
+    
+ENDWHILE
+
+
+;shorten the arrays to be only as long as they need to be
+rad= rad(0:l-1)
+averagearr = averagearr(0:l-1)
+err = err(0:l-1)
+;print, rad, averagearr
+;print, "l", l
+counter = ulong64(0)
+;print out values to a file
+;FOR counter = 0, l-2, 1 DO BEGIN
+;    printf, lun, rad(l), averagearr(l)
+;ENDFOR
+
+
+df = fltarr(l-1)
+dfsum = fltarr(l-1)
+FOR j = 0,l - 2,1 DO BEGIN
+
+    df(j) =  averagearr(j)- averagearr(j+1)
+    dfsum(j) =  averagearr(j) - (1./(l-1.-j))*(total(averagearr(j:l-1.))) 
+ENDFOR
+
+
+
+;only really want error bars on every tenth point so I can see them on
+;the graph, so make smaller arrays with every tenth data point
+radnew = fltarr(l)
+averagenew = fltarr(l)
+errnew = fltarr(l)
+
+i = 0
+FOR z =0, l-1,10 DO BEGIN
+    radnew(i) = rad(z)
+    averagenew(i) = averagearr(z)
+    errnew(i) = err(z)
+    i = i+1
+ENDFOR
+
+radnew = radnew(0:i-1)
+averagenew = averagenew(0:i-1)
+errnew = errnew(0:i-1)
+
+
+;curve fitting
+;------------------------------------------------------------------------------
+err = dindgen(l) - dindgen(l) + 1         ;make a simple error array, all even errors
+
+weight = findgen(max)                    ;change the weights by eye
+;weight(0:200) = 1
+;weight(200:500) = 2000
+;weight(500:fix(max)-1) = 1
+weight(0:10) = 1
+weight(10:250) = 2000
+weight(250:399) = 1
+;pi = replicate({fixed:0, limited:[0,0], limits:[0.D,0.D]},2)
+;pi(1).limited(0) = 1
+;pi(1).limits(0) =0.1
+averagearr = averagearr - 2
+sortedcounts = sortedcounts - 2
+
+;print, "sortedradius", sortedradius
+;print, "sortedcounts", sortedcounts
+
+FOR t = 0, j - 1, 1 DO BEGIN
+    IF (sortedcounts[t] LT 0) THEN sortedcounts[t] = sortedcounts[t - 1]
+endfor
+
+newcounts = rebin(sortedcounts, 100)
+newrad = rebin(sortedradius, 100)
+start = [0.01,500.0]
+;result = MPFITFUN('exponential',rad(4:l-1),averagearr(4:l-1), err, start);,PARINFO=pi);, weights=weight)
+;result = MPFITFUN('exponential',rad,averagearr, err, start, weights=weight);,PARINFO=pi);, weights=weight)
+
+;start = [29, 189.0]
+;result = MPFITFUN('exponential',rad, averagearr, err, start, weights=weight)
+
+;start = [0.027, 3.0]
+;result = MPFITFUN('moffat',rad, averagearr, err, start);, weights=weight)
+
+;print, "exponential result", result
+
+;openw, outlun, "/n/Godiva7/jkrick/galfit/expback/listresults",  /GET_LUN, /append
+;printf, outlun, xcenter+1 ,ycenter+1, result
+;close, outlun
+;free_lun, outlun
+
+;plotting
+;---------------------------------------------------------------------------
+
+value = fltarr(800)
+
+FOR m=0,j,1 DO BEGIN
+    value(m) = rad(m) / 0.259
+endfor
+
+
+
+
+oplot, rad, 24.6 - 2.5*alog10(averagearr/(0.259^2)), color = colors.red, thick = 3
+;, psym = 3;,yrange = [1E-3, 2E-2],/ylog, thick = 3, charthick = 3
+
+;oplot, rad, result(0)*exp(-rad/result(1)), color= colors.blue
+
+p = fltarr(800)
+FOR m = 0, 799,1 DO BEGIN
+    p(m) = 29.5
+ENDFOR
+n = fltarr(800)
+FOR m = 0, 799,1 DO BEGIN
+    n(m) = 30.6
+ENDFOR
+
+
+
+close, lun
+free_lun, lun
+
+device, /close
+set_plot, mydevice
+
+END
+
+
+
+
+;plot, rad*0.259, 25 + (-2.5)*(AlOG10(averagearr/(.259^2))),$
+;  title = 'Radial Profile of Possible ICL Component',$
+;  XTITLE='radius(pixels)', YTITLE='Surface Brightness (mag/sqarcsec)',$
+;  thick = 3, color = colors.black,yrange=[30,20];,  YRANGE=[32, 26];, xtickunits=['numeric','numeric'],$
+;  xtickv=['rad','value']
+;   /ylog, YRANGE=[1E-4, 1E-1]
+
+;FOR x=0,30,1 DO BEGIN
+;    b = 21. + 1.086*(7.6697*( (x/200.)^(1./4.)- 1))
+;print, x, b
+;ENDFOR
+
+;b = result(0)* exp((-7.67) *(((rad / (result(1)))^(1./4.)) -1.))
+;plot, rad, averagearr;, yrange=[0,10]
+;oplot, rad, (result(0)) * (exp(-7.67*(((rad/(result(1)))^(1.0/4.0)) - 1.0))), thick = 3, $
+;  color = colors.blue
+;oplot, rad*0.259,  result(0) + 1.086*(7.6697*( (rad/result(1))^(1./4.)- 1)), color = colors.blue
+;oplot, rad*0.259,  28. + 1.086*(7.6697*( (rad/200)^(1./4.)- 1)), color = colors.green
+
+;result(0) = 0.004
+;result(1) = 200
+;b = (result(0) *exp((-7.67)*((rad/result(1))^(1./4.)-1)))
+;oplot, rad, b, color = colors.red
+
+
+;oplot, rad, df, thick = 3,color = colors.orange
+;oplot, rad, dfsum, thick = 3,color = colors.yellow
+
+;errplot, radnew, averagenew - errnew/2, averagenew + errnew/2
+
+;oplot, rad,result(0) +result(1)*rad + result(2)*rad^2, $
+
+;exponential_______________________________________________________________________
+;oplot, findgen(800), 25 + (-2.5)*(ALOG10((result(0)*exp(-findgen(800)/(result(1))))/(.259^2))),$
+;  thick = 3,color = colors.blue
+;oplot, findgen(800),25 + (-2.5)*(ALOG10((0.143368*exp(-findgen(800)/187.231))/(0.259^2))),$
+;  thick = 3,color = colors.red
+;oplot, findgen(800),25 + (-2.5)*(ALOG10(0.0300519*exp(-findgen(800)/145.164))),$
+;  thick = 3,color = colors.green
+;oplot, findgen(800),25 + (-2.5)*(ALOG10(0.0287254*exp(-findgen(800)/147.585))),$
+;  thick = 3,color = colors.orange
+;oplot, rad, result(0)*(1 + ((rad) / result(1))^2)^(-2.592), color = colors.blue
+
+;xyouts, 200, 31, 'fit w/ galaxies subtracted ', color = colors.blue, charthick =3
+;xyouts, 100, 35, 'fit w/ galaxies subtracted & blocked', color = colors.orange, charthick =3
+;xyouts, 100, 34.5, 'fit w/ galaxies blocked', color = colors.green, charthick =3
+;xyouts, 200, 31.5, 'fit including all galaxy flux', color = colors.red, charthick =3
+
+;oplot, findgen(800), p, color = colors.black, linestyle = 1, thick = 3
+;oplot, findgen(800), n, color = colors.black, linestyle = 3, thick = 3
+
+
+
+;print, sortedradius[0], sortedcounts[0]
+;print, sortedradius[1], sortedcounts[1]
+;print, sortedradius[2], sortedcounts[2]
+;print, sortedradius[3], sortedcounts[3]
+;print, sortedradius[4], sortedcounts[4]
+;print, sortedradius[5], sortedcounts[5]
+;print, sortedradius[6], sortedcounts[6]
+;print, sortedradius[7], sortedcounts[7]
+;print, sortedradius[8], sortedcounts[8]
+;print, sortedradius[9], sortedcounts[9]
+;print, sortedradius[10], sortedcounts[10]
+;print, sortedradius[11], sortedcounts[11]
+;print, sortedradius[12], sortedcounts[12]
+;print, sortedradius[13], sortedcounts[13]
+;print, sortedradius[14], sortedcounts[14]
+;print, sortedradius[15], sortedcounts[15]
+;print, sortedradius[16], sortedcounts[16]
+;print, sortedradius[17], sortedcounts[17]
+;print, sortedradius[18], sortedcounts[18]
+;print, sortedradius[19], sortedcounts[19]
+
+
+;set bad column = -100
+;data[1012:1015,640:2030] = -100
+;data[1005:1015,640:661] = -100
+
+;set diffraction spikes = -100
+;for ccd3126
+;data[1052:1073,1022:1522] = -100
+;data[1052:1073,496:996] = -100
+;data[1077:1577,1008:1021] = -100
+;data[551:1051,998:1009] = -100
+
+;for ccd5061
+;data[1546:1555,1580:1913] = -100
+;data[1546:1555,1271:1562] = -100
+;data[1563:1674,1566:1578] = -100
+;data[1431:1543,1570:1579] = -100
+
+;for ccd5062
+;data[486:502,496:2000] = -100
+;data[486:502,222:432] = -100
+;data[454:530,0:222] = -100
+
+
+;for ccd3120
+;data[248:255,359:390] = -100
+;data[244:252,410:441] = -100
+
+;for ccd3117
+;data[965:972,976:1040] = -100
+;data[969:976,892:956] = -100
+
+;display masked image on screen
+;twoimage = congrid(data,507.5,510) 
+;tv, hist_equal(twoimage)
+
+
+;normalize the averages
+;i = 0
+;norm = averagearr(0)
+;norm = 1
+;print, "norm value: ", norm
+;WHILE (i LT c)  DO BEGIN
+;	averagearr(i) = averagearr(i) / norm
+;	printf, lun,rad(i), averagearr(i)
+;	i = i +1
+;ENDWHILE

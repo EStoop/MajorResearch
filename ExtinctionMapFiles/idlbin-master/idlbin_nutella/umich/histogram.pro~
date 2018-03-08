@@ -1,0 +1,44 @@
+PRO histogram
+close, /all
+colors = GetColor(/load, Start=1)
+
+zarr = fltarr(348)
+i = 0
+openr, lun, "/n/Godiva7/jkrick/A114/cmd/2df.A114.txt", /get_lun
+WHILE (NOT EOF(lun)) DO BEGIN
+    READF, lun,  junk,junk,junk,junk,junk,junk,junk,z,junk
+    IF (z NE 0) AND (z NE -9.0) THEN BEGIN
+        zarr(i) = z
+        i = i + 1
+    ENDIF
+
+ENDWHILE
+
+zarr = zarr(0:i-1)
+close, lun
+free_lun, lun
+
+print, zarr
+!p.multi = [0, 0, 1]
+ps_open, file = "/n/Godiva7/jkrick/paper2/gonzalez.ps", /portrait, xsize = 4, ysize = 4
+
+zarr=[107.9,477.2,18.4,184.6,27.6,93.9,107.7,47.9,45.8,245.9,139.5,93.5,232,202.7,102.1,69.2,314.5,30.8,215.2,126.8,45.6,186.3,180.2,72,46.1,33.9]
+
+plothist, zarr, xhist, yhist, bin=5.0, /noprint,xrange=[0,480]
+
+plot, xhist, yhist,title = "redshift distribution ",$
+thick = 3, charthick = 3, xthick = 3, ythick = 3, xtitle = "z",$
+xrange=[0.0,480],xstyle = 1
+
+
+err = fltarr(i) + 1.
+start = [132.,10., 5000.]
+result = MPFITFUN('gauss',xhist,yhist, err, start) 
+xarr = (findgen(1000.))
+
+oplot, xarr, result(2)/sqrt(2.*!Pi) * exp(-0.5*((xarr - result(0))/result(1))^2.),$
+  thick = 3, color = colors.red
+
+ps_close, /noprint, /noid
+
+end

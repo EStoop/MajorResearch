@@ -1,0 +1,4 @@
+pro find_highz
+
+
+restore, '/Users/jkrick/idlbin/object.old.sav'

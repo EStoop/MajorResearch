@@ -1,0 +1,190 @@
+;+
+; NAME: Jessica Krick
+;
+; PURPOSE: this script creates  matched star lists as input to geomap
+;
+; CALLING SEQUENCE: register
+;
+; INPUTS: 1) list of files to be registered (should already be set into 4000x4000 images)
+;                   2) fwhmcutoffs as a measure of the seeing so I know where to find the stars
+;                        I could get around this by choosing a constant, but this is not as efficient
+;                       since I would have to choose a large range
+;
+; OUTPUTS:   ccd????.big.match  which goes right into geomap
+;
+; PROCEDURE:  takes ~1-2 minutes, longer if there are more stars to check against
+;
+; MODIFICATION HISTORY:  July 2004
+;
+;-
+
+FUNCTION equalto, param1, param2, comfortlevel
+
+IF (param1 LT param2 + comfortlevel) AND (param1 GT param2 -comfortlevel) THEN BEGIN
+    return, 1
+ENDIF ELSE BEGIN
+    return, 0
+ENDELSE
+
+END
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+PRO register
+
+close, /all
+
+;openr, lun, "/n/Godiva2/jkrick/A141/phot_ccd2075.dat", /get_lun
+;this is the file with the template star locations.
+
+;for now I have chosen three stars in the very center by hand
+ax =   2122.03 
+ay = 2093.68
+bx = 2222.89 
+by = 1861.07
+cx =  2045.88 
+cy = 1685.05
+
+A = sqrt((abs(ax-bx))^2 + (abs(ay-by))^2)
+B = sqrt((abs(ax-cx))^2 + (abs(ay-cy))^2)
+C = sqrt((abs(cx-bx))^2 + (abs(cy-by))^2)
+
+openr, filelistlun, "/n/Godiva2/jkrick/A141/listbig", /get_lun
+openr, fwhmlun, "/n/Godiva2/jkrick/A141/fwhmcutoff2",/get_lun
+filename = "hello"
+WHILE (NOT(EOF(filelistlun)) )DO BEGIN
+    readf, filelistlun, filename
+    
+    infile = strmid(filename,0,30) + ".cr.fits"
+    outfile =  strmid(filename,0,30)  + ".big.match2"
+    print, infile, outfile
+
+       commandline = '/n/Godiva7/jkrick/Sex/sex ' + infile + " -c /n/Godiva2/jkrick/A141/default.sex"
+    spawn, commandline
+
+    tempname = "/n/Godiva2/jkrick/A141/SExtractor.cat"
+    openr, lun2, tempname, /get_lun
+    
+    ;read in fwhmcuttof values for the bottom of the star distribution
+    readf, fwhmlun, junk, fwhmlow
+    fwhmhigh = fwhmlow + 1.5
+    print, "fwhm from file", fwhmlow, fwhmhigh
+
+    xarr = fltarr(10000)
+    yarr = fltarr(10000)
+    i = 0
+    WHILE (NOT EOF(lun2)) DO BEGIN  
+        READF, lun2, o, xcenter, ycenter,aimage,bimage,e,fluxbest,magbest,magerr,fluxiso,isoarea,fwhm,theta,back
+        IF (e LT 0.5) AND (fluxbest GT 0) AND (isoarea GT 6) AND (magbest LT 22) AND $
+             (fwhm GT fwhmlow) AND (fwhm LT fwhmhigh) THEN BEGIN
+            xarr[i] = xcenter 
+            yarr[i] = ycenter 
+            i = i + 1
+        ENDIF
+        
+    ENDWHILE
+    close, lun2
+    free_lun, lun2
+
+    xarr = xarr[0:i-1]
+    yarr = yarr[0:i-1]
+    print, "there are ", i, "values in the center arrays"
+    FOR j = 0, i-1, 1 DO BEGIN
+        FOR k = j+1, i-1, 1 DO BEGIN
+            FOR l = k+1, i-1, 1 DO BEGIN
+                A2 = sqrt((abs(xarr[j]-xarr[k]))^2 + (abs(yarr[j]-yarr[k]))^2)
+                B2 = sqrt((abs(xarr[j]-xarr[l]))^2 + (abs(yarr[j]-yarr[l]))^2)
+                C2 = sqrt((abs(xarr[k]-xarr[l]))^2 + (abs(yarr[k]-yarr[l]))^2)
+                
+                IF (equalto(A2,A,1.0) EQ 1) AND (equalto(B2,B,1.0) EQ 1) AND (equalto(C2,C,1.0) EQ 1) THEN BEGIN
+                    print, "found something", A2, B2, C2, A, B,C
+                    xshift = xarr[j] - ax  
+                    yshift = yarr[j] - ay 
+                    print, "without rot, shift is", xshift, yshift   
+                    GOTO, printstatement
+                ENDIF
+                IF (equalto(A2,A,1.0) EQ 1) AND (equalto(B2,C,1.0) EQ 1) AND (equalto(C2,B,1.0) EQ 1) THEN BEGIN
+                    print, "found something", A2, B2, C2, A, B,C
+                    xshift = xarr[j] - bx 
+                    yshift = yarr[j] - by
+                    print, "without rot, shift is", xarr[j] - bx, yarr[j] - by
+                    GOTO, printstatement
+                ENDIF
+                IF (equalto(A2,B,1.0) EQ 1) AND (equalto(B2,A,1.0) EQ 1) AND (equalto(C2,C,1.0) EQ 1) THEN BEGIN
+                    print, "found something", A2, B2, C2, A, B,C
+                    xshift = xarr[j] - ax 
+                    yshift = yarr[j] - ay 
+                    print, "without rot, shift is", xarr[j] - ax, yarr[j] - ay
+                    GOTO, printstatement
+                ENDIF
+                IF (equalto(A2,B,1.0) EQ 1) AND (equalto(B2,C,1.0) EQ 1) AND (equalto(C2,A,1.0) EQ 1) THEN BEGIN
+                    print, "found something", A2, B2, C2, A, B,C
+                    xshift = xarr[j] - cx 
+                    yshift = yarr[j] - cy 
+                    print, "without rot, shift is", xarr[j] - cx, yarr[j] - cy
+                    GOTO, printstatement
+                ENDIF
+                IF (equalto(A2,C,1.0) EQ 1) AND (equalto(B2,A,1.0) EQ 1) AND (equalto(C2,B,1.0) EQ 1) THEN BEGIN
+                    print, "found something", A2, B2, C2, A, B,C
+                    xshift = xarr[k] - cx 
+                    yshift = yarr[k] - cy 
+                    print, "without rot, shift is", xarr[k] - cx, yarr[k] - cy
+                    GOTO, printstatement
+                ENDIF
+                IF (equalto(A2,C,1.0) EQ 1) AND (equalto(B2,B,1.0) EQ 1) AND (equalto(C2,A,1.0) EQ 1) THEN BEGIN
+                    print, "found something", A2, B2, C2, A, B,C
+                    xshift = xarr[j] - cx 
+                    yshift = yarr[j] - cy 
+                    print, "without rot, shift is", xarr[j] - cx, yarr[j] - cy
+                    GOTO, printstatement
+                ENDIF
+                
+                
+            ENDFOR
+        ENDFOR
+    ENDFOR
+    
+    ;now try making the output file with the template and new coords
+    printstatement: print, "moving on now to the files"
+
+    openw, lun4, outfile, /get_lun
+    openr, lun, "/n/Godiva2/jkrick/A141/phot_ccd2075.dat", /get_lun
+
+    WHILE (NOT EOF(lun)) DO BEGIN 
+        READF, lun, o, xcenter, ycenter,junk,junk,junk,junk,mag,junk,junk,junk,junk,junk,junk
+        
+        openr, lun2, tempname, /get_lun
+        WHILE (NOT eof(lun2)) DO BEGIN
+            READF, lun2, o2, xcenter2, ycenter2,junk,junk,e,junk,junk,junk,junk,junk,junk,junk,junk
+;       print, xcenter, ycenter, xcenter2, ycenter2
+            IF (equalto(xcenter +xshift, xcenter2, 1.0) EQ 1) THEN BEGIN
+;                print, "xequalto", xcenter - xcenter2 + xshift, ycenter- ycenter2+yshift
+                IF (equalto(ycenter +yshift, ycenter2, 1.0) EQ 1) AND (mag LT 18) AND (e LT 0.25) THEN BEGIN
+                    printf, lun4, xcenter, ycenter, xcenter2+ 1000., ycenter2+ 1000.
+                    print, "matched star", xcenter, ycenter, xcenter2+ 1000., ycenter2+ 1000.
+                ENDIF
+            ENDIF
+            
+            
+        ENDWHILE
+        close, lun2
+        free_lun,lun2
+    ENDWHILE
+    
+    close, lun
+    close, lun2
+    close, lun4
+    free_lun, lun
+    free_lun,lun2
+    free_lun,lun4
+    
+ENDWHILE
+
+close, fwhmlun
+close, filelistlun
+free_lun, fwhmlun
+free_lun, filelistlun
+
+close, /all
+END
+
+            

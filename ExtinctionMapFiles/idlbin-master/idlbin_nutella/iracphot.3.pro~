@@ -1,0 +1,460 @@
+pro iracphot
+
+print, 'starting at '+systime() 
+channels = replicate({chl, imagefilename:' ', coveragefilename:' ', psffilename:' ', gain:0D },4)
+
+channels[0]={chl, '/Users/jkrick/spitzer/irac/ch1/mosaic.fits', '/Users/jkrick/spitzer/irac/ch1/mosaic_cov.fits','/Users/jason/psf/massimo/I1_psf_x4_best.fits', 3.3 }
+channels[1]={chl, '/Users/jkrick/spitzer/irac/ch2/mosaic.fits', '/Users/jkrick/spitzer/irac/ch2/mosaic_cov.fits','/Users/jason/psf/massimo/I2_psf_x4_best.fits', 3.7}
+channels[2]={chl, '/Users/jkrick/spitzer/irac/ch3/mosaic.fits', '/Users/jkrick/spitzer/irac/ch3/mosaic_cov.fits','/Users/jason/psf/massimo/I3_psf_x4_best.fits', 3.8 }
+channels[3]={chl, '/Users/jkrick/spitzer/irac/ch4/mosaic.fits', '/Users/jkrick/spitzer/irac/ch4/mosaic_cov.fits','/Users/jason/psf/massimo/I4_psf_x4_best.fits', 3.8 }
+;channels[0]={chl, '/Users/jkrick/spitzer/irac/ch1/mosaic.nonan.fits', '/Users/jkrick/spitzer/irac/ch1/mosaic_cov.fits','/Users/jason/psf/massimo/I1_psf_x4_best.fits', 3.3 }
+;channels[1]={chl, '/Users/jkrick/spitzer/irac/ch2/mosaic.nonan.fits', '/Users/jkrick/spitzer/irac/ch2/mosaic_cov.fits','/Users/jason/psf/massimo/I2_psf_x4_best.fits', 3.7}
+;channels[2]={chl, '/Users/jkrick/spitzer/irac/ch3/mosaic.nonan.fits', '/Users/jkrick/spitzer/irac/ch3/mosaic_cov.fits','/Users/jason/psf/massimo/I3_psf_x4_best.fits', 3.8 }
+;channels[3]={chl, '/Users/jkrick/spitzer/irac/ch4/mosaic.nonan.fits', '/Users/jkrick/spitzer/irac/ch4/mosaic_cov.fits','/Users/jason/psf/massimo/I4_psf_x4_best.fits', 3.8 }
+
+
+readcol, '/Users/jkrick/spitzer/irac/SExtractor.1.cat', ch1NUMBER,ch1X_WORLD ,ch1Y_WORLD ,ch1X_IMAGE,ch1Y_IMAGE,ch1FLUX_AUTO,ch1MAG_AUTO,ch1MAGERR_AUTO,ch1FLUX_APER,ch1MAG_APER,ch1MAGERR_APER,ch1FLUX_BEST,ch1MAG_BEST,ch1MAGERR_BEST,ch1FWHM_IMAGE,ch1ISOAREA_IMAGE,ch1FLUX_MAX,ch1ELLIPTICITY,ch1CLASS_STAR,ch1FLAGS, ch1theta, ch1a, ch1b, format="A"
+
+ch1ratio = 1./(1.-ch1ellipticity)
+
+
+;want to keep both old and new
+;would be better if move current irac1flux to irac1fluxold and put new flux into irac1flux
+
+restore, '/Users/jkrick/idlbin/object.sav'
+a  = { irac1fluxerr:0D, irac2fluxerr:0D, irac3fluxerr:0D, irac4fluxerr:0D, irac1magerr:0D,  irac2magerr:0D, irac3magerr:0D, irac4magerr:0D, nearestdist:0D, nearestnum:0, extended:0D, irac1fluxold:0D, irac2fluxold:0D, irac3fluxold:0D, irac4fluxold:0D, irac1magold:0D, irac2magold:0D, irac3magold:0D, irac4magold:0D }
+
+b = replicate(a, n_elements(object.ra))
+objectnew = struct_addtags(object, b)
+
+objectnew.irac1fluxold = object.irac1flux
+objectnew.irac2fluxold = object.irac2flux
+objectnew.irac3fluxold = object.irac3flux
+objectnew.irac4fluxold = object.irac4flux
+objectnew.irac1magold = object.irac1mag
+objectnew.irac2magold = object.irac2mag
+objectnew.irac3magold = object.irac3mag
+objectnew.irac4magold = object.irac4mag
+
+
+; create arrays to hold output
+npoints=long(n_elements(object.ra))
+;npoints=60
+
+kron_factor=2.5
+min_radius=2.0                  ; minimum radius for computing an ellipse (3.2 default)
+
+g=0
+acsratio=1./(1.-object.acsellip) ; convert sextrator ellipticity to ratio of smaj/smin
+
+; define the bounding polygonal area for stars 
+px=[12.5,25, 25, 10, 12.5]       ; acsmag 
+py=[6e5 ,60, 35, 3e5, 6e5]       ; ascisoarea 
+py=alog10(py)                    ; switch to log space 
+roi = Obj_New('IDLanROI', px, py) 
+star=roi->ContainsPoints(object.acsmag,alog10(object.acsisoarea)) 
+
+
+for ch = 0, 3 do begin
+
+   fits_read, channels[ch].imagefilename,data, head  
+   fits_read, channels[ch].coveragefilename, covdata, covhead  
+   naxis1=sxpar(head,'NAXIS1')
+   naxis2=sxpar(head,'NAXIS2')
+
+   psf=readfits(channels[ch].psffilename,psf_hd)
+
+
+;convert acs ra and dec to irac x, y
+   adxy, head, object.ra, object.dec, x, y
+
+
+   iracap_acs=fltarr(npoints)
+   iracflux_acs=fltarr(npoints)
+   iracfluxerr = fltarr(npoints)
+   finalflux = fltarr(npoints)
+   finalfluxerr = fltarr(npoints)
+   mask=data                    ; initialize the mask to be the same as the image
+   mask[*]=0
+   mask_total=mask
+   mask_flux=fltarr(npoints)
+   mask_flux[*]=sqrt(-1)
+   
+;--------------------------------------------------------------------------
+
+; compute the fiducial aperture correction ;
+
+   aper,psf,521,521,pflux,pfluxerr,psky,pskyerr,500,20,[40,50],[-100,1e5],/nan,/exact,/silent,/flux,setskyval=0
+   fiducial=pflux
+   aper,psf,521,521,pflux,pfluxerr,psky,pskyerr,500,6.4,[10,20],[-100,1e5],/nan,/exact,/silent,/flux,setskyval=0
+   fiducial_cor=pflux/fiducial
+
+
+
+;loop through all objects in the catalog
+;   for i = long(74200), npoints-1 do begin
+   for i = long(0),  npoints- 1 do begin
+   
+      if ch eq 0 then interestingmag = object[i].irac1mag
+      if ch eq 1 then interestingmag = object[i].irac2mag
+      if ch eq 2 then interestingmag = object[i].irac3mag
+      if ch eq 3 then interestingmag = object[i].irac4mag
+
+      if object[i].irac1mag gt 0.  then begin
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; figure out distance to nearest neighbor
+;and the brightness and isoarea of that neighbor
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;   print, 'working on ', i
+         dist=sphdist( object[i].ra, object[i].dec,object.ra,object.dec,/degrees)
+         sorteddist = dist(sort(dist))
+         b = sort(dist)
+         nearestdist = sorteddist(1)
+         nearestflux  = object[b(1)].acsflux
+         nearestisoarea = object[b(1)].acsisoarea
+         objectnew[i].nearestdist = nearestdist
+         objectnew[i].nearestnum = b(1)
+   ;why isn't there an irac isoarea in the catalog?
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; calculate effective gain based on coverage map
+;effective gain = N * gain
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+         N= covdata[x[i], y[i]]
+         phpadu = N*channels[ch].gain
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;if the object is detected in acs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+         if object[i].acsmag gt 0 and object[i].acsmag lt 90 then begin
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; set the aperture size                                          ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            ap=sqrt(object[i].acsisoarea/3.141)
+            semi_minor=sqrt(object[i].acsisoarea/(3.141*acsratio[i]))
+            semi_major=acsratio[i]*semi_minor
+; convert that to IRAC mosaic units
+            ap=ap*0.05/0.6
+            semi_major=semi_major*0.05/0.6
+            semi_minor=semi_minor*0.05/0.6
+; now set the minimum aperture
+            if ap lt 3.2 then ap =3.2
+;ap(where(finite(ap) NE 1))=3.2
+
+; this fixes the ratio value to give a minimum semi_minor axis
+; must be done _after_ semi-major axis is computed above
+            semi_major_orig=semi_major
+            if semi_major lt 3.2 then semi_major=3.2
+            if semi_minor lt 2.0 then semi_minor = 2.0
+
+;make sure the stars get the circular apertures
+            if star(i) gt 0 then ap = 3.2
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; for all objects, measure a circular aperture
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            aper,data,x[i],y[i],tflux,tfluxerr,tsky,tskyerr,phpadu,ap,[ap+10,ap+20],[-100,1000],/nan,/exact,/flux,/silent
+            tflux=tflux*8.46    ; convert to uJy
+
+; derive the appropriate aperture correction
+            apcor=fiducial_cor  ; default aperture
+            if ((ap GT 3.2) and (ap LT 100))then begin
+               aper,psf,521,521,pflux,pfluxerr,psky,pskyerr,channels[ch].gain,ap*2,[10,20],[-100,1e5],/nan,/exact,/silent,/flux,setskyval=0
+               apcor=pflux/fiducial
+            endif
+            if (ap GT 100) then apcor=total(psf)/fiducial
+
+; apply aperture correction
+            tflux=tflux/apcor      
+
+; register the fluxes and apertures
+            iracap_acs[i]=ap
+            iracflux_acs[i]=tflux
+            iracfluxerr[i] = tfluxerr*8.46      
+            finalflux[i] =  iracflux_acs[i]
+            finalfluxerr[i]=  iracfluxerr[i]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; do photometery on extended sources
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+            if ((semi_major_orig GT min_radius)) then begin
+;               print, 'extended acs '
+               objectnew[i].extended = 1
+; first mask the aperture itself
+;               print,'extended',  i, x[i], y[i], ap, semi_major_orig
+               if acsratio[i] gt 15 then acsratio[i] = 12
+               dist_ellipse,mask_ellipse,[naxis1,naxis2],x[i],y[i],acsratio[i],90+object[i].acstheta
+               mask[*]=0
+;               print, 'n',mask_ellipse(x[i]-5:x[i]+5, y[i]-5:y[i]+5)
+               mask(where(mask_ellipse LE kron_factor*semi_major))=1
+               mask_total=mask_total OR mask
+        
+               mask_object=where(mask EQ 1)
+               mask_object_area=total(mask)
+               mask_object_flux=total(data(mask_object))
+
+; now process the sky
+               mask[*]=0
+               mask(where((mask_ellipse LE kron_factor*semi_major+15)and(mask_ellipse GE kron_factor*semi_major+5)))=1
+               mask_sky=where(mask EQ 1)
+               mmm,data(mask_sky),background,background_sigma,background_skew
+               mask_sky_flux=background*mask_object_area
+
+               mask_flux[i]=8.46*(mask_object_flux-mask_sky_flux)
+
+; derive the appropriate aperture correction
+
+; first, recreate the effective aperture
+               mask_radius=sqrt(mask_object_area / 3.141)
+
+               if (mask_radius LT 100) then begin
+                  aper,psf,521,521,pflux,pfluxerr,psky,pskyerr,channels[ch].gain, mask_radius*2,[10,20],[-100,1e5],/nan,/exact,/silent,/flux,setskyval=0
+                  apcor=pflux/fiducial
+
+               endif else begin
+                  apcor=total(psf)/fiducial
+               endelse
+
+               mask_flux[i]=mask_flux[i]/apcor
+
+;         print, i, object[i].ra, object[i].dec, object(i).acsisoarea, object[i].acsellip, semi_major_orig, semi_major, semi_minor , iracap_acs(i), iracflux_acs(i), iracfluxerr(i),  mask_flux[i], nearestdist, nearestflux, nearestisoarea
+;         finalflux[i]=mask_flux[i]
+               if finite(mask_flux[i]) gt 0  then finalflux[i]=mask_flux[i] else finalflux[i] =iracflux_acs(i)
+            endif               ;if extended
+
+         endif else begin   ;if acs detected
+;-------------------------------------------------------------------------------------
+;if the object is  NOT detected in acs but is on the irac frame
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     ;do all the same things as above.
+
+            if object[i].irac1mag gt 0 and interestingmag gt 0 then begin ; and object[i].irac1mag lt 90 then begin
+;         print, 'not detected in acs but in irac'
+ ;match with SExtractor IRAC catalog.  
+;if not in the catalog then must be a small object where a circular aperture would be a fine size.
+         
+         
+
+               iracdist=sphdist( object[i].ra, object[i].dec,ch1x_world,ch1y_world,/degrees)        
+               iracsep=min(iracdist,ind)
+               sortediracdist = iracdist(sort(iracdist))
+               iracb = sort(iracdist)
+
+               if (iracsep ge 0.0002) then ap = 3.2
+               if (iracsep LT 0.0002)  then begin
+                  ch1isoareanow = ch1isoarea_image(iracb(0))
+                  ch1rationow= ch1ratio(iracb(0))
+                  ch1thetanow = ch1theta(iracb(0))
+; set the aperture size                                          ;
+
+                  ap=sqrt(ch1isoareanow/3.141)
+                  semi_minor=sqrt(ch1isoareanow/(3.141*ch1rationow))
+                  semi_major=ch1rationow*semi_minor
+
+
+;instead try using SExtractor's a & b and not isoarea with ellipticity
+                  semi_major = ch1a(iracb(0))
+                  semi_minor = ch1b(iracb(0))
+                  ap = (semi_major + semi_minor )/2.
+
+; now set the minimum aperture
+                  if semi_major lt 3.2 then ap=3.2
+;ap(where(finite(ap) NE 1))=3.2
+
+; this fixes the ratio value to give a minimum semi_minor axis
+; must be done _after_ semi-major axis is computed above
+                  semi_major_orig=semi_major
+                  if semi_major lt 3.2 then semi_major=3.2
+                  if semi_minor lt 2.0 then semi_minor = 2.0
+            
+                                ;if object is near to a bright object then give it a small aperture
+                                ;tricky with irac detected things since sextractor knows that this is a confused image
+                  if ch1flags(iracb(0))  ge 32  then ap = 3.2
+
+               endif
+
+;make sure the stars get the circular apertures
+;???
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; for all objects, measure a circular aperture
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+               print, 'i,x[i],y[i] ', i, x[i], y[i], ap
+               aper,data,x[i],y[i],tflux,tfluxerr,tsky,tskyerr,phpadu,ap,[ap+10,ap+20],[-100,1000],/nan,/exact,/flux,/silent
+               
+               tflux=tflux*8.46 ; convert to uJy
+
+; derive the appropriate aperture correction
+               apcor=fiducial_cor ; default aperture
+               if ((ap GT 3.2) and (ap LT 100))then begin
+                  aper,psf,521,521,pflux,pfluxerr,psky,pskyerr,channels[ch].gain,ap*2,[10,20],[-100,1e5],/nan,/exact,/silent,/flux,setskyval=0
+                  apcor=pflux/fiducial
+               endif
+
+               if (ap GT 100) then apcor=total(psf)/fiducial
+
+               tflux=tflux/apcor ; apply aperture correction
+
+; register the fluxes and apertures
+               iracflux_acs[i]=tflux
+               iracap_acs[i]=ap
+               iracfluxerr[i] = tfluxerr
+
+               finalflux[i] = tflux
+               finalfluxerr[i]=tfluxerr
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; do photometery on extended sources
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+               if ap gt 3.2 then begin
+;      if ((semi_major_orig GT min_radius)) then begin
+;                  print, 'extended irac'
+                  objectnew[i].extended = 1
+
+; first mask the aperture itself
+
+                  dist_ellipse,mask_ellipse,[naxis1,naxis2],x[i],y[i],ch1rationow,90+ch1thetanow
+                  mask[*]=0
+                  mask(where(mask_ellipse LE kron_factor*semi_major))=1
+                  mask_total=mask_total OR mask
+        
+                  mask_object=where(mask EQ 1)
+                  mask_object_area=total(mask)
+                  mask_object_flux=total(data(mask_object))
+
+; now process the sky
+                  mask[*]=0
+                  mask(where((mask_ellipse LE kron_factor*semi_major+15)and(mask_ellipse GE kron_factor*semi_major+5)))=1
+
+                  mask_sky=where(mask EQ 1)
+                  mask_sky = mask_sky(where(finite(data(mask_sky)) gt 0))
+                  print, 'data', data(mask_sky)
+                  mmm,data(mask_sky),background,background_sigma,background_skew
+                  mask_sky_flux=background*mask_object_area
+
+                  mask_flux[i]=8.46*(mask_object_flux-mask_sky_flux)
+
+
+            
+
+; derive the appropriate aperture correction
+
+; first, recreate the effective aperture
+                  mask_radius=sqrt(mask_object_area / 3.141)
+
+                  if (mask_radius LT 100) then begin
+                     aper,psf,521,521,pflux,pfluxerr,psky,pskyerr,channels[ch].gain, mask_radius*2,[10,20],[-100,1e5],/nan,/exact,/silent,/flux,setskyval=0
+                     apcor=pflux/fiducial
+
+                  endif else begin
+                     apcor=total(psf)/fiducial
+                  endelse
+
+                  mask_flux[i]=mask_flux[i]/apcor
+            
+;            print, i, iracb(0), object[i].ra, object[i].dec, ch1isoareanow, ch1rationow, semi_major_orig, semi_major, semi_minor , iracap_acs(i), iracflux_acs(i), iracfluxerr(i), mask_flux[i], nearestdist, nearestflux, nearestisoarea
+                  if finite(mask_flux[i]) gt 0 then finalflux[i]=mask_flux[i] else finalflux[i] =iracflux_acs(i)
+
+;            testdeltamag[g] =  object[i].irac1mag - (8.926 - 2.5*alog10(finalflux[i]*1E-6))
+;            testskyerr[g] =background_sigma
+;            g = g + 1
+
+               endif
+
+
+            endif
+            
+         endelse
+
+
+;update the catalog
+         if ch eq 0 then begin
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac1flux = finalflux[i] else objectnew[i].irac1flux =-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac1fluxerr=finalfluxerr[i] else objectnew[i].irac1fluxerr=-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac1mag = 8.926 - 2.5*alog10(finalflux[i]*1E-6) else objectnew[i].irac1mag = 99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac1magerr = objectnew[i].irac1mag - (8.926 - 2.5*alog10((finalflux[i] + finalfluxerr[i])*1E-6)) else objectnew[i].irac1magerr =99.0
+            
+;            print, 'final1', i, objectnew[i].irac1flux , objectnew[i].irac1fluxerr, objectnew[i].irac1mag, objectnew[i].irac1magerr, object[i].irac1flux, object[i].irac1mag, objectnew[i].extended
+         endif
+         if ch eq 1 then begin
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac2flux = finalflux[i] else objectnew[i].irac2flux =-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac2fluxerr=finalfluxerr[i] else objectnew[i].irac2fluxerr=-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac2mag = 8.926 - 2.5*alog10(finalflux[i]*1E-6) else objectnew[i].irac2mag = 99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac2magerr = objectnew[i].irac2mag - (8.926 - 2.5*alog10((finalflux[i] + finalfluxerr[i])*1E-6)) else objectnew[i].irac2magerr =99.0
+            
+  ;          print, 'final2', i, objectnew[i].irac2flux , objectnew[i].irac2fluxerr, objectnew[i].irac2mag, objectnew[i].irac2magerr, object[i].irac2flux, object[i].irac2mag, objectnew[i].extended
+         endif
+         if ch eq 2 then begin
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac3flux = finalflux[i] else objectnew[i].irac3flux =-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac3fluxerr=finalfluxerr[i] else objectnew[i].irac3fluxerr=-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac3mag = 8.926 - 2.5*alog10(finalflux[i]*1E-6) else objectnew[i].irac3mag = 99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac3magerr = objectnew[i].irac3mag - (8.926 - 2.5*alog10((finalflux[i] + finalfluxerr[i])*1E-6)) else objectnew[i].irac3magerr =99.0
+            
+;            print, 'final3', i, objectnew[i].irac3flux , objectnew[i].irac3fluxerr, objectnew[i].irac3mag, objectnew[i].irac3magerr, object[i].irac3flux, object[i].irac3mag, objectnew[i].extended
+         endif
+         if ch eq 3 then begin
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac4flux = finalflux[i] else objectnew[i].irac4flux =-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac4fluxerr=finalfluxerr[i] else objectnew[i].irac4fluxerr=-99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac4mag = 8.926 - 2.5*alog10(finalflux[i]*1E-6) else objectnew[i].irac4mag = 99.0
+            if finite(finalflux[i]) gt 0 then objectnew[i].irac4magerr = objectnew[i].irac4mag - (8.926 - 2.5*alog10((finalflux[i] + finalfluxerr[i])*1E-6)) else objectnew[i].irac4magerr =99.0
+            
+;            print, 'final4', i, objectnew[i].irac4flux , objectnew[i].irac4fluxerr, objectnew[i].irac4mag, objectnew[i].irac4magerr, object[i].irac4flux, object[i].irac4mag, objectnew[i].extended
+         endif
+
+      endif
+
+   endfor
+endfor
+
+;testdeltamag = testdeltamag[0:g-1]
+;testskyerr=testskyerr[0:g-1]
+;plot, testdeltamag, testskyerr, psym=8, symsize=0.2, xtitle='orig - new', ytitle='background_sigma', xrange=[0,6], yrange=[0.0009, 0.01], xstyle=1, ystyle=1
+
+;deal with the infinities
+ ju = where(finite(objectnew.irac4mag) lt 1)
+objectnew[ju].irac4mag = -1.0
+objectnew[ju].irac4magerr = -1.0
+objectnew[ju].irac4flux = -1.0
+objectnew[ju].irac4fluxerr = -1.0
+ ju = where(finite(objectnew.irac3mag) lt 1)
+objectnew[ju].irac3mag = -1.0
+objectnew[ju].irac3magerr = -1.0
+objectnew[ju].irac3flux = -1.0
+objectnew[ju].irac3fluxerr = -1.0
+ ju = where(finite(objectnew.irac2mag) lt 1)
+objectnew[ju].irac2mag = -1.0
+objectnew[ju].irac2magerr = -1.0
+objectnew[ju].irac2flux = -1.0
+objectnew[ju].irac2fluxerr = -1.0
+ 
+; write the aperture mask file
+writefits,'mask_total.fits',mask_total,ch1head
+
+
+; save some results
+save,/variables,filename='extract_acs_shape_mask_v2.sav'
+save, objectnew, filename='/Users/jkrick/idlbin/objectnew.sav'
+
+
+
+
+;plot, object[10000:17000].irac1mag, object[10000:17000].irac1mag - objectnew[10000:17000].irac1mag, psym = 3, xrange=[10,30], xtitle='original aperture magnitudes', ytitle='original - new',  charthick=3, xthick=3, ythick=3, title='non acs detected, extended objects'
+;j = where(object.acsmag lt 0 or object.acsmag gt 90)
+;i = where(object[j].irac1mag gt 0 and object[j].irac1mag lt 90)
+
+;irac extended
+;ei1 = where(objectnew[j[i]].extended gt 0)
+
+;oplot, object[j[i[ei1]]].irac1mag, object[j[i[ei1]]].irac1mag - objectnew[j[i[ei1]]].irac1mag, psym = 2
+;oplot, object[j[i[pi1]]].irac1mag, object[j[i[pi1]]].irac1mag - objectnew[j[i[pi1]]].irac1mag, psym = 2
+
+print,"finishing at "+systime()
+
+
+end

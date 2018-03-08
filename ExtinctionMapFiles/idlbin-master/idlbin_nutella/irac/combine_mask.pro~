@@ -1,0 +1,12 @@
+pro combine_mask
+;how many background pixels will be left if I combine mask files from
+;3 different coordinates?
+
+;central positions of the 3 aors for iwic210 in coords of the irac
+;dark field image
+x = [1351,1507,1699]
+y = [775,971,1219]
+
+fits_read, '/Users/jkrick/IRAC/iwic210/dark_mask.fits', objectmaskdata, objectmaskheader
+
+end

@@ -1,0 +1,16 @@
+pro readmodels
+close, /all
+
+
+model = fltarr(7,1085,30)
+
+openr, lun, "/Users/jkrick/bin/bc03/models/Padova1994/salpeter/lr_m72_salp_exp_3_age0.1,0.5,1,3,5,8,12", /get_lun
+
+
+
+
+close, lun
+free_lun, lun
+
+
+end

@@ -1,0 +1,20 @@
+pro areavsexptime
+;make a cumulative distribution of area vs. exposure time
+
+fits_read, '/Users/jkrick/spitzer/irac/ch1/mosaic_cov.fits', data_ch1, head_ch1
+fits_read, '/Users/jkrick/spitzer/irac/ch2/mosaic_cov.fits', data_ch2, head_ch2
+
+;sort data
+sortarea_ch1 = data_ch1(sort(data_ch1))
+sortarea_ch2 = data_ch1(sort(data_ch2))
+
+N1 = n_elements(sortarea_ch1)
+N2 = n_elements(sortarea_ch1)
+
+f1 = (findgen(N1) + 1.)/ N1
+f2 = (findgen(N2) + 1.)/ N2
+
+plot, sortarea_ch1, f1, xstyle = 9
+oplot, sortarea_ch2, f2, xstyle = 9
+
+end

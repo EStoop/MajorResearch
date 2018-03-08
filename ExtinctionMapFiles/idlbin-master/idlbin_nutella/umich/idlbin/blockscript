@@ -1,0 +1,3 @@
+.run ~/idlbin/del_star.pro
+.run ~/idlbin/block_obj.A141.pro
+block_obj

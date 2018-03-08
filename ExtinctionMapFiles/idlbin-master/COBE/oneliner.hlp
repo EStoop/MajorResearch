@@ -1,0 +1,190 @@
+.Title
+ One-Line Descriptions of UIDL Tools
+.Help
+   ADDX performs extended word integer addition.
+   AVG calculates the average over one dimension of an array
+   AVGAREA finds the average over a circle or annulus
+             
+   BAR draws a color bar on the display.  
+   BATCHCUT extracts skycuts defined by a lon/lat array.
+   BITRANGE takes an arbitrary range of bits from an array for display
+   BOSE_EIN returns a Bose-Einstein spectrum with a chemical potential.
+   BUILDMAP provides user-friendly access to COBE archive maps.
+   BUILDTEE takes 1-6 cube faces and places them into an unfolded T
+             
+   CAPTURE copies an image from a workstation window to disk.
+   CHECK_FITS checks that FITS header is appropriate for a given array.
+   CLEANPLOT resets IDL system plotting variables to defaults.
+   COLORBAR puts a color bar of any size, anywhere with the mouse
+   CONV_UNIX_VAX converts UNIX IDL data types to VAX IDL data types.
+   CONV_VAX_UNIX converts VAX IDL data types to UNIX IDL data types.
+   COORCONV is a shell routine for coordinate conversion procedures
+   CPUSEC returns the amount of cpu time consumed as a FLOAT.
+
+   DATAIN reads FITS and other format files into UIDL.
+   DATAOUT is a routine which writes out FITS files or CISS files.
+   DBERROR separates the SIGMA and QUAL_FLAG from PhotQual.
+   DECOMPRESS_MF decompresses DIRBE data read from BLI_TOIRSCLD.
+   DIPOLE subtracts a dipole term from a scalar sky map.
+   DIRBE_GAINS returns the auto or commanded gain ratios per detector
+   DIRBE_MEPS returns the MUX sequence and prints it out.
+   DIRBE_RAWTOD returns auto-gain corrected data in process order.
+   DIRBE_READ_PIXEL gets data for a single pixel within a time range
+   DIRBE_READ_PIXSTR gets time strings through a central pixel
+   DIRBE_TOD reads DIRBE data and corrects for order and gains.
+   DOWNRES "coarsens" the resolution of a skycube or cube face.
+   DO_MEPS  applies MUX sequence to one major frame of DIRBE data.
+
+   EDIV performs quadword integer division.
+   EMUL performs quadword integer multiplication.
+
+   FDECOMP decomposes a file name into its components.
+   FIRASMOD: used to read in the FIRAS Model &Line Profile IPs, PDSs
+   FITMU is a Bose_Einstein / Dust Residual fitting facility.
+   FITS2X (VMS only) reads FITS hdr, array from tape to IDL arrays
+   FITSBYTE byteswaps between FITS and internal machine formats.
+   FITSHDR: reads and displays the primary fits header.
+   FITSLIST (VMS) reads FITS files from tape, writes hdrs to dsk/scrn
+   FITSPEC is a multiple blackbody fitting facility.
+   FITSTAPE performs magnetic tape FITS format I/O 
+   FITS_INFO extracts header and data information about a FITS file.
+   FLUX2MAG converts flux in ergs/s/cm^2/A to magnitude.
+   FULLMAP creates a full DSK7 skymap file from a partial one.
+   FXBREAD Read a data array from a disk FITS binary table file.
+   FXBWRITE Write a binary data array to a disk FITS binary table file.
+             
+   GAPFILL interpolates across gaps in an unfolded skycube.
+   GETNAME searches for specified file name, returns full name & path.
+   GETOPT converts a response string into a scalar or vector.
+   GETPRO copies IDL procedure into current default directory.
+   GETTOK retrieves a segment of a character string.
+   GET_COORDS takes angular coordinates, returns floating-point values.
+   GET_DATE returns the current date in DD/MM/YY format.
+   GET_RESOLUTION returns a skymap's resolution.
+   GFIT fits a gaussian plus an optional baseline to a spectrum.
+   GRABFACE grabs a cube face from an unfolded T or sixpack
+             
+   HEADFITS read a simple FITS header from a disk FITS file.
+   HELIO computes (low-precision) heliocentric coords for the planets.
+   HOST_TO_IEEE converts IDL var. from IEEE-754 to host machine type.
+             
+   IEEE_TO_HOST converts IDL var. from host machine type to IEEE-754.
+   IMSTAT returns useful statistics on an image.
+   IPINFO reads the PDS/IP FITS header and displays field and frequency info.
+
+   LABEL_DATE is a function to label axes with dates.
+   LABELIT is a graph labeling procedure for IDL Version II.
+   LATCIRC generates a 'latitude' circle.
+   LATCUT selects data from a map in a specified latitude range.
+   LEAPCHK determines if a year is a leap year.
+             
+   MAG2FLUX converts magnitude to flux in ergs/s/cm^2/A.
+   MARKMAP places source position labels on images
+   MERGE combines two vectors into one, eliminating duplicates.
+   MIN_CURV_SURF interpolate pts w/ minimum curvature spline surface.
+   MKBGRMOD is a general 2-D background modeling tool.
+   MKHDR makes a FITS image header with required keywords.
+   MONTHDAYS gives number of days in a month, given year and month.
+   MOONPOS returns the apparent RA and Declination of the Moon.
+   MULTIPOLE subtracts dipole + quadrupole terms from a scalar sky map.
+
+   NICE_HISTO returns a histogram and corresponding x-vector.
+   NYQUIST returns the Nyquist frequency of a FIRAS spectrum
+             
+   PIX2DAT extracts a data list from a rasterized skycube by xy coords
+   PIX2XY creates a raster image (sky cube/face) from pixel/data list.
+   PIXINFO returns lon/lat, x/y, pixel number, and data value 
+   PLANCK returns the spectral radiance of a blackbody.
+   PLTIME adds a date and time to a pre-existing plot.
+   PRECESS precesses coordinates from one equinox to another.
+   PROJBLD generates projection lookup tables.
+   PROJGRID overlays coordinate grids on reprojected images.
+   PSIMAGE sets optimum size and displays (tvscl) image in postscript
+   PUT_OWNER_ID puts owner ID and system time on hard-copy plots.
+   PXINCIRC generates pixels within a given circle.
+   PXINRING generates pixels within a given ring.
+
+   QS1_L shifts quadword integer 1 bit to left.
+   QS1_R shifts quadword integer 1 bit to right.
+             
+   RDFITS_STRUCT reads an entire FITS file into an IDL structure.
+   READCOL reads a free-format ASCII data file with columns of data.
+   READFITS reads simple FITS disk file data header into IDL
+   READFMT reads a fixed format ASCII data file into IDL variables. 
+   READ_COVAR used to read in the FIRAS Covariance matrix.
+   READ_DMR_TOD used to validate the COBE DMR Time-Ordered Data.
+   READ_MAP_FACE returns data for a face from a Skymap dataset.
+   READ_RDF returns field descriptions from RDF files.
+   READ_RMS returns data for multiple fields from an RMS dataset.
+   READ_SKYMAP returns data for multiple fields from a Skymap dataset.
+   READ_TOD returns data for multiple fields from Time-ordered dataset.
+   REMCHAR removes all appearances of a character from a string.
+   REPCHR replaces one character with another in a text string.
+   REPLAY redisplays an image previously stored using 'capture.pro'
+   REPROJ is a general reprojection facility for skycubes.
+   ROUND rounds a set of data to nearest absolute integers.
+
+   SCDTT makes statistical analysis of Spacecraft data simple and easy.
+   SETUP_PS configures for production of landscape PS plot files.
+   SET_RDF defines an alternate Record Definition File.
+   SIGMA calculates the standard deviation value of an array.
+   SINCE_VERSION determines if current IDL release comes after user's.
+   SIXPACK packs an unfolded skycube into 3x2 format (no wasted space).
+   SIXUNPACK "uncompresses" the packed skycube created by SIXPACK.
+   SKY determines the sky level in an image using MMM on 4000 pixels.
+   SKYCUT extracts sky data along a cross-sectional cut.
+   SMOOTHCUBE convolves an unfolded skycube with an arbitrary kernal.
+   SORTIT sorts vector in ascending order of contents of second vector.
+   SPEC_DIR expands a partial file specification into a full one.
+   SPFILTER is a general spatial filtering tool.
+   STRFORM forms right-justified string of given length from input no.
+   STRN formats input to desired format output string.
+   STRNUMBER determines if a string is a valid numeric value.
+   STRPARSE returns array of non-blank entities taken from input str.
+   SUBX performs extended word integer subtraction.
+   SUM totals an array over one of its dimensions
+   SUNPOS returns the apparent RA and Declination of the sun.
+             
+   TEN  Converts sexigesimal number to decimal.
+   TIMECONV is the shell routine for time conversion procedures.
+             
+   UGETDATA copies data from the UIMAGE environment to a UIDL variable.
+   UIMAGE is a package that allows one to manipulate COBE data.
+   UNITSTR returns a string with units corresponding to the units code.
+   UPKWHERE unpacks a 'where' vector into cube,level,col,row.
+   UPUTDATA copies data from a UIDL variable to the UIMAGE environment.
+   USRPROJ generates projections from user-generated lookup tables.
+             
+   VTGREY draws a 5-level greyscale image on a monochrome screen 
+
+   WHERENAN finds pos'ns of all vals. in array corr. to IEEE NaN vals.
+   WINLABEL uses a GUI to position labels in a window with the cursor.
+   WRITEFITS writes an IDL array into a simple FITS format disk file.
+             
+   XY2PIX calculates pixel numbers from input x-y raster coordinates.
+             
+   ZOOMW zooms window and alters color tables on windowing devices
+   ZPARCHECK verifies data type of parameters in a procedure call.
+
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@COBECL.DNET.NASA.GOV.
+
+

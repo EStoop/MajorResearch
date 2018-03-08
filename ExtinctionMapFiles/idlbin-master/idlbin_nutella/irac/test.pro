@@ -1,0 +1,80 @@
+pro test
+
+dir_name = '/Users/jkrick/IRAC/iwic210/r7665664'
+
+command1 = ' find '+dir_name+' -name "*.fits" > ' + dir_name + '/files_test.list'
+command2 = 'grep ch1 < '+dir_name+'/files_test.list |  grep _bcd.fits > '+dir_name+'/ch1_bcd.list'
+command3 = 'grep ch2 < '+dir_name+'/files_test.list |  grep _bcd.fits > '+dir_name+'/ch2_bcd.list'
+
+a = [command1, command2, command3]
+for i = 0, n_elements(a) -1 do spawn, a(i)
+
+readcol, dir_name+'/ch1_bcd.list', bcdname_ch1, format="A"
+readcol, dir_name+'/ch2_bcd.list', bcdname_ch2, format="A"
+
+;two stars
+ra = [271.015833, 270.93958333]
+dec = [66.928333, 66.93416667 ]
+
+gain = [3.3,3.7]
+
+flux_a_ch1 = fltarr(n_elements(bcdname_ch1))
+flux_b_ch1 = fltarr(n_elements(bcdname_ch1))
+flux_a_ch2 = fltarr(n_elements(bcdname_ch2))
+flux_b_ch2 = fltarr(n_elements(bcdname_ch2))
+
+for j = 0,  1 do begin  ;for each channel
+   if j eq 0 then bcdname = bcdname_ch1
+   if j eq 1 then bcdname = bcdname_ch2
+   command = 'ds9 '
+   for i = 0, n_elements(bcdname) -1 do   command = command + ' ' + bcdname(i) + ' -zscale '
+   command = command + ' -single'
+
+   print, 'A ds9 image is opening.'
+   print, 'Look at the bright sources images for artifacts or latents.'
+   print, 'Close the ds9 window to continue.'
+   latents = 'no'
+;   while (latents eq 'no') do begin
+;      spawn, command
+;      read, latents, prompt = 'Are you done looking for artifacts in the ds9 window? (yes or no) '
+;   endwhile
+
+
+;on each image, do aperture photometry at the location of the stars.
+;plot photometry against frame number
+   
+   for i = 0, n_elements(bcdname) - 1 do begin   ;on each image
+      ;read in the image
+      fits_read, bcdname(i), data, header
+      
+      ;convert ra and dec to x and y
+      adxy, header, ra, dec, xcen , ycen
+
+      ;do photometry
+      aper,  data,  xcen, ycen, flux, fluxerr, sky, skyerr, gain(j), [5], [15,25], [-100,1000], /nan,/exact,/flux,/silent
+      
+      print, 'inside', j, i, xcen, ycen, flux
+      ;keep track of fluxes
+      if j eq 0 then begin
+         flux_a_ch1(i) = flux(0)
+         flux_b_ch1(i)= flux(1)
+      endif
+
+      if j eq 1 then begin
+         flux_a_ch2(i) = flux(0)
+         flux_b_ch2(i)= flux(1)
+      endif
+
+   endfor
+
+      
+endfor
+
+
+plot, findgen(n_elements(flux_a_ch1)), flux_a_ch1, psym = 1, yrange = [0,max(flux_a_ch1)]
+oplot, findgen(n_elements(flux_b_ch1)), flux_b_ch1, psym = 2
+
+;plot, findgen(n_elements(flux_a_ch2)), flux_a_ch2, psym = 1
+;oplot, findgen(n_elements(flux_b_ch2)), flux_b_ch2, psym = 2
+
+end

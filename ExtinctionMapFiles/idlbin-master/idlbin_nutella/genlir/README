@@ -1,0 +1,29 @@
+Contains an IDL routine which uses the recipe of Chary & ELbaz (2001) to calculate
+bolometric luminosities from 24 micron flux densities and redshift. It
+does the following:
+1.  takes the CE01 and Dale & Helou (2002) templates 
+2.  redshifts all the templates it to the given redshift 
+3.  finds the template which reproduces the observed 24 micron flux most closely
+4.  selects that template and renormalizes it to the observed 24 micron flux
+5.  uses the template to give LIR after applying the correct normalization factor
+
+The returned LIR is the average of the estimates from CE01 and DH02. The systematic
+error is the difference between those two estimates of LIR. While the statistical
+error is simply due to the flux density error. flux density and error are in microJy,
+LIR and LIRerr are in Lsun.
+
+Caveats: 
+
+1. The DH02 templates are not luminosity-dependent templates and have been converted
+to that form by Ranga-Ram Chary. 
+
+2. The LIR estimate is STRONGLY reliant on the assumption that the LMIR-LFIR relation
+seen in the local Universe is valid at higher redshifts. There is quite some evidence
+that PAH strengths seem to be stronger at high redshift at large LIR values, compared 
+to the CE01 templates (e.g. Pope et al. 2007 work on SMGs). Future work will try to fold 
+in these spectral results into the templates.
+
+Call as: 
+IDL> get_lir,1.0,50,5,lir,lirerr
+
+8 Oct 2007

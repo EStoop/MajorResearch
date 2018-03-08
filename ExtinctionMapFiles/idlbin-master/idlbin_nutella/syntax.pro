@@ -1,0 +1,170 @@
+;------------------------------------------------------------
+;plotting to ps with device
+;using axis
+device, true=24
+device, decomposed=0
+
+colors = GetColor(/load, Start=1)
+
+mydevice = !D.NAME
+!p.multi = [0, 0, 1]
+SET_PLOT, 'ps'
+
+device, filename = '/n/Godiva3/jkrick/A2556/profiles2.ps', /portrait, $
+  BITS=8, scale_factor=0.9 , /color
+
+plot, radius* 0.435, 22.04 - 2.5*alog10(counts/(0.435^2)), thick = 3, $
+YRANGE = [31, 24.0], xrange = [0,250],ytitle = out, $
+psym = 3,xstyle = 9,ystyle = 1,$
+xtitle = 'Semi-major Axis (arcseconds)', charthick = 3, xthick = 3, ythick = 3
+
+axis, 0, 24.0, xaxis=1, xrange=[0,0.408], xstyle = 1, xthick = 3,charthick = 3
+
+device, /close
+set_plot, mydevice
+
+;------------------------------------------------------------
+;plotting with ps_open
+ps_open, filename='/Users/jkrick/spitzer/mips/mips24/prfvsap.ps',/portrait,/square,/color
+
+plot, x, y
+
+ps_close, /noprint,/noid
+
+;plotting with ps_start
+
+ps_start, filename= 'test.ps'
+
+plot, x, y
+
+ps_end, /png
+; the /png will output both a png and a .ps file.
+
+;------------------------------------------------------------
+;reading a fits file
+FITS_READ, '/Users/jkrick/spitzer/mips/mips24/daophot/mosaic.fits',data, header,exten_no=1
+
+
+;----------------------------------------------------------
+;conver x and y to ra dec
+xyad, header, daoobject.xcenter, daoobject.ycenter, ra, dec
+
+;the opposite
+adxy, ....
+
+; just read in a header and then convert
+acshead = headfits('/Users/jkrick/hst/raw/wholeacs.fits');
+adxy, acshead, objectnew[keeper].ra,objectnew[keeper].dec , xcenter, ycenter
+
+;----------------------------------------------------------
+
+;using readcol
+readcol,'/Users/jkrick/ZPHOT/ugriirac.z_phot',idz, zphota, chia, proba, specta, nagea, agea, $
+        ava, ba, zinf99a,zsup99a,zinf90a,zsup90a,zinf68a,zsup68a,zwma,probwma,Mabsa,$
+        zphot2a,prob2a,format="A"
+;----------------------------------------------------------
+;formatted print
+
+printf, outlun, format='(I10,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2,F10.2)',$
+        count, object[num].umaga, object[num].gmaga, object[num].rmaga, $
+        object[num].imaga, mag1,mag2,mag3,mag4,  object[num].umagerra, object[num].gmagerra, $
+        object[num].rmagerra, object[num].imagerra, err1,err2,err3,err4
+;----------------------------------------------------------
+;fit a function to data
+start = [1.0,1.0]
+result= MPFITFUN('linear',obs,ex, noise, start)    ;ICL
+plot, obs, result(0)*obs + result(1), $
+   thick = 3,psym = 2;, color = colors.green
+;----------------------------------------------------------
+;sort two columns together
+readcol,'/Users/jkrick/ZPHOT/filters/ks.txt',a,b,format="A"
+
+c = a[sort(a)]
+d = b[sort(a)]
+for n = 0, n_elements(a) - 1, 1 do begin
+   print, n + 1, 10.0*c(n), d(n)
+endfor
+
+;-----------------------------------------------------------
+;learning about save files
+IDL> savefile = filepath('test.save',root_dir=['/Users/jkrick/idlbin'])
+IDL> sobj = obj_new('IDL_Savefile', savefile)
+IDL> scontents = sobj->contents()
+IDL> print, scontents.n_var
+                     2
+IDL> snames = sobj->names()
+IDL> print, snames
+LAMBDA NULNUINLSUN
+IDL> ssize = sobj->size('nulnuinlsun')
+IDL> print, ssize
+           2         105        1366           4      143430
+;num of dimensions, size of each dimension, 4 = float, total num of elements
+IDL> restore, ('test.save')
+
+;want to know the names of every variable within a structure
+ print, TAG_NAMES(objectnew)
+
+;---------------------------------------
+;DISPLAY an image
+
+plotimage, xrange=[1,2800],yrange=[1,3200], bytscl(data, min = 0, max = 7) ,$; bytscl(data, min=1,max=3),$
+ /preserve_aspect, /noaxes, ncolors=8
+
+;------------------------------------------
+;histogram
+plothist, object.rmaga, xhist, yhist, bin=0.10, /noprint,/noplot;,xrange=[0,480]
+
+
+;-----------------------------------------
+;where
+ix=where(object.irac1mag lt 90.0 and object.irac1mag gt 0.0 and object.irac4mag gt 0.0 and object.irac4mag lt 90. and object.irac3mag gt 0.0 and object.irac3mag lt 90. and object.irac2mag gt 0.0 and object.irac2mag lt 90. )
+print, "n_elenents(ix)", n_elements(ix)
+ plot, object[ix].irac3mag - object[ix].irac4mag, object[ix].irac1mag - object[ix].irac2mag, psym = 8, xrange = [-1.2, 2.9], yrange=[-0.75, 1.0],/xst,/yst,symsize=0.4, xtitle='ch3 - ch4', ytitle = 'ch1 - ch2'
+
+
+;----------------
+;compress strings
+
+strcompress("object " + string(good(n)) + string( (object[good(n)].wirckmag) - (object[good(n)].irac2mag - 3.25)))
+
+;-----------------------------------------
+;system call
+commandline = '/n/Godiva7/jkrick/Sex/sex ' + imagefile + " -c /n/Godiva4/jkrick/A141/iclr.sex"
+spawn, commandline
+
+;-----------------------------------------
+;to get colors, insert these after opening device.
+redcolor = FSC_COLOR("Red", !D.Table_Size-2)
+bluecolor = FSC_COLOR("Blue", !D.Table_Size-3)
+greencolor = FSC_COLOR("Green", !D.Table_Size-4)
+yellowcolor = FSC_COLOR("Yellow", !D.Table_Size-5)
+cyancolor = FSC_COLOR("cyan", !D.Table_Size-6)
+orangecolor = FSC_COLOR("orange", !D.Table_Size-7)
+purplecolor = FSC_COLOR("purple", !D.Table_Size-8)
+
+;then in plot
+color = redcolor
+;-----------------------------------------
+;to get a different psym
+vsym, /polygon, /fill
+
+;-----------------------------------------
+;make *.reg file for viewing objcts in ds9
+openw, outlunred, '/Users/jkrick/nep/highz/robertson.reg', /get_lun
+printf, outlunred, 'fk5'
+for rc=0, n_elements(c) -1 do  printf, outlunred, 'circle( ', objectnew[c[rc]].ra, objectnew[c[rc]].dec, ' 3")'
+close, outlunred
+free_lun, outlunred
+
+;-----------------------------------------
+;add variables to a structure without re-making the structure.
+restore, '/Users/jkrick/idlbin/object.sav'
+a  = { irac1fluxerr:0D, irac2fluxerr:0D, irac3fluxerr:0D, irac4fluxerr:0D, irac1magerr:0D,  irac2magerr:0D, irac3magerr:0D, irac4magerr:0D, nearestdist:0D, nearestnum:0, extended:0D, irac1fluxold:0D, irac2fluxold:0D, irac3fluxold:0D, irac4fluxold:0D, irac1magold:0D, irac2magold:0D, irac3magold:0D, irac4magold:0D }
+
+b = replicate(a, n_elements(object.ra))
+objectnew = struct_addtags(object, b)
+
+;-----------------------------------------
+;convert sexagesimal to degrees
+ra = 15.* tenv(hh, mm, ss)
+dec = tenv(dd, dm, ds)

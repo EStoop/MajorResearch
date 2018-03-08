@@ -1,0 +1,3 @@
+.run ~/idlbin/del_star.pro
+.run ~/idlbin/crreject.pro
+crreject

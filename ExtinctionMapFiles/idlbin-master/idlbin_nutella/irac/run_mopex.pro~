@@ -1,0 +1,41 @@
+function run_mopex, directory_name, mopex_script_env, namelist
+
+; example directory_name where the data live= '/Users/jkrick/IRAC/EGS/download'
+; example mopex_script = '~/bin/mopex/mopex-script-env.csh'
+; example namelist = 'mosaic_test_namelist.nl'
+
+;make pertinent file lists for input to MOPEX
+command1 = ' find '+directory_name+' -name "*.fits" > ' + directory_name + '/files_test.list'
+
+command2 = 'grep ch1 < '+directory_name+'/files_test.list | grep _bcd.fits > '+directory_name+'/ch1_bcd_test.list'
+command3 = 'grep ch1 < '+directory_name+'/files_test.list | grep _bunc.fits > '+directory_name+'/ch1_bunc_test.list'
+command4 = 'grep ch1 < '+directory_name+'/files_test.list | grep _bimsk.fits > '+directory_name+'/ch1_bimsk_test.list'
+command5 = 'grep ch2 < '+directory_name+'/files_test.list | grep _bcd.fits > '+directory_name+'/ch2_bcd_test.list'
+command6 = 'grep ch2 < '+directory_name+'/files_test.list | grep _bunc.fits > '+directory_name+'/ch2_bunc_test.list'
+command7 = 'grep ch2 < '+directory_name+'/files_test.list | grep _bimsk.fits > '+directory_name+'/ch2_bimsk_test.list'
+
+;get rid of the first frame in all of the directories
+command10 = 'cat ' + directory_name + '/ch1_bcd_test.lst | grep -v 0000_0000 > ' + directory_name+'/ch1_bcd_good.lst'
+command11 = 'cat ' + directory_name + '/ch1_bunc_test.lst | grep -v 0000_0000 > ' + directory_name+'/ch1_bunc_good.lst'
+command12 = 'cat ' + directory_name + '/ch1_bimsk_test.lst | grep -v 0000_0000 > ' + directory_name+'/ch1_bimsk_good.lst'
+command13 = 'cat ' + directory_name + '/ch2_bcd_test.lst | grep -v 0000_0000 > ' + directory_name+'/ch2_bcd_good.lst'
+command14 = 'cat ' + directory_name + '/ch2_bunc_test.lst | grep -v 0000_0000 > ' + directory_name+'/ch2_bunc_good.lst'
+command15 = 'cat ' + directory_name + '/ch2_bimsk_test.lst | grep -v 0000_0000 > ' + directory_name+'/ch2_bimsk_good.lst'
+
+
+;run these commands
+commands = [command1, command2, command3, command4, command5, command6, command7, command10, command11, command12, command13, command14, command15]
+
+for i = 0, n_elements(commands)-1 do spawn, commands(i)
+
+;set environmental variables and run mopex
+command8 = 'source ' + mopex_script_env
+command9 = 'mosaic.pl -n ' + namelist + ' > mosaic_logfile.txt'
+
+CD, directory_name
+
+commands = 'pwd ; ' + command8 + ' ; ' + command9
+spawn, commands
+
+return, 0
+end

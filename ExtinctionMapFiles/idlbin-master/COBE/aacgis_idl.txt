@@ -1,0 +1,401 @@
+		COBE Data Analysis Software
+		___________________________
+
+This software library contains well documented tools written specifically for
+the analysis of data from the Cosmic Background Explorer (COBE) satellite.  Data
+I/O, analysis and display tools are included.  Examples of additional data I/O
+routines can be found in Appendices of the COBE instrument Explanatory
+Supplements.  These and other relevant documents are available from the 
+COBE web site:
+
+  http://www.gsfc.nasa.gov/astro/cobe  
+
+General information about reading the COBE data sets can be found in the COBE
+Guest Investigator Support Software User's Guide.
+
+Most of the software is coded in the Interactive Data Language (IDL).  The code
+has been tested in UNIX, VMS, OpenVMS, OSF1 and PC/WINDOWS environments.
+Installation instructions are given below.
+
+Please note that the cgis@zwicky.gsfc.nasa.gov e-mail address mentioned
+in the software documentation is no longer valid. Contact information
+and additional information about the COBE Data Analysis Software can be 
+found on the Web at:
+
+  http://www.gsfc.nasa.gov/astro/cobe/cgis.html
+
+This software package was developed by NASA's Goddard Space Flight Center 
+under the guidance of the COBE Science Working Group.
+
+
+Caveats:
+________
+
+The COBE software is written for IDL versions 4.0 or higher; the highest
+tested version as of this release is 5.1.  Problems likely will result if 
+IDL versions earlier than 4.0 are used.
+
+***IMPORTANT***
+In order to use the COBE IDL analysis software, the IDL Astronomy User's Library
+(see http://idlastro.gsfc.nasa.gov/homepage.html ) must also be installed in
+your IDL pathway.  The data ingest routines (e.g., TBGET and TBINFO) may not
+work properly if your copy of the Astronomy User's Library is older than August
+1997.
+
+While the code has been tested on a wide variety of platforms, we cannot
+guarantee that the programs will run in your particular computing environment.
+Due to resource constraints, we are able to provide only a modest amount of
+personal assistance.
+
+
+
+FILES IN THIS DIRECTORY
+_______________________
+
+1.  Listing of IDL Routines
+
+Online help is available for the entire software package.  The file ONELINER.HLP
+is a listing of the high-level routines in the library; it documents only the
+routines in the UIDL directory as these are the main analysis routines.
+Information about subroutines called by the main programs can be found in the
+prologues of the calling routines.  These prologues give complete information
+about calling sequences, variable types, etc.  A separate file called
+UIMAGE_HELP.DAT describes the UIMAGE functionality and is intended to be used
+for the on-line help rather than as a listing.  UIMAGE and the directory
+structure are described below.
+
+
+2.  IDL Source Code
+
+The IDL routines (i.e., the .PRO files) are the actual data analysis routines.
+The STARTUP.PRO routine will need to be edited, as described below, to conform
+to your platform.  The IDL routines are organized in 6 subdirectories, which
+appear under a top level COBE software directory.
+
+a) Top level files: These define the IDL environment.
+
+b) QUIDL: This directory contains all the command line data I/O, analysis
+          and display tools.
+
+c) QUIMAGE: This directory contains a menu driven analysis package specifically
+          designed for COBE data, providing a user friendly interface
+          to the routines found in UIDL. The package has extensive on-line
+          help and includes a number of standard image analysis capabilities, 
+          such as arithmetic, smoothing, zooming, reprojection, plotting,
+          and modeling (e.g., dipole, background, polynomial, blackbody...). 
+          UIMAGE can be used to read all of the COBE data sets, and can read 
+          and write both FITS files and IDL save sets. It allows the user to 
+          switch conveniently to the IDL command line in order to perform  
+          customized analyses that are not included in the UIMAGE menus.
+   
+          NOTE: the UIMAGE package only works with data in quadrilateralized 
+          spherical cube projection, and in a supported quad-cube resolution.
+
+d) QEXEC, QUTIL: These directories contain various low level routines used
+          to support the UIMAGE package.
+
+e) QLUT: This directory contains routines that create lookup tables used to
+          reproject the data, and the tables themselves when they are created 
+          (see below).
+
+f) QHELP: This directory contains both routines and text files relating
+          to the online help facility, UHELP. The text files are meant to
+          be viewed through the help facility.
+
+3.  IDL Initialization files
+
+The initialization files are 
+
+	uidl.csh (UNIX)
+	uidl.com (VMS) 
+	sample.ini (WINDOWS)
+
+When executed, these scripts start IDL with the COBE analysis routines linked.
+These files define the essential logicals and paths. They serve as templates
+that must be edited to reflect your computing environment according to the
+installation procedure given below.
+
+
+4.  Lookup Table Generators
+
+Three files are provided in the QLUT directory:
+
+	buildlut.unix
+	buildlut.vms
+	buildlut.pcw
+
+When executed, these IDL routines generate coordinate lookup tables used by the
+map reprojection routines.
+
+
+5.  C Source Routines
+
+Use of these routines is optional, since every C module has a corresponding IDL
+routine with the same functionality.  However, the C routines are faster and use
+memory more efficiently.  The installation procedure given below tells how to
+link the C routines to the COBE IDL library.  A header file (export_wrap.h) is
+included in all of the C routines.  This file, in turn, includes the export.h 
+file that came with your IDL installation and does some system checking.  Six 
+"make" files (make.sun, make.solaris, make.vms, make.osf1, make.irix, and 
+make.alpha) are provided to facilitate compilation of the C code.
+
+
+INSTALLATION PROCEDURE (See section below for PC Windows Installation)
+______________________
+
+1.  Compile the C routines.  
+
+This step is optional but highly recommended for the most efficient use
+of IDL for COBE analysis. Ten C routines must be compiled. The export.h 
+file was significantly changed in IDL version 4.0; the file 
+export_wrap.h (in the top level directory) was updated accordingly.
+If you are running an older version of IDL, un-comment the following line in
+export_wrap.h (i.e., remove the leading /* and trailing */):      
+          #include "cobe_obs.h"  
+
+The export.h file was previously changed in IDL version 3.5 to add 
+definitions of LONG and ULONG. If you are running an older version,
+such as IDL v3.0, edit the file export_wrap.h and uncomment the 
+following two lines: 
+       typedef long int LONG;            
+       typedef unsigned long int ULONG;  
+
+As mentioned above, "make" files are included for compiling the C
+routines. These files must be edited to reflect your particular
+installation with regard to pathways and compiler (e.g. Gnu-C, VAX-C, OSF1-C,
+or SunOs-C). Compilation on other UNIX machines, e.g. IBM AIX, may require 
+modifications of the compiler flags in the make.sun file. Consult the
+IDL User's Guide and the IDL Advanced Development Guide
+for references on compiling the C routines. Once you have made the
+necessary changes run the appropriate make file to build the executables or
+shareable images, e.g.
+               make -f make.osf1    (unix command)
+               @make.vms            (vms command)
+
+In order to help you understand the "make" files, several examples are
+given, showing how one of the C routines, CCONV.C, is compiled on various
+platforms. In the first example, the GNU C Compiler is used in a VMS 
+environment: 
+
+          a) Create file called cconv.opt containing:
+               idl_dir:[000000]idl/share
+               gnu_cc:[000000]gcclib/lib
+               universal=cconv
+               sys$share:vaxcrtl/share
+
+          b) Enter DCL commands:
+               $gcc/include=IDL_DIR:[source] cconv
+                 (this assumes the IDL file export.h is in IDL_DIR:[source])
+               $link/share cconv,cconv.opt/opt
+
+Example 2 pertains to an OpenVMS (Dec Alpha) system using VAX C:
+
+          a) Create file called cconv.opt containing:
+               idl_dir:[bin_alpha]idl/share
+                  (this assumes the IDL executable is in idl_dir:[bin_alpha])
+               symbol_vector=(cconv=PROCEDURE)
+
+          b) Enter DCL commands:
+               $cc/include=IDL_DIR:[source]/standard=vaxc/float=d_float cconv
+                 (this assumes the IDL file export.h is in IDL_DIR:[source])
+               $link/share cconv,cconv.opt/opt
+
+Example 3 pertains to a UNIX (SunOS) system using the native compiler:
+
+          a) Enter the SunOS commands:
+              %cc -pic -fsingle -I/idl/source -c cconv.c
+                 (this assumes the IDL file export.h is in /idl/source)
+              %ld -o cconv.so -shared -assert pure-text -lm cconv.o
+
+Finally, here is a second UNIX example, for the Sun Solaris operating
+system:
+
+          a) Enter the Solaris commands:
+              %cc -Kpic -fsingle -I/idl/source -c cconv.c
+                 (this assumes the IDL file export.h is in /idl/source)
+              %ld -o cconv.so -G -lm cconv.o
+
+2.  Edit uidl.com (VMS) or uidl.csh (UNIX) 
+
+The most important logicals defined by these files are:
+
+          CGIS_DATA - location of the projection look up tables
+          #CGIS_IDL#  - (VMS) top level, location of IDL, C source code
+          CSRC ($CSRC) - (UNIX) top level, location of IDL, C source code
+          CGIS_FITS - default FITS file directory
+          CGIS_CISS - default IDL save set directory
+
+Edit the appropriate lines to reflect the directory structure on your 
+system.
+
+NOTE: The file UIDL.COM assumes that the top level IDL source code is
+located in the logical IDL_DIR. If this is not true then either
+change the logical throughout the file or define IDL_DIR. The file
+UIDL.CSH assumes the standard installation of IDL 5.0 (i.e., the
+location of IDL is in /usr/local/rsi/idl_5).  If this is not true,
+you'll need to make the appropriate changes.
+
+3.  Edit STARTUP.PRO
+
+This IDL routine defines various startup parameters for IDL, including
+system variables, user defined startup commands and the call to IDL
+linkimage for the C routines. The following instructions are platform 
+dependent and sensitive to different "flavors" of UNIX. Select one of the 
+following two lines of code according to whether your environment is 
+VMS or UNIX
+
+          ;@$CSRC/link_unix.pro         ;unix
+          @CGIS$IDL:LINK_VMS.PRO       ;vms
+
+by commenting out (using a preceding semicolon) those that do not apply.
+This call assumes that the computer supports IDL linkimage. If
+the code is on a machine that does not support IDL linkimage (e.g.,
+Ultrix) then all three lines should be commented out; this will cause the
+(much slower) IDL versions of the C routines to be executed instead of
+the C routines themselves. 
+
+A second pair of lines should also be edited according to the operating
+system. Place a semicolon in front of one of the following lines to
+deselect the inapplicable option:
+
+          ;@$USER_START     ;unix
+          @USER_START       ;vms
+
+The file USER_START reflects the user's personal IDL startup file. This
+is defined in the initialization file.
+
+Lastly, a set of lines can be included for the optional DIRBE C library,
+a data I/O library that must be obtained separately from the COBE
+software anonFTP site: ftp://rosette.gsfc.nasa.gov/pub/cobe-gi/
+
+4.  Edit LINK_UNIX.PRO or LINK_VMS.PRO
+
+This IDL routine performs the actual linking of the C routines to IDL. 
+In the "linkimage" call, the /PATH must be edited to reflect the proper 
+pathway, similarly to the logical $CSRC, as defined in uidl.csh. For the
+VMS file, LINK_VMS, you should change the variable #CGIS_IDL# to reflect 
+the path, as was done in uidl.com.
+
+5. VMS Users - Edit INITWEX.PRO in the QEXEC directory.
+
+This IDL routine defines the help path for UIDL routines. 
+Edit the file and replace everywhere #CGIS_IDL# with the top
+level location of the CGIS software:
+
+       e.g.   #CGIS_IDL# --> idl_dir:[lib.cgis
+ 
+If you have installed this package elsewhere, please edit the appropriate
+line as necessary.
+
+6.  Execute uidl.com (VMS) or uidl.csh (UNIX)
+
+This will cause IDL to start up, with (almost) all of the COBE routines 
+ready for use. Once inside IDL access to the UIMAGE package is obtained
+by entering:
+ 
+           UIDL> uimage
+
+at the command line.
+
+
+7.  Execute buildlut.vms (VMS) or buildlut.unix (UNIX) from within IDL
+
+This IDL command procedure will build the projection (AITOFF, Global
+Sinusoidal, and Mollweide) look up tables. As these are machine specific, 
+two files are provided, BUILDLUT.VMS and BUILDLUT.UNIX.  The IDL 
+command
+
+          @buildlut.unix
+
+(or .vms, as appropriate) will create these large (40 MB) files.  Make
+sure that the files are located in the directory specified by the 
+CGIS_DATA pointer that you edited in step 2. Step 7 will only need to
+be executed once (ever) to create the files.
+
+Upon completion of the installation, you will be able to enter IDL from 
+your operating system command line by executing uidl.com (VMS) or 
+uidl.csh (UNIX), and the COBE analysis routines will be available. 
+
+
+
+PC WINDOWS INSTALLATION
+_______________________
+
+1. Copy files onto disk.
+
+If the files are in .ZIP format then the following command must be
+used to create the directory structure described above (assuming
+the top level IDL is in c:\rsi\idl_5 and this software is installed
+in a sub-directory named cgis):
+
+             pkunzip.exe -d cobe-pc.zip c:\rsi\idl_5\cgis
+
+2. C routines
+
+The C routines have not been validated on the PC. Therefore they
+will not be discussed here.
+
+3. Edit IDL.INI
+
+This file contains the main definitions for setting up the IDL
+environment on the PC. The most important logicals defined by this
+file are:
+ 
+            PATH - the complete path for IDL and the COBE software
+            STARTUP - the startup file for IDL
+            DIR - the top level IDL directory
+
+An example IDL.INI file is included, namely SAMPLE.INI. Edit your 
+local IDL.INI file, adding the definitions given in our SAMPLE.INI, 
+but reflecting your local pathways.
+
+4. Edit PSTARTUP.PRO
+
+This IDL routine defines various startup parameters for IDL, including
+system variables and user defined startup commands. Like the IDL.INI
+file, PSTARTUP.PRO should be edited and made to reflect the pathways 
+used on your system. The most important logicals are:
+
+           CGIS_DATA - location of the projection look up tables
+           CGIS_FITS - default FITS file directory
+           CGIS_CISS - default IDL save set directory
+           HOME - top level IDL directory
+           .run files - specify path to reflect particular setup
+
+5. Edit QEXEC\INITWEX.PRO
+
+This IDL routine defines the help path for UIDL routines. For the
+windows platform this pathway is hardcoded to:
+ 
+          c:\rsi\idl_5\cgis
+
+If you have installed this package elsewhere, please edit the appropriate
+line as necessary.
+
+6. Startup IDL
+
+Startup IDL in the WINDOWS environment. This will cause IDL to start
+with (almost) all the COBE routines ready for use. 
+
+7. Execute buildlut.pcw from within IDL
+
+This IDL command procedure will build the projection look up tables, 
+each of which is about 40 MB in size.  Note: this will create 6 "large"
+(1024x768) projection files which may not be usable on a PC screen. If
+space is a concern these can be deleted. 
+
+This step need only be executed once (ever) to create the files.
+Thereafter, you need only enter IDL from your operating system command
+line (or ICON) and the COBE analysis routines will be available. 
+
+To run an IDL command procedure enter: 
+
+           UIDL> @buildlut.pcw
+
+8. Once inside IDL access to the UIMAGE package is obtained be entering: 
+
+           UIDL> uimage
+
+at the command line.
+
+

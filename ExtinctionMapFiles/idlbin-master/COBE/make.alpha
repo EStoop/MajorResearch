@@ -1,0 +1,58 @@
+$! This "make" file is suitable for compiling the ancillary 
+$! C routines used in the COBE Guest Investigator Software
+$! package.
+$!
+$! The file MAKE.ALPHA should be used when compiling on a Digital
+$! ALPHA machine running OpenVMS (use make.unix if on an ALPHA
+$! running OSF1).
+$!
+$! Assumes the IDL executable is  IDL_DIR:[bin.bin_alpha]idl.exe
+$! Assumes the IDL file export.h is in IDL_DIR:[external]
+$! if above is not true change or rename these logicals 
+$!
+$! There are two compiling options depending whether using IDL v5.1 and
+$! above or earlier versions. If using earlier version, comment the first
+$! line and un-comment the second.
+$!
+$compile :== "cc/include=IDL_DIR:[external]/standard=vaxc/float=ieee_float/ieee_mode=denorm"
+$!compile :== "cc/include=IDL_DIR:[external]/standard=vaxc/float=d_float"
+$!
+$! this will use VAX C by default. Un-comment if prefer to use 
+$! GNU_C if available.
+$!if f$trnlnm("GNU_CC") .NES. "" then compile :== "gcc/include=IDL_DIR:[external]"
+$!
+$i=1
+$start:
+$if i .eq. 1 then file="cconv"
+$if i .eq. 2 then file="cpusec"
+$if i .eq. 3 then file="adt2zulu"
+$if i .eq. 4 then file="rastr"
+$if i .eq. 5 then file="inpoly"
+$if i .eq. 6 then file="zulu2adt"
+$if i .eq. 7 then file="pixavg"
+$if i .eq. 8 then file="projtran"
+$if i .eq. 9 then file="dblsvd"
+$if i .eq. 10 then file="qrdcmp"
+$!
+$define sys$output 'file'.opt
+$write sys$output "idl_dir:[bin.bin_alpha]idl/share"
+$!
+$! this will use VAX C by default. Un-comment 3 lines (on second line delete
+$! both the $ and ! sign) if prefer to use GNU_C if available. 
+$! If gcclib is not in gnu_cc:[000000] i.e. top level GNU_CC directory 
+$! make appropriate change.
+$!    if f$trnlnm("GNU_CC") .NES. "" then write sys$output - 
+$!           "gnu_cc:[000000]gcclib/lib"
+$!      write sys$output "sys$share:vaxcrtl/share"
+$!
+$write sys$output "symbol_vector=("+''file''+"=PROCEDURE)"
+$deassign sys$output
+$compile 'file'
+$link/share 'file','file'.opt/opt
+$ i=i+1
+$if i .eq. 11 then goto done
+$goto start
+$!
+$done:
+$delete *.obj;*
+$write sys$output "Done compiling and linking C routines."

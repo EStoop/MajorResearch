@@ -1,0 +1,240 @@
+PRO colorplot
+close,/all
+
+
+
+;read in the V radial profile
+OPENR, lun,'/Users/jkrick/umich/icl/A4059/cdBtab', /GET_LUN  ;iclVtab2
+rows=48
+radius = FLTARR(rows)
+counts = FLTARR(rows)
+Verr = FLTARR(rows)
+stop = FLTARR(rows)
+r = 0.0				;radius
+c = 0.0				;mean counts
+ellerr = 0.0
+s = 0
+i = 0
+FOR j=0,rows-1 DO BEGIN
+      READF, lun, r,c, ellerr,s
+      
+          radius(i) = r
+          counts(i) = c
+          Verr(i) = ellerr 
+          stop(i) = s
+          i = i +1
+     
+ENDFOR
+
+close, lun
+free_lun, lun
+
+counts = counts[0:i -1 ] 
+radius = radius[0:i-1]
+
+;print, radius
+
+;iclrtab2 vs samemask/iclVtab2.2
+;interpcounts = fltarr(19)
+;interpradius = fltarr(19)
+;interpradius = interpolate(radius, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19])
+;interpcounts = interpolate(counts, [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]);
+;print, "B radius", interpradius
+
+;cdBtab vs cdtab
+interpcounts = fltarr(51)
+interpradius = fltarr(51)
+
+interpradius = interpolate(radius, [0,1,1.5,2,3,4,5,6,7,8,9,10,11,12,13,14,14.71,15,16,16.66,17,18,19,20,21,22,23,24,25,26,27,28,28.5,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47])
+interpcounts = interpolate(counts, [0,1,1.5,2,3,4,5,6,7,8,9,10,11,12,13,14,14.71,15,16,16.66,17,18,19,20,21,22,23,24,25,26,27,28,28.5,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47])
+print, "B radius", interpradius
+print,"n_elements interpcounts", n_elements(interpcounts)
+
+
+;read in the r sb profile
+OPENR, lun,'/Users/jkrick/umich/icl/A4059/cdtab', /GET_LUN 
+rows= 45
+rradius = FLTARR(rows)
+rcounts = FLTARR(rows)
+rerr = FLTARR(rows)
+r = 0.0				;radius
+c = 0.0				;mean counts
+ellerr = 0.0
+
+FOR j=0,rows-1 DO BEGIN
+      READF, lun, r,c, ellerr,s
+      rradius(j) = r
+      rcounts(j) = c
+      rerr(j) = ellerr
+ENDFOR
+
+close, lun
+free_lun, lun
+
+rcounts = rcounts[0:j-1]; - 2
+rradius = rradius[0:j-1]
+
+;iclrtab2 vs samemask/iclVtab2.2
+;interprcounts = fltarr(19)
+;interprradius = fltarr(19)
+;interprradius = interpolate(rradius, [0,1,2,3,4,5,6,7,8,9,9.5,10,11,12,13,14,15,16,17])
+;interprcounts = interpolate(rcounts, [0,1,2,3,4,5,6,7,8,9,9.5,10,11,12,13,14,15,16,17])
+;print, "rradius", interpradius
+
+;
+interprcounts = fltarr(51)
+interprradius = fltarr(51)
+interprradius = interpolate(rradius, [4,5,6,7,8,9,10,11,12,12.5,13,13.5,14,14.5,15,15.16,16,17,17.33,18,18.5,19,19.5,20,20.5,21,21.5,22,22.5,23,23.33,23.66,24,25,26,27,28,29,30,31,32,33,34,34.5,35,36,37,38,39,40,41,42])
+interprcounts = interpolate(rcounts, [4,5,6,7,8,9,10,11,12,12.5,13,13.5,14,14.5,15,15.16,16,17,17.33,18,18.5,19,19.5,20,20.5,21,21.5,22,22.5,23,23.33,23.66,24,25,26,27,28,29,30,31,32,33,34,34.5,35,36,37,38,39,40,41,42])
+print, "rradius", interprradius
+print,"n_elements interprcounts", n_elements(interprcounts)
+
+;print, interprcounts
+
+Vyarr = fltarr(10)
+ryarr = fltarr(10)
+radarr = fltarr(10)
+
+Vyarr(0) = mean(interpcounts(0:5))
+Vyarr(1) = mean(interpcounts(6:10))
+Vyarr(2) = mean(interpcounts(11:15))
+Vyarr(3) = mean(interpcounts(16:19))
+Vyarr(4) = mean(interpcounts(20:24))
+Vyarr(5) = mean(interpcounts(25:29))
+Vyarr(6) = mean(interpcounts(30:35))
+Vyarr(7) = mean(interpcounts(36:40))
+Vyarr(8) = mean(interpcounts(41:43))
+Vyarr(9) = mean(interpcounts(44:46))
+;Vyarr(10) = mean(interpcounts(47:50))
+
+radarr(0) = mean(interpradius(0:5))
+radarr(1) = mean(interpradius(6:10))
+radarr(2) = mean(interpradius(11:15))
+radarr(3) = mean(interpradius(16:19))
+radarr(4) = mean(interpradius(20:24))
+radarr(5) = mean(interpradius(25:29))
+radarr(6) = mean(interpradius(30:35))
+radarr(7) = mean(interpradius(36:40))
+radarr(8) = mean(interpradius(41:43))
+radarr(9) = mean(interpradius(44:46))
+;radarr(10) = mean(interpradius(47:50))
+
+ryarr(0) = mean(interprcounts(0:5))
+ryarr(1) = mean(interprcounts(6:10))
+ryarr(2) = mean(interprcounts(11:15))
+ryarr(3) = mean(interprcounts(16:19))
+ryarr(4) = mean(interprcounts(20:24))
+ryarr(5) = mean(interprcounts(25:29))
+ryarr(6) = mean(interprcounts(30:35))
+ryarr(7) = mean(interprcounts(36:40))
+ryarr(8) = mean(interprcounts(41:43))
+ryarr(9) = mean(interprcounts(44:46))
+;ryarr(10) = mean(interprcounts(47:50))
+
+
+;print, Vyarr, ryarr
+
+Vyarr = 22.19 -2.5*(alog10(Vyarr/(0.435^2)))
+ryarr = 22.04 -2.5*(alog10(ryarr/(0.435^2)))
+;print, Vyarr, ryarr
+
+
+;f0v = 3.75E-9
+f0v = 6.40E-9 ;= f0B
+f0r = 1.75E-9
+noiser = fltarr(10) + 27.7
+print, "noiser", noiser
+;noiser= [27.7,27.7,27.7,27.7]
+noisev = noiser + 2.2
+
+
+fv = f0v*10^(Vyarr/(-2.5))
+sigv = f0v*10^(noisev/(-2.5))
+fr = f0r*10^(ryarr/(-2.5))
+sigr = f0r*10^(noiser/(-2.5))
+print,"sigB,sigr", sigv, sigr
+
+;because I have averaged together 4(sometimes 3 values, the sigma is
+;better than the individual sigma)
+
+;;sigv = sqrt(1./4.)*sigv
+;sigv(4) = sqrt(1./3.)*sigv(4)
+
+;;sigr = sqrt(1./4.)*sigr
+;sigr(1) = sqrt(1./3.)*sigr(1)
+;sigr(2) = sqrt(1./3.)*sigr(2)
+;sigr(3) = (1./2.)*sigr(3)
+
+color = Vyarr - ryarr
+print, "color", color
+sig = sqrt(((fv/fr)^2)*(((sigv/fv)^2)+((sigr/fr)^2)))
+percent = sig/(fv/fr)
+print, "sig", sig, "percent",percent
+FOR gah =0, 3 DO BEGIN
+    IF percent[gah] GT 1 THEN percent[gah] =0.99
+ENDFOR
+
+print, "percent",percent
+plus = -2.5*alog10(1+percent)
+minus = -2.5*alog10(1-percent)
+print, "plus,minus",plus, minus
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+mydevice = !D.NAME
+!p.multi = [0, 0, 1]
+SET_PLOT, 'ps'
+
+device, filename = '/Users/jkrick/umich/icl/A4059/color.2.ps', /portrait, $
+  BITS=8, scale_factor=0.9 , /color
+
+plot, radarr*0.435, color, psym = 2, xrange = [0,400], ytitle ="B-r",thick = 3,$
+charthick = 3, xthick = 3, ythick = 3,xtitle = 'Semi-major Axis (arcseconds)',$
+yrange=[1.0,2.5],ystyle = 1, xstyle = 8
+
+;axis, 0, 2.5, xaxis=1, xrange=[0,0.4638], xstyle = 1, xthick = 3,charthick = 3  ;500
+axis, 0, 2.5, xaxis=1, xrange=[0,0.377], xstyle = 1, xthick = 3,charthick = 3
+
+;upper = [0.2,0.2,0.2,0.2]
+errplot, radarr*0.435, color-minus, color-plus
+
+;fit this with a linear function
+err = plus
+start = [-0.0025,1.6]
+result = MPFITFUN('linear',radarr,color,err, start,perror =test)
+print, "test", test
+oplot, findgen(1200)*0.435, result(0)*findgen(1200) + result(1), thick = 3, linestyle = 2
+;oplot, findgen(1200)*0.435, (result(0) -1*test(0))*findgen(1200) + (result(1) - 1*test(1)), linestyle = 2
+;oplot, findgen(1200)*0.435, (result(0)+1*test(0) )*findgen(1200) + (result(1) + 1*test(1)), linestyle = 2
+
+out = textoidl('h_{70}^{-1}kpc')
+
+
+;the red cluster sequence
+x= findgen(100) + 350
+y = x - (findgen(100)+350) + 1.9
+;y2 = x - (findgen(100)+135) + 0.0
+
+oplot, x, y, thick = 3
+;oplot, x, y2, thick = 3
+xyouts, 350, 1.84, 'RCS', charthick = 3
+;xyouts, 230, 0.02, 'Tidal Features', charthick = 3
+xyouts, 30, 2.4, "A4059", charthick = 3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+sum = total(color)
+av = sum / n_elements(color)
+
+sig2 = sig^2
+sumsig = sqrt(total(sig2))
+
+sigav = av*(sqrt(sumsig^2/sum^2))
+
+
+print, "sum, av, sumsig, sigav", sum, av, sumsig, sigav
+
+
+device, /close
+set_plot, mydevice
+
+
+END

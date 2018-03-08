@@ -1,0 +1,68 @@
+.Title
+UHelp MAIN MENU Options
+.Help
+
+   {BT}{U}The UHelp MAIN MENU Options{N}
+
+   {BT}View UIDL Routine List{N} - Selecting this item invokes the
+   display of the UIDL routine name list.  The list is alphabetical
+   and includes a one-line description for each routine.
+
+   {BT}Search List with a Keyword{N} - This item starts a keyword
+   search of the UIDL routine name list.  Once selected, you will
+   be prompted for a search string (e.g., data, plot, etc.).  The
+   results will be presented in a menu.  The last items on that
+   menu are options to try another keyword, return to the main menu,
+   or exit UHelp.
+
+   {BT}Specify Routine Name{N} - If this item is choosen, you will
+   be prompted for the name of a UIDL routine.  Do not use the
+   file name extension .PRO, just type in a name such as PLANCK.
+   The help for that routine will then be displayed.
+
+   {BT}View User Library Routine List{N} - Selecting this item
+   causes the display of the User Library routine name list.  Like
+   the UIDL routine name list, it is alphabetical and contains
+   one-line descriptions.  However, there is no keyword search
+   available.
+
+   {BT}Other Routine Lists...{N} - This item gives access to a
+   menu of other routine name lists.
+
+   {BT}COBE Help Tree...{N} - This item provides access to the
+   help category menu tree.
+
+   {BT}UIDL News{N} - Selecting this invokes a display of the
+   CGIS News menu.
+
+   {BT}Getting Source Code{N} - This item provides the help
+   for using the GETPRO routine.  The GETPRO routine produces
+   a source listing for any UIDL (or IDL) routine.
+
+   {BT}HELP{N} - Choosing this item produces this help display.
+
+   {BT}Exit UHelp{N} - Select this item to exit UHelp and
+   return to the UIDL command line.
+
+;DISCLAIMER:
+;
+;This software was written at the Cosmology Data Analysis Center in
+;support of the Cosmic Background Explorer (COBE) Project under NASA
+;contract number NAS5-30750.
+;
+;This software may be used, copied, modified or redistributed so long
+;as it is not sold and this disclaimer is distributed along with the
+;software.  If you modify the software please indicate your
+;modifications in a prominent place in the source code.  
+;
+;All routines are provided "as is" without any express or implied
+;warranties whatsoever.  All routines are distributed without guarantee
+;of support.  If errors are found in this code it is requested that you
+;contact us by sending email to the address below to report the errors
+;but we make no claims regarding timely fixes.  This software has been 
+;used for analysis of COBE data but has not been validated and has not 
+;been used to create validated data sets of any type.
+;
+;Please send bug reports to CGIS@ZWICKY.GSFC.NASA.GOV.
+
+

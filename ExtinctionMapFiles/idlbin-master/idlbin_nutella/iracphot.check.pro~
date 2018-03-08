@@ -1,0 +1,10 @@
+pro iracphot_check
+
+restore, '/Users/jkrick/idlbin/objectnew.sav'
+
+plot, objectnew.irac1flux, objectnew.irac1fluxold, psym = 2
+plot, objectnew.irac2flux, objectnew.irac2fluxold, psym = 2
+plot, objectnew.irac3flux, objectnew.irac3fluxold, psym = 2
+plot, objectnew.irac4flux, objectnew.irac4fluxold, psym = 2
+
+end
