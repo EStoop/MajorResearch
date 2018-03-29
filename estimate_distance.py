@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import astropy.coordinates as coord
 import astropy.units as u
 
+
 # Read the gog sample file
 dir_gog = '/net/blekekil/data2/gog/random_samples/'
 nSamples = 1837070.
@@ -18,8 +19,6 @@ e_parallax = np.array(edata['parallax_err']) * u.mas 	# mas
 
 ra  = np.array(data['alpha']) * u.rad # rad 
 dec = np.array(data['delta']) * u.rad # rad
-
-
 
 
 # Remove parallaxes with relative errors (f_obs) > 1.0
@@ -43,11 +42,11 @@ def Likelihood(r, std, varpi):
 	P		The likelihood on varpi given the uncertainty and the distance	
 	'''
 	
-	return (1 / np.sqrt(2*np.pi)*std) * np.exp( (-1/(2* std**2)) * (varpi - r**(-1))**2 )
+	return (1.0 / np.sqrt(2.0*np.pi)*std) * np.exp( (-1.0/(2.0* std**2)) * (varpi - r**(-1))**2 )
 
 # The stellar number density
 def rho_MW(r, l, b):
-<<<<<<< HEAD
+	
 	'''
 	Calculates the stellar number density of the Milky Way. The number of stars per volumne element dV. 
 	----------------
@@ -63,7 +62,7 @@ def rho_MW(r, l, b):
 	rho_MW	The stellar number density of the Milky Way consisting of the sum of the number density of 
 			the buldge, disc and halo.
 	'''
-=======
+	
 	
 	# Convert l,b to Galactocentric distance and height in cylindrical coordinates
 	c_gal = coord.SkyCoord(l=l, b=b, frame='galactic')
@@ -73,7 +72,6 @@ def rho_MW(r, l, b):
 	c_galacto_sph = c_gal.transform_to(coord.Galactocentric,  representation_type='spherical')
 	r_G = c_galacto_sph.distance
 	
->>>>>>> 3571107a711ce9ab9ba54575ac39dbfc695aded0
 	
 	# Constants used
 	# Bulge (Binney & Tremaine 2008)
@@ -99,21 +97,8 @@ def rho_MW(r, l, b):
 	del_h	= 7.1 * u.kpc
 	ep_h	= (r_ht/del_h) - 4.5
 	r_hmin	= 0.5 * u.kpc
-
-<<<<<<< HEAD
-
-	# Convert l,b to Galactocentric distance and height in cylindrical coordinates
-	c_gal = coord.SkyCoord(l=l, b=b, frame='galactic')
-	c_galacto = c_gal.transform_to(coord.Galactocentric,  representation_type='cylindrical')
-	z, R = c_galacto.z, c_galacto.rho
-	# Transform to spherical Galactocentric coordinates
-	c_galacto_sph = c_gal.transform_to(coord.Galactocentric,  representation_type='spherical')
-	r_G = c_galacto_sph.distance	
-
-
-=======
+		
 	
->>>>>>> 3571107a711ce9ab9ba54575ac39dbfc695aded0
 	# The bulge model as described by Binney & Tremaine (2008)
 	q = np.sqrt(R**2 + (z/q_b)**2)
 	if q > qmin:
@@ -179,13 +164,10 @@ def P(r, std, varpi):
 	r = r.to(u.pc)
 	std = std.to(u.arcsec)
 	varpi = varpi.to(u.arcsec)	
-
-
-<<<<<<< HEAD
+	
+	
 	P = 1.0/norm * Likelihood(r, std, varpi) * Prior(r, l, b)
-=======
-	P = 1/norm * Likelihood(r, std, varpi) * Prior(r, l, b)
->>>>>>> 3571107a711ce9ab9ba54575ac39dbfc695aded0
+	return P
 
 
 
